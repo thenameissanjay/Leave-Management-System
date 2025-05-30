@@ -5,6 +5,8 @@ const { designation } = require("./entity/designation");
 const { leave_policy } = require("./entity/leave_policy");
 const { leave_level } = require("./entity/leave_level");
 const { leave_request } = require("./entity/leave_requests");
+const { leave_policy_dm } = require("./entity/leave_policy_dm");
+
 require('dotenv').config();
 
 const AppDataSource = new DataSource({
@@ -15,9 +17,9 @@ const AppDataSource = new DataSource({
   username: process.env.USER,
   password: process.env.PASSWORD,
   database: process.env.DBNAME,
-  synchronize: false,
+  synchronize: true,
   logging: false,
-  entities: [employee, designation, leave_policy, leave_level, leave_request]
+  entities: [employee, designation, leave_policy, leave_level, leave_request, leave_policy_dm]
   
 });
 

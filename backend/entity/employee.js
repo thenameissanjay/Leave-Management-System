@@ -1,4 +1,5 @@
 const { EntitySchema } = require("typeorm");
+const { designation } = require("./designation");
 
 
 
@@ -17,10 +18,10 @@ const { EntitySchema } = require("typeorm");
             type: "varchar",
           },
           phone: {
-              type: "int",
+              type: "bigint",
             },
             designation: {
-              type: "varchar",
+              type: "int",
             },
             level: {
               type: "varchar",
@@ -53,6 +54,14 @@ const { EntitySchema } = require("typeorm");
               referencedColumnName: "level",
             },
           },
+          designation:{
+            type: "many-to-one",
+            target: designation,
+            joinColumn:{
+              name: "designation",
+              referencedColumnName: "id"
+            }
+          }
         }
       });  
 

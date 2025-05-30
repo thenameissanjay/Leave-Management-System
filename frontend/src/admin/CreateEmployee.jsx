@@ -48,9 +48,7 @@ const CreateEmployee = () => {
         password: ''
       });
     } catch (err) {
-
       {
-          
         const message = err.response?.data?.message;
         console.log(err)
         if (err.response?.status === 403) {
@@ -87,9 +85,10 @@ const CreateEmployee = () => {
 
     const fetchDesignations = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/designation/getDesignationRole');
+        const res = await axios.get('http://localhost:8080/api/designation/getDesignation');
         if (Array.isArray(res.data)) {
           setDesignations(res.data);
+          console.log(res.data)
         } else {
           console.error('Expected array but got:', res.data);
           setDesignations([]);
@@ -155,7 +154,7 @@ const CreateEmployee = () => {
             >
               <option value="">Select Designation</option>
               {designations.map((desg, idx) => (
-                <option key={idx} value={desg.name}>
+                <option key={idx} value={desg.id}>
                   {desg.name}
                 </option>
               ))}
