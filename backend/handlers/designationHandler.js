@@ -1,8 +1,12 @@
 const conn = require('../connection');
 const {AppDataSource} = require('../connection')
-const {designation} = require('../entity/designation')
+const {designation} = require('../entity/designation');
+const { leave_policy_dm } = require('../entity/leave_policy_dm');
+const { leave_type_dm } = require('../entity/leave_type_dm');
 
 const designationRepo = AppDataSource.getRepository(designation)
+const leaveTypeRepo = AppDataSource.getRepository(leave_type_dm);
+const leavePolicyRepo = AppDataSource.getRepository(leave_policy_dm);
 
 const CreateDesignation = async (req, res)=>{
   try {
@@ -13,7 +17,17 @@ const CreateDesignation = async (req, res)=>{
     }
 
     const newDesignation = designationRepo.create({ name, description });
-    await designationRepo.save(newDesignation);
+    const designationId = await designationRepo.save(newDesignation);
+
+
+    const LeaveTypes = await leaveTypeRepo.find();
+    
+    const leavePolicies = LeaveTypes.map((type) => ({
+      employee_type_id:designationId.id,
+      leave_type_id: type.id,
+      max_days_per_year: 0
+    }))
+    await leavePolicyRepo.save(leavePolicies);
 
     res.status(201).json({ success: true, message: "Designation created" });
   } catch (err) {
@@ -51,6 +65,7 @@ const deleteDesignation =  async (req, res) => {
     if(!id){
       return res.json({message: 'required name and description'})
     }
+    await leavePolicyRepo.delete({employee_type_id: id});
     const result = await designationRepo.delete(id);
 
     if (result.affected === 0) {
@@ -77,17 +92,12 @@ const updateDesignation = async (req,res)=>{
       name: newName,
       description: newDescription,
     });
+    
 
-    // Update employee.designation where old name was used
-    await employeeRepo
-      .createQueryBuilder()
-      .update()
-      .set({ designation: newName })
-      .where("designation = :oldName", { oldName })
-      .execute();
 
     res.json({ success: true, message: "Designation updated successfully" });
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: "Failed to update designation", details: err.message });
   }
 }

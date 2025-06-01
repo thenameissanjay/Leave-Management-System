@@ -7,15 +7,13 @@ const leave_type_dm = new EntitySchema({
     id: {
       primary: true,
       type: "int",
+      generated: "increment",
     },
-    employee_type_id: {
-      type: "int",
+    name: {
+      type: "varchar",
     },
-    leave_type_id: {
-      type: "int",
-    },
-    max_days_per_year: {
-      type: "int",
+    description: {
+      type: "varchar",
     },
   },
 });

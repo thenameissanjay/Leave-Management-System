@@ -10,6 +10,9 @@ const employeeRoutes = require('./routes/employeeRoutes');
 const leaveRoutes = require('./routes/leaveRoutes');
 const designationRoutes  = require('./routes/designationRoutes');
 const leaveLevelRoutes  = require('./routes/leaveLevelRoutes');
+const leaveTypeRoutes  = require('./routes/leavetypeRoutes');
+const leavePolicyRouteDM = require('./routes/leavePolicyRoutesDM');
+
 const {adminAuth, employeeAuth} = require('./JWT/verify');
 
 
@@ -29,9 +32,12 @@ app.use('/api/auth', authRoutes);
 
 // Admin
 app.use('/api/admin',adminAuth,  adminRoutes);
-app.use('/api/designation', adminAuth,  designationRoutes)
+app.use('/api/designation', adminAuth,  designationRoutes);
 app.use('/api/leavepolicy', adminAuth, leavePolicyRoute);
 app.use('/api/leavelevel', adminAuth,  leaveLevelRoutes);
+app.use('/api/leavetype', adminAuth, leaveTypeRoutes);
+app.use('/api/leavepolicyDM', leavePolicyRouteDM);
+
 
 // Employee   /api/employee/getIDNameDesg
 app.use('/api/employee',employeeAuth, employeeRoutes);
