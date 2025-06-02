@@ -1,0 +1,91 @@
+🔹 Entities and Their Relationships
+1. EmployeeType
+id: Primary key
+
+name: Type name (e.g., Intern, Manager)
+
+description
+
+2. Employee
+id: Primary key
+
+name, email, role: Basic employee details
+
+emp_type_id: Foreign key → EmployeeType(id)
+
+manager_id: Self-referencing FK → Employee(id) (to assign a manager)
+
+created_at
+
+3. LeaveType
+id: Primary key
+
+name, description
+
+4. LeavePolicy
+id: Primary key
+
+employee_type_id: FK → EmployeeType(id)
+
+leave_type_id: FK → LeaveType(id)
+
+max_days_per_year
+
+name
+
+accrual_per_month
+
+5. Leave
+id: Primary key
+
+employee_id: FK → Employee(id)
+
+leave_type_id: FK → LeaveType(id)
+
+start_date, end_date, reason
+
+status: Integer Enum
+
+100: pending
+
+200: m_appr (manager approved)
+
+250: d_appr (director approved)
+
+300: rejected
+
+350: cancelled
+
+requested_at, updated_at
+
+approved_by: FK → Employee(id) (approver)
+
+comment
+
+6. LeaveBalance
+id: Primary key
+
+employee_id: FK → Employee(id)
+
+leave_type_id: FK → LeaveType(id)
+
+year
+
+total_leave: Total accrued/available
+
+leaves_taken: Leave taken
+
+balance_leave: Remaining leave
+
+🔁 Entity Relationships Summary
+Employee → EmployeeType (Many-to-One)
+
+Employee → Employee (manager, self-referencing)
+
+Leave → Employee, LeaveType (Many-to-One)
+
+Leave → Employee (approved_by, self-referencing)
+
+LeavePolicy → EmployeeType, LeaveType (Many-to-One)
+
+LeaveBalance → Employee, LeaveType (Many-to-One)

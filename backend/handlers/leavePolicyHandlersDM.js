@@ -4,7 +4,7 @@ const { getLeave } = require('./leavePolicyHandlers');
 
 const repo = AppDataSource.getRepository(leave_policy_dm);
 
-
+// /api/leavepolicyDM/getLeavePolicy  GET
 const getLeavePolicy = async (req, res) => {
     try { 
         const records = await repo
@@ -14,7 +14,9 @@ const getLeavePolicy = async (req, res) => {
         .select([
           "designation.name AS designation",
           "leave_type.name AS leave_type",
-          "lp.max_days_per_year AS days"
+          "lp.max_days_per_year AS days",
+          "designation.id AS designation_id",
+          "leave_type.id AS leave_type_id"
         ])
         .getRawMany();
     
@@ -29,7 +31,7 @@ const getLeavePolicy = async (req, res) => {
       const pivot = {};
       const leaveTypes = new Set();
     
-      records.forEach(({ designation, leave_type, days }) => {
+      records.forEach(({ designation, leave_type, days,designation_id, leave_type_id }) => {
         if (!pivot[designation]) pivot[designation] = { designation };
         pivot[designation][leave_type] = days;
         leaveTypes.add(leave_type);
