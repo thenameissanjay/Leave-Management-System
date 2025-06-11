@@ -9,7 +9,6 @@ const LeaveCards = () => {
 
     useEffect(() => {
         const fetchLeave = async (id) => {
-
           try {
             const response = await axios.get(`http://localhost:8080/api/employee/total-leave/${user.EmployeeID}`);
             console.log( response);
@@ -17,7 +16,6 @@ const LeaveCards = () => {
             setLeaveData(data);
           } catch (err) {
             {
-                console.log(err)
               const message = err.response?.data?.message;
               if (err.response?.status === 403) {
                 alert(message || "You are not authorized to access this resource.");

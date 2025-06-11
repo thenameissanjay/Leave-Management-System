@@ -1,43 +1,29 @@
-// LeaveLevelManagement.jsx
 import React, { useEffect, useState } from 'react';
-import { Pencil, Trash2, Save } from 'lucide-react';
+import { Pencil, Trash2, Save, Plus } from 'lucide-react';
 import axios from 'axios';
 import { useToast } from '../employee/ui/ToastContainer';
 
 const LeaveLevelManager = () => {
   const [levels, setLevels] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
+  const [oldLevel, setOldLevel] = useState(null);
   const [newLevel, setNewLevel] = useState({
     start_count: '',
     end_count: '',
     approval_order: '',
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isCreating, setIsCreating] = useState(false);
   const { showToast } = useToast();
 
-  /* ─────────────── FETCH ALL ─────────────── */
   useEffect(() => {
-    const fetchLevels = async () => {
-      try {
-        const res = await axios.get(
-          'http://localhost:8080/api/leave-level/look-up'
-        );
-        setLevels(res.data);
-      } catch (err) {
-        const message = err.response?.data?.message;
-        const code = err.response?.status;
-        if (code === 403) showToast(message || 'Unauthorized access.', 'error');
-        else if (code === 401) showToast(message || 'Session expired.', 'error');
-        else showToast(message || 'Unexpected error.', 'error');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchLevels();
+    axios
+      .get('http://localhost:8080/api/leave-level/look-up')
+      .then((res) => setLevels(res.data))
+      .catch((err) =>
+        showToast(err?.response?.data?.message || 'Failed to fetch', 'error')
+      );
   }, []);
 
-  /* ─────────────── TABLE EDIT HANDLERS ─────────────── */
   const handleEditChange = (index, field, value) => {
     const updated = [...levels];
     updated[index][field] = value;
@@ -46,39 +32,35 @@ const LeaveLevelManager = () => {
 
   const handleSave = async (index) => {
     const item = levels[index];
-
-    // Basic front-end validation
-    if (
-      item.start_count === '' ||
-      item.end_count === '' ||
-      item.approval_order === ''
-    ) {
-      return showToast('All fields are required', 'error');
-    }
-
     try {
       await axios.put(
         `http://localhost:8080/api/leave-level/look-up/${item.leave_level_id}`,
         {
-          start_count: (item.start_count, 10),
+          start_count: parseInt(item.start_count, 10),
           end_count: parseInt(item.end_count, 10),
           approval_order: parseInt(item.approval_order, 10),
         }
       );
       setEditIndex(null);
       showToast('Leave level updated!', 'success');
-    } catch (err) {
-      showToast('Failed to update leave level', 'error');
+    } catch {
+      showToast('Failed to update', 'error');
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this leave level?')) return;
+  const handleCancelEdit = () => {
+    if (editIndex !== null && oldLevel) {
+      const updated = [...levels];
+      updated[editIndex] = oldLevel;
+      setLevels(updated);
+    }
+    setEditIndex(null);
+  };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure?')) return;
     try {
-      await axios.delete ( 
-        `http://localhost:8080/api/leave-level/look-up/${id}`
-      );
+      await axios.delete(`http://localhost:8080/api/leave-level/look-up/${id}`);
       setLevels(levels.filter((lvl) => lvl.leave_level_id !== id));
       showToast('Deleted!', 'success');
     } catch {
@@ -86,109 +68,115 @@ const LeaveLevelManager = () => {
     }
   };
 
-  /* ─────────────── CREATE NEW ─────────────── */
   const handleCreate = async () => {
     const { start_count, end_count, approval_order } = newLevel;
-
-    if (start_count === '' || end_count === '' || approval_order === '') {
+    if (!start_count || !end_count || !approval_order) {
       return showToast('All fields are required', 'error');
     }
-
     try {
       const res = await axios.post(
         'http://localhost:8080/api/leave-level/look-up',
         {
-          start_count: start_count,
-          end_count: end_count, 
-          approval_order: approval_order,
+          start_count,
+          end_count,
+          approval_order,
         }
       );
-      setLevels([...levels, res.data.data]); // backend returns the created row in `data`
+      setLevels([...levels, res.data.data]);
       setNewLevel({ start_count: '', end_count: '', approval_order: '' });
       showToast('Created!', 'success');
     } catch {
-      showToast('Creation failed', 'error');
+      showToast('Failed to create', 'error');
     }
   };
 
-  /* ─────────────── UI ─────────────── */
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="h-12 w-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
   return (
-    <div className="max-w-5xl mx-auto px-4 py-6">
-      <div className="bg-white p-6 rounded-xl shadow-lg">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">
-          Leave-Level Management
-        </h1>
+    <div className="max-w-6xl mx-auto px-4 py-6">
+      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+        <div className="flex justify-between items-center mb-6">
+        <h1 className="text-xl font-semibold text-gray-800 text-center">Approval Levels</h1>
+   
+        </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm">
-            <thead className="bg-gray-100 text-gray-600 uppercase tracking-wide">
+        <div className="overflow-x-auto rounded-lg border border-gray-200">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-800">
               <tr>
-                <th className="p-3 text-left">Start Count</th>
-                <th className="p-3 text-left">End Count</th>
-                <th className="p-3 text-left">Approval Order</th>
-                <th className="p-3 text-center">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase">
+                  Start Count
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase">
+                  End Count
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase">
+                  Approval Order
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-white uppercase">
+                  Actions
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-gray-200">
               {levels.length ? (
                 levels.map((lvl, index) => (
-                  <tr key={lvl.leave_level_id} className="border-t hover:bg-gray-50">
-                    {['start_count', 'end_count', 'approval_order'].map((field) => (
-                      <td key={field} className="p-3">
-                        <input
-                          type="number"
-                          value={lvl[field]}
-                          readOnly={editIndex !== index}
-                          onChange={(e) =>
-                            handleEditChange(index, field, e.target.value)
-                          }
-                          className={`w-full px-2 py-1 rounded ${
-                            editIndex === index
-                              ? 'border border-gray-300'
-                              : 'bg-transparent'
-                          }`}
-                        />
-                      </td>
-                    ))}
-
-                    <td className="p-3 text-center">
-                      <div className="flex justify-center gap-3">
-                        {editIndex === index ? (
-                          <button onClick={() => handleSave(index)} title="Save">
-                            <Save
-                              size={18}
-                              className="text-green-600 hover:text-green-800"
+                  <tr key={lvl.leave_level_id} className="hover:bg-gray-50">
+                    {['start_count', 'end_count', 'approval_order'].map(
+                      (field) => (
+                        <td key={field} className="px-6 py-4 whitespace-nowrap">
+                          {editIndex === index ? (
+                            <input
+                              type="number"
+                              value={lvl[field]}
+                              onChange={(e) =>
+                                handleEditChange(index, field, e.target.value)
+                              }
+                              className="w-full px-2 py-1 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-keka-blue"
                             />
-                          </button>
+                          ) : (
+                            <div className="text-sm text-gray-900">
+                              {lvl[field]}
+                            </div>
+                          )}
+                        </td>
+                      )
+                    )}
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex justify-end items-center gap-3">
+                        {editIndex === index ? (
+                          <>
+                            <button
+                              onClick={() => handleSave(index)}
+                              className="text-keka-blue hover:text-keka-blue-dark"
+                              title="Save"
+                            >
+                              <Save size={18} />
+                            </button>
+                            <button
+                              onClick={handleCancelEdit}
+                              className="text-gray-500 hover:text-gray-700"
+                              title="Cancel"
+                            >
+                              ×
+                            </button>
+                          </>
                         ) : (
                           <button
-                            onClick={() => setEditIndex(index)}
+                            onClick={() => {
+                              setEditIndex(index);
+                              setOldLevel({ ...lvl });
+                            }}
+                            className="text-keka-blue hover:text-keka-blue-dark"
                             title="Edit"
                           >
-                            <Pencil
-                              size={18}
-                              className="text-blue-600 hover:text-blue-800"
-                            />
+                            <Pencil size={18} />
                           </button>
                         )}
-
                         <button
                           onClick={() => handleDelete(lvl.leave_level_id)}
+                          className="text-red-500 hover:text-red-700"
                           title="Delete"
                         >
-                          <Trash2
-                            size={18}
-                            className="text-red-600 hover:text-red-800"
-                          />
+                          <Trash2 size={18} />
                         </button>
                       </div>
                     </td>
@@ -196,8 +184,12 @@ const LeaveLevelManager = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4" className="text-center py-4 text-gray-500">
-                    No leave levels found.
+                  <td
+                    colSpan="4"
+                    className="px-6 py-4 text-center text-sm text-gray-500"
+                  >
+                    No leave levels found. Add your first leave level to get
+                    started.
                   </td>
                 </tr>
               )}
@@ -205,48 +197,97 @@ const LeaveLevelManager = () => {
           </table>
         </div>
 
-        {/* Divider */}
-        <div className="my-6 border-t"></div>
-
-        {/* Create Form */}
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h2 className="text-lg font-medium mb-4 text-gray-700">
-            Create New Leave Level
-          </h2>
+        {/* Add Form */}
+        {isCreating && (
+          <div className="mt-4 bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <div className="md:col-span-1">
+                <input
+                  type="number"
+                  placeholder="Start Count"
+                  value={newLevel.start_count}
+                  onChange={(e) =>
+                    setNewLevel({ ...newLevel, start_count: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-keka-blue"
+                />
+              </div>
+              <div className="md:col-span-1">
+                <input
+                  type="number"
+                  placeholder="End Count"
+                  value={newLevel.end_count}
+                  onChange={(e) =>
+                    setNewLevel({ ...newLevel, end_count: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-keka-blue"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <input
+                  type="number"
+                  placeholder="Approval Order"
+                  value={newLevel.approval_order}
+                  onChange={(e) =>
+                    setNewLevel({
+                      ...newLevel,
+                      approval_order: e.target.value,
+                    })
+                  }
+                  className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-keka-blue"
+                />
+              </div>
+              <button
+                onClick={handleCreate}
+                className="bg-gray-800 hover:bg-gray-900 text-white text-sm px-2 py-2 rounded-lg disabled:opacity-50"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        )}
+        <div className=" mt-4 bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <input
-              type="number"
-              placeholder="Start count"
-              value={newLevel.start_count}
-              onChange={(e) =>
-                setNewLevel({ ...newLevel, start_count: e.target.value })
-              }
-              className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            <input
-              type="number"
-              placeholder="End count"
-              value={newLevel.end_count}
-              onChange={(e) =>
-                setNewLevel({ ...newLevel, end_count: e.target.value })
-              }
-              className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            <input
-              type="number"
-              placeholder="Approval order"
-              value={newLevel.approval_order}
-              onChange={(e) =>
-                setNewLevel({ ...newLevel, approval_order: e.target.value })
-              }
-              className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
+            <div className="md:col-span-1">
+              <input
+                type="text"
+                placeholder="Start"
+                value={newLevel.start_count}
+                onChange={(e) =>
+                  setNewLevel({ ...newLevel, start_count: e.target.value })
+                }
+                className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-keka-blue"
+              />
+            </div>
+            <div className="md:col-span-1">
+              <input
+                type="text"
+                placeholder="End"
+                value={newLevel.end_count}
+                onChange={(e) =>
+                  setNewLevel({ ...newLevel, end_count: e.target.value })
 
+                }
+                className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-keka-blue"
+              />
+            </div>
+            <div className="md:col-span-1">
+              <input
+                type="text"
+                placeholder="Order"
+                value={newLevel.approval_order}
+                onChange={(e) =>
+                  setNewLevel({ ...newLevel, approval_order: e.target.value })
+                }
+                className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-keka-blue"
+              />
+            </div>
             <button
               onClick={handleCreate}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-5 py-2 rounded-lg"
+              disabled={isCreating}
+              className="bg-gray-800 md:col-span-1 hover:bg-gray-900 text-white text-sm px-2 py-2 rounded-lg disabled:opacity-50"
             >
-              Add
+              {'Add'}
             </button>
           </div>
         </div>

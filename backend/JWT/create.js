@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const employeeToken =()=>{
     const token = jwt.sign(
-        { role: "employee" },
+        { role: process.env.EMPLOYEE_ROLE },
         process.env.SECRETKEY, 
         { expiresIn: '1h' }
       );
@@ -13,7 +13,7 @@ const employeeToken =()=>{
 
 const adminToken = ()=>{
     const token = jwt.sign(
-        { role: "admin" },
+        { role: process.env.ADMIN_ROLE },
         process.env.SECRETKEY, 
         { expiresIn: '1h' }
       );

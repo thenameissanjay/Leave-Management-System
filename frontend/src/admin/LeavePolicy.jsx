@@ -7,23 +7,24 @@ import LeavePolicyDM from './LeavePolicyDM';
 const LeavePolicy = () => {
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="">
       <LeavePolicyDM/>
 
-      <div className='flex flex-row'>
+      <div className='flex flex-row max-w-2xl'>
       <div >
       <DesignationManagement/>
 
       </div>
       <div >
+      <LeaveLevelManager/>
+
+
+      </div>
+
+
+      </div>
       <LeaveTypeManagement/>
 
-      </div>
-
-
-      </div>
-    
-     <LeaveLevelManager/>
     </div>
   );
 };
