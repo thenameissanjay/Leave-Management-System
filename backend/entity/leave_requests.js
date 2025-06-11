@@ -1,9 +1,14 @@
 const { EntitySchema } = require("typeorm");
 
  const LeaveStatus = {
-  pending :0,
-  approved :200,
-  rejected : 400,
+  pending :100,
+  developer_approved: 150,
+  manager_approved : 200,
+  hr_approved : 250,
+  director_approved :300,
+  approved: 400,
+  rejected: 500,
+  cancelled: 600
 }
 
 const LeaveStatusLabel = {
@@ -16,42 +21,41 @@ const LeaveStatusLabel = {
         name: "leave_requests",
         tableName: "leave_requests",
         columns: {
-          id: {
+          request_id: {
             type: "int",
             primary: true,
             generated: true, // Auto-incremented surrogate key
           },
-          request_id: {
-            type: "int",
-            nullable:false
-          },
           employee_id: {  // many
             type: "int",
-            nullable:false
           },
           leave_type: {
-            type: "varchar",
-            length: 45
+            type: "int",
+
           },
           from_date: {
-              type: "datetime",
+              type: "date",
+
             },
             to_date: {
-              type: "datetime",
+              type: "date",
+
             },
             reason: {
               type: "varchar",
-              length: 100
+              length: 100,
+
             },
             status: {
               type: "enum",
               enum: LeaveStatus,         // Use the enum
               default: LeaveStatus.pending,
             },
-            reporting_to: {
-              type: "varchar",
-              length: 45
-          }, 
+            requestedAt:{
+              type:"datetime",
+
+            }
+         
         },
         relations: {
           employee: {
@@ -61,6 +65,19 @@ const LeaveStatusLabel = {
               name: "employee_id", // foreign key 
               referencedColumnName: "employee_id", // primary key 
             },
+          },
+          leave_type: {
+            type: "many-to-one",
+            target: "leave_type_dm", 
+            joinColumn: {
+              name: "leave_type", // foreign key 
+              referencedColumnName: "id", // primary key 
+            },
+          },
+          approval_flow: {
+            type: "one-to-many",
+            target: "approval_flow",
+            inverseSide: "leave_request", // match the name in approval_flow relation
           },
         },
       });  

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Pencil, Trash2, Save } from 'lucide-react';
 import axios from 'axios';
+import { useToast } from '../employee/ui/ToastContainer';
+
 
 const DesignationManagement = () => {
   const [designations, setDesignations] = useState([]);
@@ -8,26 +10,27 @@ const DesignationManagement = () => {
   const [oldDesignation, setOldDesignation] = useState(null);
   const [newDesignation, setNewDesignation] = useState({ name: '', description: '' });
   const [isLoading, setIsLoading] = useState(true);
+  const { showToast } = useToast();
+
 
   useEffect(() => {
     const fetchDesignations = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/designation/getDesignation');
+        const res = await axios.get('http://localhost:8080/api/designation/Designation');
         setDesignations(res.data);
       } catch (err) {
         const message = err.response?.data?.message;
         if (err.response?.status === 403) {
-          alert(message || "Unauthorized access.");
+          showToast(message, 'error');
         } else if (err.response?.status === 401) {
-          alert(message || "Session expired.");
+          showToast(message, 'error')
         } else {
-          alert("Unexpected error.");
+          showToast('Unexpected error.', 'error')
         }
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchDesignations();
   }, []);
 
@@ -40,19 +43,17 @@ const DesignationManagement = () => {
   const handleSave = async (index) => {
     const updated = designations[index];
     const payload = {
-      oldName: oldDesignation.name,
-      oldDescription: oldDesignation.description,
-      newName: updated.name,
-      newDescription: updated.description
+      name: updated.name,
+      description: updated.description
     };
 
     try {
-      await axios.put(`http://localhost:8080/api/designation/updateDesignation/${updated.id}`, payload);
+      await axios.put(`http://localhost:8080/api/designation/Designation/${updated.id}`, payload);
       setEditIndex(null);
       setOldDesignation(null);
-      alert('Designation updated!');
+      showToast('Designation updated!', 'success')
     } catch (err) {
-      alert('Failed to update designation');
+      showToast('Failed to update designation', 'error')
     }
   };
 
@@ -60,27 +61,27 @@ const DesignationManagement = () => {
     if (!window.confirm('Delete this designation?')) return;
 
     try {
-      await axios.delete(`http://localhost:8080/api/designation/deleteDesignation/${id}`);
+      await axios.delete(`http://localhost:8080/api/designation/Designation/${id}`);
       setDesignations(designations.filter(item => item.id !== id));
-      alert('Deleted!');
+      showToast('Deleted!', 'success');
     } catch {
-      alert('Delete failed');
+      showToast('Delete failed', 'error');
     }
   };
 
   const handleCreate = async () => {
     if (!newDesignation.name.trim()) {
-      alert('Name is required');
+      showToast('Name is required', 'success');
       return;
     }
 
     try {
-      const res = await axios.post('http://localhost:8080/api/designation/createDesignation', newDesignation);
+      const res = await axios.post('http://localhost:8080/api/designation/Designation', newDesignation);
       setDesignations([...designations, newDesignation]);
       setNewDesignation({ name: '', description: '' });
-      alert('Created!');
+      showToast('Created!', 'success');
     } catch {
-      alert('Creation failed');
+      showToast('Creation failed', 'error');
     }
   };
 

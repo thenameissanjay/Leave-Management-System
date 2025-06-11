@@ -1,11 +1,36 @@
-const express = require('express')
+const express = require('express');
 const router = express.Router();
-const {getLeaveLevel, createLeaveLevel, deleteLeaveLevel, updateLeaveLevel, getLeaveLevelOrder} = require('../handlers/leaveLevelHandlers')
+const {
+  createLeaveLevel,
+  getLeaveLevels,
+  updateLeaveLevel,
+  deleteLeaveLevel,
+} = require('../handlers/leaveLevelHandlers');
+const {
+  createLevelSchema,
+  levelIdSchema,
+} = require('../joi_schema/leaveLevelSchema');
+const validator = require('express-joi-validation').createValidator({});
 
-router.get('/getLeaveLevel', getLeaveLevel)
-router.post('/createLeaveLevel', createLeaveLevel)
-router.delete('/deleteLeaveLevel/:id', deleteLeaveLevel)
-router.put('/updateLeaveLevel/:id', updateLeaveLevel)
-router.post('/getLeaveLevelOrder', getLeaveLevelOrder)
+router.get(
+    '/lookup', 
+    getLeaveLevels);
 
-module.exports = router
+router.post(
+    '/lookup', 
+    validator.body(createLevelSchema), 
+    createLeaveLevel);
+    
+router.delete(
+  '/lookup/:levelID',
+  validator.params(levelIdSchema),
+  deleteLeaveLevel
+);
+router.put(
+  '/lookup/:levelID',
+  validator.params(levelIdSchema),
+  validator.body(createLevelSchema),
+  updateLeaveLevel
+);
+
+module.exports = router;

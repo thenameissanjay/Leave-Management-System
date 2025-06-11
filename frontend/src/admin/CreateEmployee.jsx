@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '../employee/ui/ToastContainer';
 const CreateEmployee = () => {
   const [employees, setEmployees] = useState([]);
   const [designations, setDesignations] = useState([]); // new for designation list
   const navigate = useNavigate();
+  const { showToast } = useToast();
+  
 
   const [values, setValues] = useState({
     name: '',
@@ -12,10 +15,6 @@ const CreateEmployee = () => {
     phone: '',
     designation: '',
     reporting_to: '',
-    level: '',
-    casual: 0,
-    sick: 0,
-    others: 0,
     date_of_joining: '',
     password: ''
   });
@@ -31,61 +30,60 @@ const CreateEmployee = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/api/admin/createEmployee', values);
-      alert('Employee created successfully!');
-      console.log(response.data);
+      const payload = {
+        ...values,
+        designation: values.designation === "" ? null : parseInt(values.designation),
+        reporting_to: values.reporting_to === "" ? null : parseInt(values.reporting_to),  
+      };
+      const response = await axios.post('http://localhost:8080/api/admin/Employee', payload);
+      showToast('Employee Added Successfully', 'success')
       setValues({
         name: '',
         email: '',
         phone: '',
         designation: '',
         reporting_to: '',
-        level: '',
-        casual: 0,
-        sick: 0,
-        others: 0,
         date_of_joining: '',
         password: ''
       });
     } catch (err) {
       {
         const message = err.response?.data?.message;
-        console.log(err)
         if (err.response?.status === 403) {
-          alert(message || "You are not authorized to access this resource.");
+          showToast(message, 'error')
           navigate('/');
         } else if (err.response?.status === 401) {
-          alert(message || "Session expired. Please log in again.");
+          showToast(message, 'error')
           navigate('/');
 
         } else {
-          alert("An unexpected error occurred.");
+          showToast('An unexpected error occurred.', 'error')
         }
       }
-      console.error('Error creating employee:', err);
-      alert('Failed to create employee. Please try again.');
     }
   };
 
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/admin/getIdNameDesg');
+        const res = await axios.get('http://localhost:8080/api/admin/EmployeeIdNameDesg');
         if (Array.isArray(res.data)) {
           setEmployees(res.data);
+          console.log(res.data);
         } else {
           console.error('Expected array but got:', res.data);
           setEmployees([]);
         }
       } catch (err) {
-        console.error('Error fetching employee data:', err);
+        const message = err.response?.data?.message;
+        showToast(message, 'error')
         setEmployees([]);
       }
     };
 
     const fetchDesignations = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/designation/getDesignation');
+        const res = await axios.get('http://localhost:8080/api/designation/Designation');
         if (Array.isArray(res.data)) {
           setDesignations(res.data);
           console.log(res.data)
@@ -94,7 +92,8 @@ const CreateEmployee = () => {
           setDesignations([]);
         }
       } catch (err) {
-        console.error('Error fetching designation data:', err);
+        const message = err.response?.data?.message;
+        showToast(message, 'error')
         setDesignations([]);
       }
     };
@@ -145,54 +144,44 @@ const CreateEmployee = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Designation</label>
-            <select
-              name="designation"
-              value={values.designation}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="">Select Designation</option>
-              {designations.map((desg, idx) => (
-                <option key={idx} value={desg.id}>
-                  {desg.name}
-                </option>
-              ))}
-            </select>
-          </div>
+  <label className="block text-sm font-medium mb-1">
+    Designation <span className="text-gray-400">(optional)</span>
+  </label>
+  <select
+    name="designation"
+    value={values.designation || ""}
+    onChange={handleChange} 
+    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+  >
+    <option value="">None</option> {/* Nullable Option */}
+    {designations.map((desg, idx) => (
+      <option key={idx} value={desg.id}>
+        {desg.name}
+      </option>
+    ))}
+  </select>
+</div>
+
 
           <div>
-            <label className="block text-sm font-medium mb-1">Reporting Manager</label>
-            <select
-              name="reporting_to"
-              value={values.reporting_to}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="">Select Manager</option>
-              {employees.map((emp) => (
-                <option key={emp.employee_id} value={emp.employee_id}>
-                  {emp.name} ({emp.designation}) - [{emp.employee_id}]
-                </option>
-              ))}
-            </select>
-          </div>
+  <label className="block text-sm font-medium mb-1">
+    Reporting Manager <span className="text-gray-400">(optional)</span>
+  </label>
+  <select
+    name="reporting_to"
+    value={values.reporting_to || ""}
+    onChange={handleChange}
+    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+  >
+    <option value="">None</option> {/* Nullable option */}
+    {employees.map((emp) => (
+      <option key={emp.employee_id} value={emp.employee_id}>
+        {emp.name} ({emp.designation}) - [{emp.employee_id}]
+      </option>
+    ))}
+  </select>
+</div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Level</label>
-            <select
-              name="level"
-              value={values.level}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="">Select Level</option>
-              <option value="L1">L1 (Intern)</option>
-              <option value="L2">L2 (Lead)</option>
-              <option value="L3">L3 (Manager)</option>
-              <option value="L4">L4 (HR/Admin)</option>
-            </select>
-          </div>
 
        
           <div>

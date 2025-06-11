@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
+import { useToast } from "../employee/ui/ToastContainer";
 
 import axios from 'axios';
 import CryptoJS from "crypto-js";
@@ -10,6 +11,7 @@ import CryptoJS from "crypto-js";
 
 const EmployeeLoginPortal = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const { showToast } = useToast();
   const [employeeId, setEmployeeId] = useState(''); // Only used in Set Password
   const [email, setEmail] = useState(''); // Used in both forms
   const [password, setPassword] = useState('');
@@ -25,18 +27,17 @@ const EmployeeLoginPortal = () => {
         setError('Please enter both email and password');
         return;
       }
-      const secretKey = import.meta.env.VITE_SECRETKEY;
       const encryptedPassword = CryptoJS.AES.encrypt(password, secretKey).toString();
     
       const response = await axios.post("http://localhost:8080/api/auth/employeeLogin", {
         email,
         encryptedPassword
       });
-      
+      // JWT token from backend
       const access_token = response.data.access_token;
       
       setUser({ 
-        role: 'employee', 
+        role: 'employee',   // for navbar, req.header.role = "employee"
         EmployeeID: response.data.employeeId,
       Name:response.data.name, 
       Email: response.data.email, 
@@ -44,16 +45,13 @@ const EmployeeLoginPortal = () => {
        DateOfJoining: response.data.date_of_joining,
         Designation: response.data.designation, 
         ReportingTo:response.data.reporting_to,
-         Level:response.data.level, 
-         Sick: response.data.sick, 
-         Casual: response.data.casual,
-          Others: response.data.others,
-          access_token : access_token         
+        access_token : access_token         
       });
       navigate('/Employee');
+      showToast('Logged Successfully', 'success')
     } catch (error) {
-      console.log(error)
-      setError(error.response?.data?.message || 'Login failed. Please try again.');
+      const message = err.response?.data?.message;
+     showToast(message, 'error');
     }
   };
 
@@ -72,17 +70,15 @@ const EmployeeLoginPortal = () => {
       }
       const secretKey = import.meta.env.VITE_SECRETKEY;
       const encryptedPassword = CryptoJS.AES.encrypt(password, secretKey).toString();
-      const response = await axios.post("http://localhost:8080/api/auth/createPassword", {
+      const response = await axios.post("http://localhost:8080/api/auth/Password", {
         id: numericId,
         email,
         encryptedPassword
       });
-
-      alert(`Password created for employee ${numericId}`);
       setIsLogin(true);
-      setError('');
+      showToast("Password Created Succesfully", 'success')
     } catch (error) {
-      setError(error.response?.data?.message || 'Failed to create password. Please try again.');
+      showToast(error.response?.data?.message, 'error')
     }
   };
 

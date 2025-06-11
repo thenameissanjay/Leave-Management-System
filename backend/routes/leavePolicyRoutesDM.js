@@ -1,7 +1,18 @@
-const express = require('express')
-const router = express.Router()
-const { getLeavePolicy} = require('../handlers/leavePolicyHandlersDM')
+const express = require('express');
+const router = express.Router();
+const {
+  getLeavePolicy,
+  updateLeavePolicy,
+} = require('../handlers/leavePolicyHandlersDM');
 
-router.get('/getLeavePolicy', getLeavePolicy);
+const { updateLeavePolicySchema } = require('../joi_schema/leavePolicySchema');
+const validator = require('express-joi-validation').createValidator({});
 
-module.exports = router
+router.get('/LeavePolicy', getLeavePolicy);
+router.put(
+  '/LeavePolicy',
+  validator.body(updateLeavePolicySchema),
+  updateLeavePolicy
+);
+
+module.exports = router;

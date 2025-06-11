@@ -14,6 +14,7 @@ import Employee from './employee/employee';
 import RequestForm from './employee/RequestForm';
 import RequestStatus from './employee/RequestStatus';
 import IncomingRequest from './employee/IncomingRequest';
+import ViewLeavePolicy from './employee/LeavePolicy';
 
 const App = () => {
 
@@ -36,6 +37,8 @@ const App = () => {
             <Route path="/RequestForm" element={<RequestForm />} />
             <Route path="/RequestStatus" element={<RequestStatus />} />
             <Route path="/IncomingRequest" element={<IncomingRequest />} />
+            <Route path="/ViewLeavePolicy" element={<ViewLeavePolicy />} />
+
           </Route>
         </Routes>
       </BrowserRouter>

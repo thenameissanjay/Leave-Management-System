@@ -1,105 +1,124 @@
 const conn = require('../connection');
-const {AppDataSource} = require('../connection')
-const {designation} = require('../entity/designation');
+const { AppDataSource } = require('../connection');
+const { designation } = require('../entity/designation');
 const { leave_policy_dm } = require('../entity/leave_policy_dm');
 const { leave_type_dm } = require('../entity/leave_type_dm');
 
-const designationRepo = AppDataSource.getRepository(designation)
+const designationRepo = AppDataSource.getRepository(designation);
 const leaveTypeRepo = AppDataSource.getRepository(leave_type_dm);
 const leavePolicyRepo = AppDataSource.getRepository(leave_policy_dm);
+const {
+  updateLeavePolicyByDesignation,
+} = require('../service/leavePolicyService');
 
-const CreateDesignation = async (req, res)=>{
+/**
+ * POST
+ * /api/designation/Designation
+ * req.body =
+ * {
+  "name": "intern",
+  "description": "intern"
+ }
+ */
+const CreateDesignation = async (req, res) => {
   try {
+    // name = 'intern'
     const { name, description } = req.body;
 
-    if(!name || !description){
-      return res.json({message: 'required name and description'})
+    if (!name || !description) {
+      return res.json({ message: 'required name and description' });
     }
 
     const newDesignation = designationRepo.create({ name, description });
     const designationId = await designationRepo.save(newDesignation);
 
+    // add 'intern' to Leave Policy entity
+    await updateLeavePolicyByDesignation(designationId.id);
 
-    const LeaveTypes = await leaveTypeRepo.find();
-    
-    const leavePolicies = LeaveTypes.map((type) => ({
-      employee_type_id:designationId.id,
-      leave_type_id: type.id,
-      max_days_per_year: 0
-    }))
-    await leavePolicyRepo.save(leavePolicies);
-
-    res.status(201).json({ success: true, message: "Designation created" });
+    res.status(201).json({ success: true, message: 'Designation created' });
   } catch (err) {
-    res.status(500).json({ error: "Failed to create designation", details: err.message });
+    res
+      .status(500)
+      .json({ error: 'Failed to create designation', details: err.message });
   }
+};
 
-}
-
-const GetDesignation = async ( req, res)=>{
+/** fetching all designation
+ * GET
+ * /api/designation/Designation
+ */
+const GetDesignation = async (req, res) => {
   try {
-    const all = await designationRepo.find();
-    res.json(all);
+    const allDesignation = await designationRepo.find();
+    res.json(allDesignation);
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch designations" });
-  
-
-}
-}
-
-const GetDesignationRole = async (req, res)=>{
-  
-  try {
-    const roles = await designationRepo.find({ select: ["name"] });
-    res.json(roles);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to fetch roles" });
+    res.status(500).json({ error: 'Failed to fetch designations' });
   }
+};
 
-}
+/** delete designation
+ * DELETE
+ * /api/designation/Designation/${DesignationId}
+ */
 
-const deleteDesignation =  async (req, res) => {
+const deleteDesignation = async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    
-    if(!id){
-      return res.json({message: 'required name and description'})
+    const id = req.params.DesignationID;
+
+    if (!id) {
+      return res.json({ message: 'required name and description' });
     }
-    await leavePolicyRepo.delete({employee_type_id: id});
-    const result = await designationRepo.delete(id);
+    // aslo delet the employee table
+    // deleting designation in Leave Policy Entity
+    await leavePolicyRepo.delete({ employee_type_id: id });
+    // deleting designation in Designation entity
+    await designationRepo.delete(id);
 
-    if (result.affected === 0) {
-      return res.status(404).json({ error: "Designation not found" });
-    }
-
-    res.json({ success: true, message: "Designation deleted successfully" });
+    res.json({ success: true, message: 'Designation deleted successfully' });
   } catch (err) {
-    res.status(500).json({ error: "Failed to delete designation", details: err.message });
-  }
-}
+    console.log(err);
 
-const updateDesignation = async (req,res)=>{
-  const id = parseInt(req.params.id);
-  
-  if(!id){
-    return res.json({message: 'required name and description'})
+    res
+      .status(500)
+      .json({ error: 'Failed to delete designation', details: err.message });
   }
-  const { newName, newDescription, oldName } = req.body;
+};
+
+/**
+ * PUT
+ * /api/designation/Designation/${designationID}
+ * req.body =
+ * {
+  "name": "intern",
+  "description": "intern"
+ }
+ */
+const updateDesignation = async (req, res) => {
+  const id = req.params.DesignationID;
+
+  if (!id) {
+    return res.json({ message: 'required name and description' });
+  }
+  const { name, description } = req.body;
 
   try {
-    // Update designation
+    // Update designation by ID
     await designationRepo.update(id, {
-      name: newName,
-      description: newDescription,
+      name: name,
+      description: description,
     });
-    
 
-
-    res.json({ success: true, message: "Designation updated successfully" });
+    res.json({ success: true, message: 'Designation updated successfully' });
   } catch (err) {
-    console.log(err)
-    res.status(500).json({ error: "Failed to update designation", details: err.message });
+    res
+      .status(500)
+      .json({ error: 'Failed to update designation', details: err.message });
   }
-}
+};
 
-module.exports = {CreateDesignation, GetDesignation, deleteDesignation, GetDesignationRole, updateDesignation}
+module.exports = {
+  CreateDesignation,
+  GetDesignation,
+  deleteDesignation,
+  updateDesignation,
+};

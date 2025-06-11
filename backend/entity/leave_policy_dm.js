@@ -21,6 +21,9 @@ const leave_policy_dm = new EntitySchema({
     max_days_per_year: {
       type: "int",
     },
+    accrual_leave:{
+      type: "int",
+    }
   },
   relations:{
     designation: { 

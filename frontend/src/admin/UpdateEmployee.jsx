@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useToast } from '../employee/ui/ToastContainer';
 
 const UpdateEmployee = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [values, setValues] = useState({
     name: '',
     email: '',
     phone: '',
     designation: '',
     reporting_to: '',
-    level: '',
-    casual: 0,
-    sick: 0,
-    others: 0,
     date_of_joining: ''
   });
 
@@ -24,7 +22,7 @@ const UpdateEmployee = () => {
     console.log('hello')
     const fetchEmployee = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/admin/GetEmployee/${id}`);
+        const response = await axios.get(`http://localhost:8080/api/admin/Employee/${id}`);
         setValues(response.data);
 
       } catch (err) {
@@ -33,14 +31,14 @@ const UpdateEmployee = () => {
           const message = err.response?.data?.message;
           console.log(err)
           if (err.response?.status === 403) {
-            alert(message || "You are not authorized to access this resource.");
+            showToast(message || "You are not authorized to access this resource.", 'error');
             navigate('/')
           } else if (err.response?.status === 401) {
-            alert(message || "Session expired. Please log in again.");
+            showToast(message || "Session expired. Please log in again.", 'error');
             navigate('/')
 
           } else {
-            alert("An unexpected error occurred.");
+            showToast("An unexpected error occurred.", 'error');
           }
         } 
       }
@@ -59,12 +57,12 @@ const UpdateEmployee = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8080/api/admin/updateEmployee/${id}`, values);
-      alert('Employee updated successfully!');
+      await axios.put(`http://localhost:8080/api/admin/Employee/${id}`, values);
+      showToast('Employee updated successfully!', 'success');
       navigate('/ViewEmployee'); 
     } catch (error) {
       console.error('Error updating employee:', error);
-      alert('Failed to update employee. Please try again.');
+      showToast('Failed to update employee. Please try again.', 'error');
     }
   };
 

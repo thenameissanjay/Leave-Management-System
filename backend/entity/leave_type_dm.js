@@ -1,3 +1,4 @@
+const { boolean } = require('joi');
 const {EntitySchema} = require( 'typeorm');
 
 const leave_type_dm = new EntitySchema({
@@ -15,6 +16,12 @@ const leave_type_dm = new EntitySchema({
     description: {
       type: "varchar",
     },
+    yearAccrual:{
+      type: Boolean
+    },
+    monthAccrual:{
+      type: Boolean
+    }
   },
 });
 

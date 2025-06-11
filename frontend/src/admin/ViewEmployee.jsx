@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useToast } from '../employee/ui/ToastContainer';
 
 const ViewEmployee = () => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { showToast } = useToast();
+
 
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/admin/getEmployee');
+        const response = await axios.get('http://localhost:8080/api/admin/Employee');
         
         const data = response.data;
         console.log(response.data)
@@ -21,13 +24,13 @@ const ViewEmployee = () => {
           const message = err.response?.data?.message;
           console.log(err)
           if (err.response?.status === 403) {
-            alert(message || "You are not authorized to access this resource.");
+            showToast(message || "You are not authorized to access this resource.", 'error');
             navigate('/');
           } else if (err.response?.status === 401) {
-            alert(message || "Session expired. Please log in again.");
+            showToast(message || "Session expired. Please log in again.", 'error');
             navigate('/');
           } else {
-            alert("An unexpected error occurred.");
+            showToast("An unexpected error occurred.", 'error');
           }
         }    
         } finally {
@@ -41,11 +44,11 @@ const ViewEmployee = () => {
   const handleDelete = async (employeeId) => {
     if (window.confirm('Are you sure you want to delete this employee?')) {
       try {
-        await axios.delete(`http://localhost:8080/api/admin/deleteEmployee/${employeeId}`);
+        await axios.delete(`http://localhost:8080/api/admin/Employee/${employeeId}`);
         setEmployees(employees.filter(emp => emp.employee_id !== employeeId));
-        alert('Employee deleted successfully!');
+        showToast('Employee deleted successfully!', 'success');
       } catch (err) {
-        alert('Failed to delete employee');
+        showToast('Failed to delete employee', 'error');
         console.error('Delete error:', err);
       }
     }
@@ -86,7 +89,6 @@ const ViewEmployee = () => {
                 <p><span className="font-medium">Email:</span> {employee.email}</p>
                 <p><span className="font-medium">Phone:</span> {employee.phone}</p>
                 <p><span className="font-medium">Designation:</span> {employee.designation}</p>
-                <p><span className="font-medium">Level:</span> {employee.level}</p>
                 <p><span className="font-medium">Joined:</span> {employee.date_of_joining}</p>
               </div>
 

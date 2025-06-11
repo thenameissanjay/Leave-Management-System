@@ -1,187 +1,188 @@
-const {AppDataSource} = require('../connection');
+const { AppDataSource } = require('../connection');
 const { leave_request } = require('../entity/leave_requests');
-const {convertToCalendarFormat} = require('../function/calendarFunction')
-const employeeRepo = AppDataSource.getRepository("employee");
-const leaveRepo = AppDataSource.getRepository("leave_policy");
+const { convertToCalendarFormat } = require('../utils/calendarFunction');
+const employeeRepo = AppDataSource.getRepository('employee');
+const { designation } = require('../entity/designation');
+const designationRepo = AppDataSource.getRepository(designation);
+
+const leaveRepo = AppDataSource.getRepository('leave_policy');
 const leaveRequestRepo = AppDataSource.getRepository(leave_request);
-const {LeaveStatus, LeaveStatusLabel} = require('../entity/leave_requests');
-const getIdNameDesg = async  (req, res) => {
+const { LeaveStatus, LeaveStatusLabel } = require('../entity/leave_requests');
+const { leave_balance } = require('../entity/leave_balance');
+const { leave_type_dm } = require('../entity/leave_type_dm');
+const { employee } = require('../entity/employee');
+const leaveBalanceRepo = AppDataSource.getRepository(leave_balance);
+
+
+/** fetch DesignationName="Sick" by DesignationID="1"
+ * GET 
+ * /api/employee/DesignationName/${DesignationID}
+ */
+const getDesignationName = async (req, res) => {
+  const  designationID  = req.params.DesignationID;
+  if (!designationID) {
+    return res.json({ message: 'required name and description' });
+  }
   try {
-    const data = await employeeRepo.find({
-      select: ['employee_id', 'name', 'designation'],
+    const data = await designationRepo.find({
+      where: { id: designationID },
+      select: ['name'],
     });
     res.json(data);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Database query failed' });
   }
-  }
+};
 
-const getIdNameDesgId = async (req, res) => {
-    const { id } = req.params;
-    if(!id){
-      return res.json({message: 'required name and description'})
-    }
-    try {
-      const data = await employeeRepo.find({
-        where: { employee_id: id },
-        select: ['employee_id', 'name', 'designation'],
-      });
-      res.json(data);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Database query failed' });
-    }
-  }
 
-const getName = async (req, res) => {
-  const { id } = req.params;
-  if(!id){
-    return res.json({message: 'required name and description'})
+/** fetch ReportingName="user_manager" by ReportingID="3"
+ * GET 
+ * /api/employee/ReportingManagerName/${ReportingManagerID}
+ */
+const getReportingManagerName = async (req, res) => {
+  const { ReportingManagerID } = req.params;
+  if (!ReportingManagerID) {
+    return res.json({ message: 'required name and description' });
   }
   try {
     const employee = await employeeRepo.findOne({
-      where: { employee_id: id },
+      where: { employee_id: ReportingManagerID },
       select: ['name'],
     });
 
     if (!employee) {
       return res.status(404).json({ error: 'Employee not found' });
     }
-    console.log(employee)
+    console.log(employee);
 
     res.json({ name: employee.name });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Database error' });
   }
-  }
+};
 
-const getLeave = async (req, res) => {
-    const { id } = req.params;
-    if(!id){
-      return res.json({message: 'required name and description'})
-    }
-    try {
-      const employee = await employeeRepo.findOne({
-        where: { employee_id: id },
-        select: ['sick', 'casual', 'others'],
-      });
-  
-      if (!employee) {
-        return res.status(404).json({ error: 'Employee not found' });
-      }
-  
-      res.json(employee);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Database error' });
-    }
-  }
 
-const getWhereDesg = async (req, res) => {
-    const { role } = req.query;
-    if(!role){
-      return res.json({message: 'required name and description'})
-    }
 
-    if (!role) {
-      return res.status(400).json({ error: 'Role is required' });
-    }
-  
-    try {
-      const result = await employeeRepo.find({
-        where: { designation: role },
-        select: ['employee_id', 'name', 'designation'],
-      });
-      res.json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Database query failed' });
-    }
-  };
 
+/** Fetchign leave balance, leave taken , Total leave , leave type of employee
+   GET
+   /api/employee/TotalLeave/{employeeID}
+ */
 const getTotalLeave = async (req, res) => {
-    const { id } = req.params;
-    if(!id){
-      return res.json({message: 'required name and description'})
-    }
-    try {
-      const result = await leaveRepo.findOne({
-        where: { level: id },
-        select: ['total_sick', 'total_casual', 'total_others'],
-      });
-      console.log(result)
-  
-      if (!result) {
-        return res.status(404).json({ error: 'Leave policy not found' });
-      }
-  
-      res.json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Database error' });
-    }
-  }
-  
-const getLeaveLevelOrder = async (req, res) => {
-    const { leaveCount, fromDate, toDate } = req.body;
-    if(!leaveCount || !fromDate || !toDate){
-      return res.json({message: 'required name and description'})
-    }
-    try {
-      const repo = AppDataSource.getRepository("leave_level");
-
-      const result = await repo
-        .createQueryBuilder('leave_level')
-        .where('leave_level.start_count <= :leaveCount', { leaveCount })
-        .andWhere('leave_level.end_count >= :leaveCount', { leaveCount })
-        .andWhere('leave_level.start_date <= :fromDate', { fromDate })
-        .andWhere('leave_level.end_date >= :toDate', { toDate })
-        .getMany();
-      res.json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Query failed' });
-    }
-  };
-
-const getCalendar = async (req, res) =>{
-   const reporting_to = req.params.id;
-   if(!reporting_to){
-    return res.json({message: 'required name and description'})
-  }
-
   try {
-    const results = await leaveRequestRepo.createQueryBuilder('lr')
-    .leftJoinAndSelect('lr.employee', 'e')
-    .select([
-      'e.employee_id AS employee_id',
-      'e.name AS name',
-      'lr.reason AS reason',
-      'lr.from_date AS from_date',
-      'lr.to_date AS to_date',
-    ])
-    .where('lr.reporting_to = :reporting_to', {reporting_to: reporting_to})
-    .andWhere('lr.status = :status', {status: LeaveStatus.approved})
-    .getRawMany()
-    const calendarJson = convertToCalendarFormat(results)
-    console.log(results)
-    return res.json(calendarJson)
+    const employeeId = req.params.EmployeeID;
+
+    if (!employeeId) {
+      return res.status(400).json({ error: 'Invalid employee ID' });
+    }
+
+    const leaveBalances = await leaveBalanceRepo.find({
+      where: { employee_id: employeeId },
+      relations: ['leave_type_dm'],
+    });
+    const extracted = [];
+
+    for (const item of leaveBalances) {
+      extracted.push({
+        total_leave: item.total_leave, // 10
+        leave_taken: item.leave_taken, // 5
+        balance_leave: item.balance_leave, // 5
+        leave_type_name: item.leave_type_dm.name, // Sick
+      });
+    }
+    res.json(extracted);
   } catch (error) {
-    return res.json({err: error})
+    console.error('Error fetching leave balances:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-  };
+};
+
+/** Fetching leaveType for UI DropDown in Request form
+   GET
+   /api/employee/LeaveId/{employeeID}
+ */
+const getLeaveId = async (req, res) => {
+  try {
+    const employeeId = req.params.EmployeeID;
+    if (!employeeId) {
+      return res.status(400).json({ error: 'Invalid employee ID' });
+    }
+
+    const leaveBalances = await leaveBalanceRepo.find({
+      where: { employee_id: employeeId },
+      relations: ['leave_type_dm'], 
+    });
+    const response = {};
+
+    leaveBalances.forEach((lb) => {
+      const { id, name } = lb.leave_type_dm; // in your entity it's many-to-many
+      if (id && lb.total_leave != 0) {      // ignore total_leave = null
+        response[`${id}`] = name;         // {1:"sick", 2:"casual", 3:"LOP"}
+      }
+    });
+    console.log(response);
+    res.json(response);
+  } catch (error) {
+    console.error('Error fetching leave balances:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+/**
+ * GET
+ * /api/employee/teamCalendar/${EmployeeID}
+ */
+const TeamCalendar = async (req, res) => {
+  const EmployeeID = req.params.EmployeeID;
+
+  // Step 1: Get employees reporting to this manager, with designation
+  const teamMembers = await employeeRepo.find({
+    where: { reporting_to: EmployeeID },
+    select: {
+      employee_id: true,
+      name: true,
+    },
+    relations: ["designation"],
+  });
+  console.log(teamMembers)
+
+  // Step 2: Fetch leaves for each team member with status "400" (approved/rejected/pending?)
+  const results = [];
+
+  for (const member of teamMembers) {
+    const leaves = await leaveRequestRepo.find({
+      where: {
+        employee: { employee_id: member.employee_id },
+        status: "400",
+      },
+      select: ["request_id", "from_date", "to_date", "leave_type"],
+    });
+
+    results.push({
+      employee_id: member.employee_id,
+      name: member.name,
+      designation: member.designation?.name || null,
+      leaves: leaves.map(l => ({
+        request_id: l.request_id,
+        from_date: l.from_date,
+        to_date: l.to_date,
+        leaveType: l.leave_type
+      })),
+    });
+  }
+
+  res.json(results);
+};
+
+  
 
 
 module.exports = {
-   getIdNameDesg, 
-   getName,
-   getWhereDesg,
-   getIdNameDesgId,
-   getLeave,
-   getLeaveLevelOrder,
-   getTotalLeave,
-   getCalendar
-}
-  
+  getReportingManagerName,
+  getDesignationName,
+  getTotalLeave,
+  getLeaveId,
+  TeamCalendar
+};

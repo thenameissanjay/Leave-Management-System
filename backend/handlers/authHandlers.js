@@ -1,22 +1,31 @@
-const {AppDataSource} = require('../connection')
-const {adminToken , employeeToken} = require('../JWT/create')
-const repo = AppDataSource.getRepository("employee");
-const CryptoJS = require("crypto-js");
+const { AppDataSource } = require('../connection');
+const { adminToken, employeeToken } = require('../JWT/create');
+const repo = AppDataSource.getRepository('employee');
+const CryptoJS = require('crypto-js');
 const bcrypt = require('bcryptjs');
-const { decryptFunction } = require('../function/decrypt');
-const { hashGenerate } = require('../function/hashPassword');
+const { decryptFunction } = require('../utils/decrypt');
+const { hashGenerate } = require('../utils/hashPassword');
 require('dotenv').config();
 
-
-const createPassword  = async (req, res) => {
+/**Create New Employee Password
+ * POST 
+ * /api/auth/Password
+ * req.body = 
+ * {
+  "id": 1,
+  "email": "sanjay@gmail.com",
+  "encryptedPassword": "U2FsdGVkX18eLalVZFiduBLFUDsRxYeVMWVI2dCrSKY="  // sanjay123
+   }
+ * 
+ */
+const createPassword = async (req, res) => {
   const { encryptedPassword, id, email } = req.body;
-  
+
   try {
-     
     if (!email || !encryptedPassword || !id) {
       return res.status(400).json({
         success: false,
-        error: 'Email and password are required'
+        error: 'Email and password are required',
       });
     }
 
@@ -24,98 +33,116 @@ const createPassword  = async (req, res) => {
       where: {
         employee_id: id,
         email: email,
-        password: "" 
-      }
+        password: '',
+      },
     });
 
     if (!employee) {
       return res.status(404).json({
-        error: 'Employee not found or password already set'
+        error: 'Employee not found or password already set',
       });
     }
-   const decryptedPassword = decryptFunction(encryptedPassword);
-   const hashedPassword =  await hashGenerate(decryptedPassword);
-   
+    // decrypting password using crypto JS
+    const decryptedPassword = decryptFunction(encryptedPassword); // sanjay123
+    // hashing using bcrypt
+    const hashedPassword = await hashGenerate(decryptedPassword); // $10$gBDg44jVdWNoWlq.GjJLLOpyLqwDd4Z0x/ABmIb9uPLLlnkvVMI8i
 
-   employee.password = hashedPassword;
-   await repo.save(employee);
+    employee.password = hashedPassword;
+    // stored hashed password
+    await repo.save(employee);
 
     res.json({
       success: true,
-      message: 'Password created successfully'
+      message: 'Password created successfully',
     });
-
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Database error' });
   }
-  }
+};
+
+/** Checking Employee Login
+ * POST 
+ * /api/auth/employeeLogin
+ * req.body = 
+ * {
+  "email": "sanjay@gmail.com",
+  "encryptedPassword": "U2FsdGVkX18eLalVZFiduBLFUDsRxYeVMWVI2dCrSKY="  // sanjay123
+   }
+ * 
+ */
 
 const employeeLogin = async (req, res) => {
-    const { email, encryptedPassword } = req.body;
-    if (!email || !encryptedPassword) {
-      return res.status(400).json({
-        success: false,
-        error: 'Email and password are required'
-      });
-    }
-  
-    try {
+  const { email, encryptedPassword } = req.body;
 
-      const decryptedPassword = decryptFunction(encryptedPassword);
-      const employee = await repo.findOne({ where: { email } });
-      const isMatch = await bcrypt.compare( decryptedPassword, employee.password);
-
-      if (!employee || !isMatch) {
-        return res.status(401).json({
-          success: false,
-          error: 'Invalid email or password'
-        });
-      }
-  
-      const token = employeeToken();  // token = employee
-  
-      res.json({
-        success: true,
-        employeeId: employee.employee_id,
-        name: employee.name,
-        email: employee.email,
-        phone: employee.phone,
-        designation: employee.designation,
-        level: employee.level,
-        date_of_joining: employee.date_of_joining,
-        sick: employee.sick,
-        casual: employee.casual,
-        others: employee.others,
-        reporting_to: employee.reporting_to,
-        access_token: token,
-        message: 'Login successful'
-      });
-  
-    } catch (err) {
-      console.error('Login error:', err);
-      res.status(500).json({
-        success: false,
-        error: 'Internal server error'
-      });
-    }
+  if (!email || !encryptedPassword) {
+    return res.status(400).json({
+      success: false,
+      error: 'Email and password are required',
+    });
   }
 
-const adminLogin = (req, res)=>{
+  try {
+    // decrypting password using crypto JS
+    const decryptedPassword = decryptFunction(encryptedPassword); // sanjay123
+    const employee = await repo.findOne({ where: { email } });
+    // matching sanjay123 with hashed Password
+    const isMatch = await bcrypt.compare(decryptedPassword, employee.password);
+
+    if (!employee || !isMatch) {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid email or password',
+      });
+    }
+
+    //  Generating JWT Token "role:employee"
+    const token = employeeToken();
+    // sending to employee login page
+    res.json({
+      employeeId: employee.employee_id,
+      name: employee.name,
+      email: employee.email,
+      phone: employee.phone,
+      designation: employee.designation,
+      date_of_joining: employee.date_of_joining,
+      reporting_to: employee.reporting_to,
+      access_token: token, // JWT Token
+    });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+    });
+  }
+};
+
+/** Generating Admin JWT Token 
+ * POST
+ * /api/auth/adminlogin'
+ * req.body = 
+ * {
+  "role": "admin"
+   }
+ * 
+ */
+const adminLogin = (req, res) => {
   const { role } = req.body;
   if (!role) {
     return res.status(400).json({
       success: false,
-      error: 'Role is required'
+      error: 'Role is required',
     });
   }
 
-  const token = adminToken();  // toke = admin
+  // Generatign JWT Token
+  const token = adminToken();
   res.json({ access_token: token });
-}
+};
 
 module.exports = {
-    createPassword,
-    employeeLogin,
-    adminLogin
-}
+  createPassword,
+  employeeLogin,
+  adminLogin,
+};

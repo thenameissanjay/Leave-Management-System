@@ -11,13 +11,11 @@ const adminAuth = (req, res, next) => {
   const token = authHeader.split(' ')[1];
 
   try {
-
-    const decoded = jwt.verify(token, process.env.SECRETKEY);
+   const decoded = jwt.verify(token, process.env.SECRETKEY);
    if(decoded.role == "admin")
     next();
    if(decoded.role != "admin")
    {  
-    
     return  res.status(403).json({ message: "admin authorized is need" });
    }
   } catch (err) {

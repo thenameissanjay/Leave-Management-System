@@ -34,15 +34,15 @@ const leave_balance = new EntitySchema({
   },
   relations:{
     employee: { 
-      type: "many-to-many", 
+      type: "many-to-one", 
       target: employee,
       joinColumn: {
         name: "employee_id",
         referencedColumnName: "employee_id",
       },
     },
-    leave_type:{
-      type:'many-to-many',
+    leave_type_dm:{
+      type:'many-to-one',
       target: leave_type_dm,
       joinColumn:{
         name:'leave_type_id',

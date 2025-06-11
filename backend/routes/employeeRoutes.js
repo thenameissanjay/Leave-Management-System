@@ -1,16 +1,45 @@
-const express = require('express')
-const router = express.Router()
-const {getIdNameDesg, getName, getWhereDesg,getIdNameDesgId,getLeave,getTotalLeave, getLeaveLevelOrder, getCalendar} = require('../handlers/employeeHandlers')
+const express = require('express');
+const router = express.Router();
+const {
+  getReportingManagerName,
+  getLeaveId,
+  getDesignationName,
+  getTotalLeave,
+  TeamCalendar,
+} = require('../handlers/employeeHandlers');
+const {
+  employeeIdSchema,
+  reportingIdSchema,
+} = require('../joi_schema/adminSchema');
 
-router.get('/getIdNameDesg', getIdNameDesg )   // all frotnene- /api/employee/getIDNameDesg -> serer.js
-router.get('/getIdNameDesg/:id', getIdNameDesgId )   // <- id
-router.get('/getWhereDesg', getWhereDesg )           // <- role
-router.get('/getName/:id', getName)
-router.get('/getLeave/:id', getLeave)
-router.get('/getTotalLeave/:id', getTotalLeave);
-router.post('/getLeaveLevelOrder', getLeaveLevelOrder);
+const { designationIdSchema } = require('../joi_schema/desigantionSchema');
+const validator = require('express-joi-validation').createValidator({});
 
-router.get('/getCalendar/:id', getCalendar);
+router.get(
+  '/DesignationName/:DesignationID',
+  validator.params(designationIdSchema),
+  getDesignationName
+);
+router.get(
+  '/ReportingManagerName/:ReportingManagerID',
+  validator.params(reportingIdSchema),
+  getReportingManagerName
+);
+router.get(
+  '/TotalLeave/:EmployeeID',
+  validator.params(employeeIdSchema),
+  getTotalLeave
+);
+router.get(
+  '/LeaveId/:EmployeeID',
+  validator.params(employeeIdSchema),
+  getLeaveId
+);
 
+router.get(
+  '/teamCalendar/:EmployeeID',
+  validator.params(employeeIdSchema),
+  TeamCalendar
+);
 
 module.exports = router;

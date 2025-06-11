@@ -1,7 +1,5 @@
-const { EntitySchema } = require("typeorm");
+const { EntitySchema, PrimaryColumnCannotBeNullableError } = require("typeorm");
 const { designation } = require("./designation");
-
-
 
     const employee = new EntitySchema({
         name: "employee",
@@ -10,6 +8,7 @@ const { designation } = require("./designation");
           employee_id: {
             primary: true,
             type: "int",
+            generated: true
           },
           name: {
             type: "varchar",
@@ -22,38 +21,22 @@ const { designation } = require("./designation");
             },
             designation: {
               type: "int",
-            },
-            level: {
-              type: "varchar",
+              nullable: true
+
             },
             date_of_joining: {
-              type: "varchar",
-            },
-            sick: {
-              type: "varchar",
-            },
-            casual: {
-              type: "varchar",
-            },
-            others: {
-              type: "varchar",
+              type: "date",
+              nullable: true
             },
             reporting_to: {
               type: "int",
+              nullable: true
             },
             password: {
               type: "varchar",
             },
         },
         relations: {
-          leavePolicy: {  // employee() -> leave plocyy(level)
-            type: "many-to-one", 
-            target: "leave_policy",
-            joinColumn: {
-              name: "level",
-              referencedColumnName: "level",
-            },
-          },
           designation:{
             type: "many-to-one",
             target: designation,

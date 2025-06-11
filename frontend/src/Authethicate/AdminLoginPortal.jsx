@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import axios from 'axios';
+import { useToast } from "../employee/ui/ToastContainer";
+
 
 const AdminLoginPortal = () => {
   const [username, setUsername] = useState('');
+  const { showToast } = useToast();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { setUser } = useContext(AuthContext);
@@ -23,10 +26,11 @@ const AdminLoginPortal = () => {
         access_token: access_token
        });
 
-
+      
       navigate('/Admin');
+      showToast('Logged Successfully', 'success')
     } else {
-      setError('Invalid credentials. Use admin/admin');
+      showToast('Invalid credentials', 'error')
     }
   };
 
