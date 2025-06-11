@@ -16,7 +16,7 @@ const ApprovalList = () => {
       try {
         setLoading(true);
         const employeeID = user.EmployeeID;
-        const response = await axios.get(`http://localhost:8080/api/leave/incomingHistory/${employeeID}`);
+        const response = await axios.get(`http://localhost:8080/api/leave/incoming-history/${employeeID}`);
         setApprovalData(response.data);
       } catch (err) {
         const message = err.response?.data?.message;

@@ -15,7 +15,7 @@ const leaveBalanceRepo = AppDataSource.getRepository(leave_balance);
 
 /**
  * POST
- * /api/leavetype/LeaveType
+ * /api/leavetype/leave-type
  * req.body =
  * {
   "name": "sick",
@@ -67,7 +67,7 @@ const CreateLeaveType = async (req, res) => {
 
 /**
  * GET
- * /api/leavetype/LeaveType
+ * /api/leavetype/leave-type
  */
 const GetLeaveType = async (req, res) => {
   try {
@@ -80,7 +80,7 @@ const GetLeaveType = async (req, res) => {
 
 /**
  * DELETE
- * /api/leavetype/LeaveType/${id}
+ * /api/leavetype/leave-type/${id}
  */ 
 const deleteLeaveType = async (req, res) => {
   try {
@@ -106,7 +106,7 @@ const deleteLeaveType = async (req, res) => {
 
 /**
  * PUT
- * /api/leavetype/LeaveType/${id}
+ * /api/leavetype/leave-type/${id}
  * req.body =
  * {
   "name": "sick",

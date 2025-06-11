@@ -12,7 +12,7 @@ const LeavePolicyManager = () => {
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/leavepolicyDM/LeavePolicy");
+        const res = await axios.get("http://localhost:8080/api/leave-policy/leave-policy");
         setLeavePolicies(res.data);
         setOriginalPolicies(JSON.parse(JSON.stringify(res.data)));
       } catch (err) {
@@ -78,7 +78,7 @@ const LeavePolicyManager = () => {
         return;
       }
 
-      await axios.put("http://localhost:8080/api/leavepolicyDM/LeavePolicy", changes);
+      await axios.put("http://localhost:8080/api/leave-policy/leave-policy", changes);
       showToast("Leave policies updated successfully.", 'success');
       setOriginalPolicies(JSON.parse(JSON.stringify(leavePolicies)));
     } catch (err) {

@@ -13,18 +13,18 @@ const {
 const validator = require('express-joi-validation').createValidator({});
 
 router.post(
-  '/employeeLogin',
+  '/employee-login',
   validator.body(employeeLoginSchema),
   employeeLogin
 );
 
 router.post(
-    '/adminlogin', 
+    '/admin-login', 
     validator.body(adminLoginSchema), 
     adminLogin);
     
 router.post(
-  '/Password',
+  '/password',
   validator.body(createpasswordSchema),
   createPassword
 );

@@ -13,7 +13,7 @@ const {
 
 
 // GET
-// /api/leavepolicyDM/getLeavePolicy 
+// /api/leavepolicy/leave-policy 
  
 const getLeavePolicy = async (req, res) => {
   try {
@@ -103,7 +103,7 @@ const getLeavePolicy = async (req, res) => {
 };
 
 // PUT
-// /api/leavepolicyDM/updateLeavePolicy
+// /api/leavepolicy/leave-policy
 /**req.body = {
  * {
     "designation_id": 21,

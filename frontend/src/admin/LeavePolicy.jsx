@@ -1,5 +1,5 @@
 import React from 'react';
-import DesignationManagement  from './designation';
+import DesignationManagement  from './Designation';
 import LeaveLevelManager  from './LeaveLevel';
 import LeaveTypeManagement from './LeaveType';
 import LeavePolicyDM from './LeavePolicyDM';

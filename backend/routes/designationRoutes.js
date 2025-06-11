@@ -13,22 +13,22 @@ const {
 const validator = require('express-joi-validation').createValidator({});
 
 router.post(
-  '/Designation',
+  '/designation',
   validator.body(createDesignationSchema),
   CreateDesignation
 );
 
-router.get('/Designation', GetDesignation);
+router.get('/designation', GetDesignation);
 
 router.put(
-  '/Designation/:DesignationID',
+  '/designation/:DesignationID',
   validator.params(designationIdSchema),
   validator.body(createDesignationSchema),
   updateDesignation
 );
 
 router.delete(
-  '/Designation/:DesignationID',
+  '/designation/:DesignationID',
   validator.params(designationIdSchema),
   deleteDesignation
 );

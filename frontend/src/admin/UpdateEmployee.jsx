@@ -22,7 +22,7 @@ const UpdateEmployee = () => {
     console.log('hello')
     const fetchEmployee = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/admin/Employee/${id}`);
+        const response = await axios.get(`http://localhost:8080/api/admin/employee/${id}`);
         setValues(response.data);
 
       } catch (err) {
@@ -57,7 +57,7 @@ const UpdateEmployee = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8080/api/admin/Employee/${id}`, values);
+      await axios.put(`http://localhost:8080/api/admin/employee/${id}`, values);
       showToast('Employee updated successfully!', 'success');
       navigate('/ViewEmployee'); 
     } catch (error) {

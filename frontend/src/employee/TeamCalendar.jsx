@@ -15,7 +15,7 @@ const TeamCalendar = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8080/api/employee/teamCalendar/${user.EmployeeID}`
+          `http://localhost:8080/api/employee/team-calendar/${user.EmployeeID}`
         );
         setTeamData(res.data);
       } catch (err) {

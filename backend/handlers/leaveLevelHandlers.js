@@ -13,7 +13,7 @@ const leaveLeaveRepo = AppDataSource.getRepository(leave_level)
 
 /**
  * POST
- * /api/leavelevel/lookup
+ * /api/leavelevel/look-up
  * req.body =
  * {
   "start_count": 1,
@@ -50,7 +50,7 @@ const createLeaveLevel = async (req, res) => {
 
 /**
  * GET
- * /api/leavelevel/lookup
+ * /api/leavelevel/look-up
  */
 const getLeaveLevels = async (req, res) => {
   try {
@@ -64,7 +64,7 @@ const getLeaveLevels = async (req, res) => {
 
 /**
  * PUT
- * /api/leavelevel/lookup/${leave_level_id}
+ * /api/leavelevel/look-up/${leave_level_id}
  * req.body =
  * {
   "start_count": 1,
@@ -101,7 +101,7 @@ const updateLeaveLevel = async (req, res) => {
 
 /**
  * DELETE
- * /api/leavelevel/lookup/${id}
+ * /api/leavelevel/look-up/${id}
  */
 const deleteLeaveLevel = async (req, res) => {
   try {

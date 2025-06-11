@@ -8,9 +8,9 @@ const {
 const { updateLeavePolicySchema } = require('../joi_schema/leavePolicySchema');
 const validator = require('express-joi-validation').createValidator({});
 
-router.get('/LeavePolicy', getLeavePolicy);
+router.get('/leave-policy', getLeavePolicy);
 router.put(
-  '/LeavePolicy',
+  '/leave-policy',
   validator.body(updateLeavePolicySchema),
   updateLeavePolicy
 );

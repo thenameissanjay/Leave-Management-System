@@ -16,29 +16,29 @@ const {
 const validator = require('express-joi-validation').createValidator({});
 
 router.post(
-    '/Employee', 
+    '/employee', 
     validator.body(createEmployeeSchema), 
     createEmployee);
 
-router.get('/Employee', getEmployee);
+router.get('/employee', getEmployee);
 
 router.get(
-    '/Employee/:EmployeeID', 
+    '/employee/:EmployeeID', 
     validator.params(employeeIdSchema), 
     GetEmployee);
 
 router.put(
-  '/Employee/:EmployeeID',
+  '/employee/:EmployeeID',
   validator.params(employeeIdSchema),
   validator.body(updateEmployeeSchema),
   updateEmployee
 );
 
 router.delete(
-    '/Employee/:EmployeeID', 
+    '/employee/:EmployeeID', 
     validator.params(employeeIdSchema),
     deleteEmployee);
 
-router.get('/EmployeeIdNameDesg', EmployeeIdNameDesg);
+router.get('/employee-id-name-desg', EmployeeIdNameDesg);
 
 module.exports = router;

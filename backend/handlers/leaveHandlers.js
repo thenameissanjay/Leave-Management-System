@@ -39,7 +39,7 @@ const LeaveStatusFlow = [
 ];
 
 /**   create leave request 
-   POST /api/leave/requestLeave
+   POST /api/leave/request-leave
     req.body = {
   "employee_id": 24,
   "leaveType": "45",
@@ -160,7 +160,7 @@ const requestLeave = async (req, res) => {
 };
 
 /**  Fetching Incoming Leave Request 
- // GET http://localhost:8080/api/leave/reportingLeaveStatus?EmployeeID=${EmployeeID}&role=${role} 
+ // GET http://localhost:8080/api/leave/reporting-leave-status?EmployeeID=${EmployeeID}&role=${role} 
  */
 const reportingLeaveStatus = async (req, res) => {
   const { EmployeeID, role } = req.query;
@@ -238,7 +238,7 @@ const reportingLeaveStatus = async (req, res) => {
 };
 
 /** Approved or Reject the Leave Request by manager
-   * PUT  /api/leave/updateLeaveStatus
+   * PUT  /api/leave/update-leave-status
    * req.body = {{
   "request_id": 13,
   "approver_id": 23,
@@ -353,7 +353,7 @@ const updateLeaveStatus = async (req, res) => {
 
 //list out the previous Leave Status
 /**
-   GET  http://localhost:8080/api/leave/incomingHistory/${EmpolyeeID}
+   GET  http://localhost:8080/api/leave/incoming-history/${EmpolyeeID}
    */
 const incomingHistory = async (req, res) => {
   const employeeID = req.params.EmployeeID;
@@ -404,7 +404,7 @@ const incomingHistory = async (req, res) => {
 };
 
 // Employee Leave Status
-// GET `http://localhost:8080/api/leave/leaveStatus/${employeeID}`
+// GET `http://localhost:8080/api/leave/leave-status/${employeeID}`
 const leaveStatus = async (req, res) => {
   const employeeID = req.params.EmployeeID;
   if (!employeeID) {

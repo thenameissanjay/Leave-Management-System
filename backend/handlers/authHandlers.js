@@ -9,7 +9,7 @@ require('dotenv').config();
 
 /**Create New Employee Password
  * POST 
- * /api/auth/Password
+ * /api/auth/password
  * req.body = 
  * {
   "id": 1,
@@ -63,7 +63,7 @@ const createPassword = async (req, res) => {
 
 /** Checking Employee Login
  * POST 
- * /api/auth/employeeLogin
+ * /api/auth/employee-login
  * req.body = 
  * {
   "email": "sanjay@gmail.com",
@@ -120,7 +120,7 @@ const employeeLogin = async (req, res) => {
 
 /** Generating Admin JWT Token 
  * POST
- * /api/auth/adminlogin'
+ * /api/auth/admin-login'
  * req.body = 
  * {
   "role": "admin"

@@ -16,25 +16,25 @@ const {
 const { employeeIdSchema } = require('../joi_schema/adminSchema');
 const validator = require('express-joi-validation').createValidator({});
 
-router.post('/requestLeave', validator.body(createRequestSchema), requestLeave);
+router.post('/request-leave', validator.body(createRequestSchema), requestLeave);
 router.get(
-  '/incomingHistory/:EmployeeID',
+  '/incoming-history/:EmployeeID',
   validator.params(employeeIdSchema),
   incomingHistory
 );
 router.get(
-  '/leaveStatus/:EmployeeID',
+  '/leave-status/:EmployeeID',
   validator.params(employeeIdSchema),
   leaveStatus
 );
 
 router.get(
-  '/reportingLeaveStatus',
+  '/reporting-leave-status',
   validator.query(incomingLeaveSchema),
   reportingLeaveStatus
 );
 router.put(
-  '/updateLeaveStatus',
+  '/update-leave-status',
   validator.body(approveLeaveSchema),
   updateLeaveStatus
 );

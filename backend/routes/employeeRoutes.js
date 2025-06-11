@@ -16,28 +16,28 @@ const { designationIdSchema } = require('../joi_schema/desigantionSchema');
 const validator = require('express-joi-validation').createValidator({});
 
 router.get(
-  '/DesignationName/:DesignationID',
+  '/designation-name/:DesignationID',
   validator.params(designationIdSchema),
   getDesignationName
 );
 router.get(
-  '/ReportingManagerName/:ReportingManagerID',
+  '/reporting-manager-name/:ReportingManagerID',
   validator.params(reportingIdSchema),
   getReportingManagerName
 );
 router.get(
-  '/TotalLeave/:EmployeeID',
+  '/total-leave/:EmployeeID',
   validator.params(employeeIdSchema),
   getTotalLeave
 );
 router.get(
-  '/LeaveId/:EmployeeID',
+  '/leave-id/:EmployeeID',
   validator.params(employeeIdSchema),
   getLeaveId
 );
 
 router.get(
-  '/teamCalendar/:EmployeeID',
+  '/team-calendar/:EmployeeID',
   validator.params(employeeIdSchema),
   TeamCalendar
 );

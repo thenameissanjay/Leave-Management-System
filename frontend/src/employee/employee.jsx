@@ -26,14 +26,14 @@ const Employee = () => {
   useEffect(() => {
     const fetchReportingName = async (ReportingManagerID) => {
       const results = await axios.get(
-        `http://localhost:8080/api/employee/ReportingManagerName/${ReportingManagerID}`
+        `http://localhost:8080/api/employee/reporting-manager-name/${ReportingManagerID}`
       );
       setReporting(results.data.name);
     };
 
     const fetchDesignationName = async (DesignationID) => {
       const result = await axios.get(
-        `http://localhost:8080/api/employee/DesignationName/${DesignationID}`
+        `http://localhost:8080/api/employee/designation-name/${DesignationID}`
       );
       setDesignation(result.data[0].name);
     };

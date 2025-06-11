@@ -16,7 +16,7 @@ const DesignationManagement = () => {
   useEffect(() => {
     const fetchDesignations = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/designation/Designation');
+        const res = await axios.get('http://localhost:8080/api/designation/designation');
         setDesignations(res.data);
       } catch (err) {
         const message = err.response?.data?.message;
@@ -48,7 +48,7 @@ const DesignationManagement = () => {
     };
 
     try {
-      await axios.put(`http://localhost:8080/api/designation/Designation/${updated.id}`, payload);
+      await axios.put(`http://localhost:8080/api/designation/designation/${updated.id}`, payload);
       setEditIndex(null);
       setOldDesignation(null);
       showToast('Designation updated!', 'success')
@@ -61,7 +61,7 @@ const DesignationManagement = () => {
     if (!window.confirm('Delete this designation?')) return;
 
     try {
-      await axios.delete(`http://localhost:8080/api/designation/Designation/${id}`);
+      await axios.delete(`http://localhost:8080/api/designation/designation/${id}`);
       setDesignations(designations.filter(item => item.id !== id));
       showToast('Deleted!', 'success');
     } catch {
@@ -76,7 +76,7 @@ const DesignationManagement = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:8080/api/designation/Designation', newDesignation);
+      const res = await axios.post('http://localhost:8080/api/designation/designation', newDesignation);
       setDesignations([...designations, newDesignation]);
       setNewDesignation({ name: '', description: '' });
       showToast('Created!', 'success');

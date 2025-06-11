@@ -13,7 +13,7 @@ const {
 
 /**
  * POST
- * /api/designation/Designation
+ * /api/designation/designation
  * req.body =
  * {
   "name": "intern",
@@ -45,7 +45,7 @@ const CreateDesignation = async (req, res) => {
 
 /** fetching all designation
  * GET
- * /api/designation/Designation
+ * /api/designation/designation
  */
 const GetDesignation = async (req, res) => {
   try {
@@ -58,7 +58,7 @@ const GetDesignation = async (req, res) => {
 
 /** delete designation
  * DELETE
- * /api/designation/Designation/${DesignationId}
+ * /api/designation/designation/${DesignationId}
  */
 
 const deleteDesignation = async (req, res) => {
@@ -86,7 +86,7 @@ const deleteDesignation = async (req, res) => {
 
 /**
  * PUT
- * /api/designation/Designation/${designationID}
+ * /api/designation/designation/${designationID}
  * req.body =
  * {
   "name": "intern",

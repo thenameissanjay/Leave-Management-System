@@ -29,7 +29,7 @@ const EmployeeLoginPortal = () => {
       }
       const encryptedPassword = CryptoJS.AES.encrypt(password, secretKey).toString();
     
-      const response = await axios.post("http://localhost:8080/api/auth/employeeLogin", {
+      const response = await axios.post("http://localhost:8080/api/auth/employee-login", {
         email,
         encryptedPassword
       });
@@ -70,7 +70,7 @@ const EmployeeLoginPortal = () => {
       }
       const secretKey = import.meta.env.VITE_SECRETKEY;
       const encryptedPassword = CryptoJS.AES.encrypt(password, secretKey).toString();
-      const response = await axios.post("http://localhost:8080/api/auth/Password", {
+      const response = await axios.post("http://localhost:8080/api/auth/password", {
         id: numericId,
         email,
         encryptedPassword

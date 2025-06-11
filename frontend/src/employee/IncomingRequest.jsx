@@ -25,7 +25,7 @@ const IncomingRequest = () => {
         const EmployeeID = user?.EmployeeID;
         const role = user?.Designation;
 
-        const res = await axios.get(`http://localhost:8080/api/leave/reportingLeaveStatus?EmployeeID=${EmployeeID}&role=${role}`);
+        const res = await axios.get(`http://localhost:8080/api/leave/reporting-leave-status?EmployeeID=${EmployeeID}&role=${role}`);
         const approvals = res.data;
 
         approvals.sort((a, b) => b.leave_request.request_id - a.leave_request.request_id);
@@ -49,7 +49,7 @@ const IncomingRequest = () => {
   const handleApproval = async (requestId, approver_id, status) => {
     const approvedAt = new Date();
     try {
-      const res = await axios.put('http://localhost:8080/api/leave/updateLeaveStatus', {
+      const res = await axios.put('http://localhost:8080/api/leave/update-leave-status', {
         request_id: requestId,
         approver_id,
         status,

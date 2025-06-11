@@ -11,7 +11,7 @@ const ViewLeavePolicy = () => {
     const fetchPolicies = async () => {
       try {
         const res = await axios.get(
-          'http://localhost:8080/api/leavepolicyDM/LeavePolicy'
+          'http://localhost:8080/api/leave-policy/Leave-policy'
         );
         setLeavePolicies(res.data);
       } catch (err) {

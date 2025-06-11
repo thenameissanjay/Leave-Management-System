@@ -20,7 +20,7 @@ const LeaveLevelManager = () => {
     const fetchLevels = async () => {
       try {
         const res = await axios.get(
-          'http://localhost:8080/api/leavelevel/lookup'
+          'http://localhost:8080/api/leave-level/look-up'
         );
         setLevels(res.data);
       } catch (err) {
@@ -58,7 +58,7 @@ const LeaveLevelManager = () => {
 
     try {
       await axios.put(
-        `http://localhost:8080/api/leavelevel/lookup/${item.leave_level_id}`,
+        `http://localhost:8080/api/leave-level/look-up/${item.leave_level_id}`,
         {
           start_count: (item.start_count, 10),
           end_count: parseInt(item.end_count, 10),
@@ -77,7 +77,7 @@ const LeaveLevelManager = () => {
 
     try {
       await axios.delete ( 
-        `http://localhost:8080/api/leavelevel/lookup/${id}`
+        `http://localhost:8080/api/leave-level/look-up/${id}`
       );
       setLevels(levels.filter((lvl) => lvl.leave_level_id !== id));
       showToast('Deleted!', 'success');
@@ -96,7 +96,7 @@ const LeaveLevelManager = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:8080/api/leavelevel/lookup',
+        'http://localhost:8080/api/leave-level/look-up',
         {
           start_count: start_count,
           end_count: end_count, 

@@ -35,7 +35,7 @@ const CreateEmployee = () => {
         designation: values.designation === "" ? null : parseInt(values.designation),
         reporting_to: values.reporting_to === "" ? null : parseInt(values.reporting_to),  
       };
-      const response = await axios.post('http://localhost:8080/api/admin/Employee', payload);
+      const response = await axios.post('http://localhost:8080/api/admin/employee', payload);
       showToast('Employee Added Successfully', 'success')
       setValues({
         name: '',
@@ -66,7 +66,7 @@ const CreateEmployee = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/admin/EmployeeIdNameDesg');
+        const res = await axios.get('http://localhost:8080/api/admin/employee-id-name-desg');
         if (Array.isArray(res.data)) {
           setEmployees(res.data);
           console.log(res.data);
@@ -83,7 +83,7 @@ const CreateEmployee = () => {
 
     const fetchDesignations = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/designation/Designation');
+        const res = await axios.get('http://localhost:8080/api/designation/designation');
         if (Array.isArray(res.data)) {
           setDesignations(res.data);
           console.log(res.data)

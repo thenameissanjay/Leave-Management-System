@@ -16,7 +16,7 @@ const leaveBalanceRepo = AppDataSource.getRepository(leave_balance);
 
 /** fetch DesignationName="Sick" by DesignationID="1"
  * GET 
- * /api/employee/DesignationName/${DesignationID}
+ * /api/employee/designation-name/${DesignationID}
  */
 const getDesignationName = async (req, res) => {
   const  designationID  = req.params.DesignationID;
@@ -38,7 +38,7 @@ const getDesignationName = async (req, res) => {
 
 /** fetch ReportingName="user_manager" by ReportingID="3"
  * GET 
- * /api/employee/ReportingManagerName/${ReportingManagerID}
+ * /api/employee/reporting-manager-name/${ReportingManagerID}
  */
 const getReportingManagerName = async (req, res) => {
   const { ReportingManagerID } = req.params;
@@ -68,7 +68,7 @@ const getReportingManagerName = async (req, res) => {
 
 /** Fetchign leave balance, leave taken , Total leave , leave type of employee
    GET
-   /api/employee/TotalLeave/{employeeID}
+   /api/employee/total-leave/{employeeID}
  */
 const getTotalLeave = async (req, res) => {
   try {
@@ -101,7 +101,7 @@ const getTotalLeave = async (req, res) => {
 
 /** Fetching leaveType for UI DropDown in Request form
    GET
-   /api/employee/LeaveId/{employeeID}
+   /api/employee/leave-id/{employeeID}
  */
 const getLeaveId = async (req, res) => {
   try {
@@ -132,7 +132,7 @@ const getLeaveId = async (req, res) => {
 
 /**
  * GET
- * /api/employee/teamCalendar/${EmployeeID}
+ * /api/employee/team-calendar/${EmployeeID}
  */
 const TeamCalendar = async (req, res) => {
   const EmployeeID = req.params.EmployeeID;

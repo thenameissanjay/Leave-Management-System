@@ -21,7 +21,7 @@ const LeaveTypeManagement = () => {
     const fetchLeaveType = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:8080/api/leavetype/LeaveType'
+          'http://localhost:8080/api/leave-type/leave-type'
         );
         setLeaveType(response.data);
       } catch (err) {
@@ -55,7 +55,7 @@ const LeaveTypeManagement = () => {
 
     try {
       await axios.put(
-        `http://localhost:8080/api/leavetype/LeaveType/${updatedLeaveType.id}`,
+        `http://localhost:8080/api/leave-type/leave-type/${updatedLeaveType.id}`,
         payload
       );
       setEditIndex(null);
@@ -74,7 +74,7 @@ const LeaveTypeManagement = () => {
       return;
 
     try {
-      await axios.delete(`http://localhost:8080/api/leavetype/LeaveType/${id}`);
+      await axios.delete(`http://localhost:8080/api/leave-type/leave-type/${id}`);
       setLeaveType(leaveType.filter((lt) => lt.id !== id));
       showToast('Leave Type deleted successfully!', 'success');
     } catch (err) {
@@ -91,7 +91,7 @@ const LeaveTypeManagement = () => {
 
     try {
       await axios.post(
-        'http://localhost:8080/api/leavetype/LeaveType',
+        'http://localhost:8080/api/leave-type/leave-type',
         newLeaveType
       );
       setLeaveType([...leaveType, newLeaveType]);

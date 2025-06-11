@@ -17,7 +17,7 @@ const AdminLoginPortal = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (username == 'admin' && password == 'admin') {
-      const response = await axios.post('http://localhost:8080/api/auth/adminlogin',{
+      const response = await axios.post('http://localhost:8080/api/auth/admin-login',{
         role:"admin"
       })
       const access_token = response.data.access_token;

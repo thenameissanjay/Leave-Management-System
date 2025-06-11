@@ -17,7 +17,7 @@ const RequestStatus = () => {
       try {
         const employeeID = user.EmployeeID;
         const res = await axios.get(
-          `http://localhost:8080/api/leave/leaveStatus/${employeeID}`
+          `http://localhost:8080/api/leave/leave-status/${employeeID}`
         );
         setRequests(res.data);
       } catch (err) {

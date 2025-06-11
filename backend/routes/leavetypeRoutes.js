@@ -13,22 +13,22 @@ const {
 const validator = require('express-joi-validation').createValidator({});
 
 router.post(
-  '/LeaveType',
+  '/leave-type',
   validator.body(createLeaveTypeSchema),
   CreateLeaveType
 );
 
-router.get('/LeaveType', GetLeaveType);
+router.get('/leave-type', GetLeaveType);
 
 router.put(
-  '/LeaveType/:leaveTypeID',
+  '/leave-type/:leaveTypeID',
   validator.params(leaveTypeIdSchema),
   validator.body(createLeaveTypeSchema),
   updateLeaveType
 );
 
 router.delete(
-  '/LeaveType/:leaveTypeID',
+  '/leave-type/:leaveTypeID',
   validator.params(leaveTypeIdSchema),
   deleteLeaveType
 );

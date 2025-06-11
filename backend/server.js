@@ -33,9 +33,9 @@ app.use('/api/auth', authRoutes);
 // Admin
 app.use('/api/admin', adminRoutes);
 app.use('/api/designation',  designationRoutes);
-app.use('/api/leavelevel',  leaveLevelRoutes);
-app.use('/api/leavetype', adminAuth, leaveTypeRoutes);
-app.use('/api/leavepolicyDM', leavePolicyRouteDM);
+app.use('/api/leave-level',  leaveLevelRoutes);
+app.use('/api/leave-type', adminAuth, leaveTypeRoutes);
+app.use('/api/leave-policy', leavePolicyRouteDM);
 
 
 // Employee   

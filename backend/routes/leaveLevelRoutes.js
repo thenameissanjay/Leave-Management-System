@@ -13,21 +13,21 @@ const {
 const validator = require('express-joi-validation').createValidator({});
 
 router.get(
-    '/lookup', 
+    '/look-up', 
     getLeaveLevels);
 
 router.post(
-    '/lookup', 
+    '/look-up', 
     validator.body(createLevelSchema), 
     createLeaveLevel);
     
 router.delete(
-  '/lookup/:levelID',
+  '/look-up/:levelID',
   validator.params(levelIdSchema),
   deleteLeaveLevel
 );
 router.put(
-  '/lookup/:levelID',
+  '/look-up/:levelID',
   validator.params(levelIdSchema),
   validator.body(createLevelSchema),
   updateLeaveLevel

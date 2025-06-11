@@ -63,7 +63,7 @@ const RequestForm = () => {
     const fetchLeaveTypes = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8080/api/employee/LeaveId/${user.EmployeeID}`
+          `http://localhost:8080/api/employee/leave-id/${user.EmployeeID}`
         );
         setLeaveTypes(res.data);
       } catch (err) {
@@ -106,7 +106,7 @@ const RequestForm = () => {
         ...formData,
         requestAt: new Date().toISOString(), // e.g. "2025-06-04T09:23:15.123Z"
       };
-      await axios.post('http://localhost:8080/api/leave/requestLeave', payload);
+      await axios.post('http://localhost:8080/api/leave/request-leave', payload);
       setMessage('Leave request submitted successfully!');
       setError('');
       setFormData({
