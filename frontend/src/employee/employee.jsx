@@ -12,6 +12,7 @@ import ViewLeavePolicy from './LeavePolicy';
 import HolidaysCalendarModal from './HolidayCalendar'; //
 import LeaveCards from './ui/leaveCards';
 import { useToast } from './ui/ToastContainer';
+import api from '../utils/BaseUrl';
 // import TeamCalendar from './ui/teamcalendar';
 const Employee = () => {
   const { showToast } = useToast();
@@ -25,15 +26,15 @@ const Employee = () => {
 
   useEffect(() => {
     const fetchReportingName = async (ReportingManagerID) => {
-      const results = await axios.get(
-        `http://localhost:8080/api/employee/reporting-manager-name/${ReportingManagerID}`
+      const results = await api.get(
+        `/api/employee/reporting-manager-name/${ReportingManagerID}`
       );
       setReporting(results.data.name);
     };
 
     const fetchDesignationName = async (DesignationID) => {
-      const result = await axios.get(
-        `http://localhost:8080/api/employee/designation-name/${DesignationID}`
+      const result = await api.get(
+        `/api/employee/designation-name/${DesignationID}`
       );
       setDesignation(result.data[0].name);
     };

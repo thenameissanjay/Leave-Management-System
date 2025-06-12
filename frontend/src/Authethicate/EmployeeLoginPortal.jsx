@@ -2,12 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
-import { useToast } from "../employee/ui/ToastContainer";
+import { useToast } from '../employee/ui/ToastContainer';
+import api from '../utils/BaseUrl';
 
-import axios from 'axios';
-import CryptoJS from "crypto-js";
-
-
+import CryptoJS from 'crypto-js';
 
 const EmployeeLoginPortal = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -27,31 +25,34 @@ const EmployeeLoginPortal = () => {
         setError('Please enter both email and password');
         return;
       }
-      const encryptedPassword = CryptoJS.AES.encrypt(password, secretKey).toString();
-    
-      const response = await axios.post("http://localhost:8080/api/auth/employee-login", {
+      const encryptedPassword = CryptoJS.AES.encrypt(
+        password,
+        secretKey
+      ).toString();
+
+      const response = await api.post('/api/auth/employee-login', {
         email,
-        encryptedPassword
+        encryptedPassword,
       });
       // JWT token from backend
       const access_token = response.data.access_token;
-      
-      setUser({ 
-        role: 'employee',   // for navbar, req.header.role = "employee"
+
+      setUser({
+        role: 'employee', // for navbar, req.header.role = "employee"
         EmployeeID: response.data.employeeId,
-      Name:response.data.name, 
-      Email: response.data.email, 
-      Phone:response.data.phone,
-       DateOfJoining: response.data.date_of_joining,
-        Designation: response.data.designation, 
-        ReportingTo:response.data.reporting_to,
-        access_token : access_token         
+        Name: response.data.name,
+        Email: response.data.email,
+        Phone: response.data.phone,
+        DateOfJoining: response.data.date_of_joining,
+        Designation: response.data.designation,
+        ReportingTo: response.data.reporting_to,
+        access_token: access_token,
       });
       navigate('/Employee');
-      showToast('Logged Successfully', 'success')
+      showToast('Logged Successfully', 'success');
     } catch (error) {
       const message = err.response?.data?.message;
-     showToast(message, 'error');
+      showToast(message, 'error');
     }
   };
 
@@ -69,16 +70,19 @@ const EmployeeLoginPortal = () => {
         return;
       }
       const secretKey = import.meta.env.VITE_SECRETKEY;
-      const encryptedPassword = CryptoJS.AES.encrypt(password, secretKey).toString();
-      const response = await axios.post("http://localhost:8080/api/auth/password", {
+      const encryptedPassword = CryptoJS.AES.encrypt(
+        password,
+        secretKey
+      ).toString();
+      await api.post('/api/auth/password', {
         id: numericId,
         email,
-        encryptedPassword
+        encryptedPassword,
       });
       setIsLogin(true);
-      showToast("Password Created Succesfully", 'success')
+      showToast('Password Created Succesfully', 'success');
     } catch (error) {
-      showToast(error.response?.data?.message, 'error')
+      showToast(error.response?.data?.message, 'error');
     }
   };
 
@@ -87,12 +91,17 @@ const EmployeeLoginPortal = () => {
       <h2 className="text-2xl font-bold mb-6 text-center">
         {isLogin ? 'Employee Login' : 'Set Password'}
       </h2>
-      
-      <form onSubmit={isLogin ? handleEmployeeLogin : handleEmployeeSignUp} className="space-y-4">
+
+      <form
+        onSubmit={isLogin ? handleEmployeeLogin : handleEmployeeSignUp}
+        className="space-y-4"
+      >
         {/* Employee ID field - only shown in Set Password form */}
         {!isLogin && (
           <div>
-            <label className="block text-sm font-medium text-gray-700">Employee ID</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Employee ID
+            </label>
             <input
               type="text"
               value={employeeId}
@@ -106,7 +115,9 @@ const EmployeeLoginPortal = () => {
 
         {/* Email field - shown in both forms */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Email
+          </label>
           <input
             type="email"
             value={email}
@@ -127,7 +138,9 @@ const EmployeeLoginPortal = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder={isLogin ? 'Enter your password' : 'Create a new password'}
+            placeholder={
+              isLogin ? 'Enter your password' : 'Create a new password'
+            }
             required
           />
         </div>
@@ -143,7 +156,7 @@ const EmployeeLoginPortal = () => {
           </button>
         </div>
       </form>
-      
+
       <div className="mt-4 text-center">
         <button
           onClick={() => {

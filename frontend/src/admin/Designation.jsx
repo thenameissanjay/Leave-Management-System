@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Pencil, Trash2, Save, Plus } from 'lucide-react';
-import axios from 'axios';
 import { useToast } from '../employee/ui/ToastContainer';
+import api from '../utils/BaseUrl';
 
 const DesignationManagement = () => {
   const [designations, setDesignations] = useState([]);
@@ -18,8 +18,8 @@ const DesignationManagement = () => {
   useEffect(() => {
     const fetchDesignations = async () => {
       try {
-        const res = await axios.get(
-          'http://localhost:8080/api/designation/designation'
+        const res = await api.get(
+          '/api/designation/designation'
         );
         setDesignations(res.data);
       } catch (err) {
@@ -50,8 +50,8 @@ const DesignationManagement = () => {
     };
 
     try {
-      await axios.put(
-        `http://localhost:8080/api/designation/designation/${updated.id}`,
+      await api.put(
+        `/api/designation/designation/${updated.id}`,
         payload
       );
       setEditIndex(null);
@@ -75,8 +75,8 @@ const DesignationManagement = () => {
       return;
 
     try {
-      await axios.delete(
-        `http://localhost:8080/api/designation/designation/${id}`
+      await api.delete(
+        `/api/designation/designation/${id}`
       );
       setDesignations(designations.filter((item) => item.id !== id));
       showToast('Designation deleted successfully!', 'success');
@@ -94,8 +94,8 @@ const DesignationManagement = () => {
 
     setIsCreating(true);
     try {
-      const res = await axios.post(
-        'http://localhost:8080/api/designation/designation',
+      const res = await api.post(
+        '/api/designation/designation',
         newDesignation
       );
       setDesignations([...designations, res.data]);

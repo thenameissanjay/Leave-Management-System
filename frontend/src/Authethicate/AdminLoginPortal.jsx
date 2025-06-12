@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
-import axios from 'axios';
+import api from '../utils/BaseUrl';
 import { useToast } from "../employee/ui/ToastContainer";
 
 
@@ -17,7 +17,7 @@ const AdminLoginPortal = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (username == 'admin' && password == 'admin') {
-      const response = await axios.post('http://localhost:8080/api/auth/admin-login',{
+      const response = await api.post('/api/auth/admin-login',{
         role:"admin"
       })
       const access_token = response.data.access_token;

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../employee/ui/ToastContainer';
+import api from '../utils/BaseUrl';
+
 const CreateEmployee = () => {
   const [employees, setEmployees] = useState([]);
   const [designations, setDesignations] = useState([]); // new for designation list
@@ -35,7 +36,7 @@ const CreateEmployee = () => {
         designation: values.designation === "" ? null : parseInt(values.designation),
         reporting_to: values.reporting_to === "" ? null : parseInt(values.reporting_to),  
       };
-      const response = await axios.post('http://localhost:8080/api/admin/employee', payload);
+      const response = await api.post('/api/admin/employee', payload);
       showToast('Employee Added Successfully', 'success')
       setValues({
         name: '',
@@ -66,7 +67,7 @@ const CreateEmployee = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/admin/employee-id-name-desg');
+        const res = await api.get('/api/admin/employee-id-name-desg');
         if (Array.isArray(res.data)) {
           setEmployees(res.data);
           console.log(res.data);
@@ -83,7 +84,7 @@ const CreateEmployee = () => {
 
     const fetchDesignations = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/designation/designation');
+        const res = await api.get('/api/designation/designation');
         if (Array.isArray(res.data)) {
           setDesignations(res.data);
           console.log(res.data)

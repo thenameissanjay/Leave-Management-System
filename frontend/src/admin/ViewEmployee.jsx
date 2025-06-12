@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useToast } from '../employee/ui/ToastContainer';
+import api from '../utils/BaseUrl';
 
 const ViewEmployee = () => {
   const [employees, setEmployees] = useState([]);
@@ -14,7 +14,7 @@ const ViewEmployee = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/admin/employee');
+        const response = await api.get('/api/admin/employee');
         
         const data = response.data;
         console.log(response.data)
@@ -44,7 +44,7 @@ const ViewEmployee = () => {
   const handleDelete = async (employeeId) => {
     if (window.confirm('Are you sure you want to delete this employee?')) {
       try {
-        await axios.delete(`http://localhost:8080/api/admin/employee/${employeeId}`);
+        await api.delete(`/api/admin/employee/${employeeId}`);
         setEmployees(employees.filter(emp => emp.employee_id !== employeeId));
         showToast('Employee deleted successfully!', 'success');
       } catch (err) {

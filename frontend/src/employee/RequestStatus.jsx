@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
 import { AuthContext } from '../Context/AuthContext';
 import { useToast } from "./ui/ToastContainer";
+import api from '../utils/BaseUrl';
 
 const RequestStatus = () => {
   const { user } = useContext(AuthContext);
@@ -16,8 +16,8 @@ const RequestStatus = () => {
     const fetchRequests = async () => {
       try {
         const employeeID = user.EmployeeID;
-        const res = await axios.get(
-          `http://localhost:8080/api/leave/leave-status/${employeeID}`
+        const res = await api.get(
+          `/api/leave/leave-status/${employeeID}`
         );
         setRequests(res.data);
       } catch (err) {
@@ -48,7 +48,7 @@ const RequestStatus = () => {
 
   const handleCancel = async (requestId) => {
     try {
-      await axios.put(`http://localhost:8080/api/leave/cancel/${requestId}`);
+      await api.put(`/api/leave/cancel/${requestId}`);
       setRequests((prev) => prev.filter((r) => r.request_id !== requestId));
       showToast('Updated Successfully', 'success')
     } catch (err) {

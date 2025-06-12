@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Pencil, Trash2, Save, Plus } from 'lucide-react';
-import axios from 'axios';
 import { useToast } from '../employee/ui/ToastContainer';
+import api from '../utils/BaseUrl';
 
 const LeaveLevelManager = () => {
   const [levels, setLevels] = useState([]);
@@ -16,8 +16,8 @@ const LeaveLevelManager = () => {
   const { showToast } = useToast();
 
   useEffect(() => {
-    axios
-      .get('http://localhost:8080/api/leave-level/look-up')
+    api
+      .get('/api/leave-level/look-up')
       .then((res) => setLevels(res.data))
       .catch((err) =>
         showToast(err?.response?.data?.message || 'Failed to fetch', 'error')
@@ -33,8 +33,8 @@ const LeaveLevelManager = () => {
   const handleSave = async (index) => {
     const item = levels[index];
     try {
-      await axios.put(
-        `http://localhost:8080/api/leave-level/look-up/${item.leave_level_id}`,
+      await api.put(
+        `/api/leave-level/look-up/${item.leave_level_id}`,
         {
           start_count: parseInt(item.start_count, 10),
           end_count: parseInt(item.end_count, 10),
@@ -60,7 +60,7 @@ const LeaveLevelManager = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure?')) return;
     try {
-      await axios.delete(`http://localhost:8080/api/leave-level/look-up/${id}`);
+      await api.delete(`/api/leave-level/look-up/${id}`);
       setLevels(levels.filter((lvl) => lvl.leave_level_id !== id));
       showToast('Deleted!', 'success');
     } catch {
@@ -74,8 +74,8 @@ const LeaveLevelManager = () => {
       return showToast('All fields are required', 'error');
     }
     try {
-      const res = await axios.post(
-        'http://localhost:8080/api/leave-level/look-up',
+      const res = await api.post(
+        '/api/leave-level/look-up',
         {
           start_count,
           end_count,

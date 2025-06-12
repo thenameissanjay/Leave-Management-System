@@ -19,11 +19,13 @@ const {adminAuth, employeeAuth} = require('./JWT/verify');
 
 const app = express();
 app.use(express.json());
-app.use(cors());
 
 app.use(cors({
-    allowedHeaders: ['Authorization', 'Content-Type'],
-  }));
+  origin: ['http://localhost:3000', 'https://your-frontend.vercel.app'], // Add more if needed
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Authorization', 'Content-Type'],
+}));
 
 AppDataSource.initialize()
   .then(() => { console.log("DB connected successfully");

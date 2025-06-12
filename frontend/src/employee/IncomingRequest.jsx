@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
 import { AuthContext } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import ApprovalList from './IncomingHistory';
 import { useToast } from "./ui/ToastContainer";
+import api from '../utils/BaseUrl';
+
 
 
 const IncomingRequest = () => {
@@ -24,7 +25,7 @@ const IncomingRequest = () => {
         const EmployeeID = user?.EmployeeID;
         const role = user?.Designation;
 
-        const res = await axios.get(`http://localhost:8080/api/leave/incoming-leave-request?EmployeeID=${EmployeeID}&role=${role}`);
+        const res = await api.get(`/api/leave/incoming-leave-request?EmployeeID=${EmployeeID}&role=${role}`);
         const approvals = res.data;
 
         approvals.sort((a, b) => b.leave_request.request_id - a.leave_request.request_id);
@@ -48,7 +49,7 @@ const IncomingRequest = () => {
   const handleApproval = async (requestId, approver_id, status) => {
     const approvedAt = new Date();
     try {
-      const res = await axios.put('http://localhost:8080/api/leave/update-leave-status', {
+      const res = await api.put('/api/leave/update-leave-status', {
         request_id: requestId,
         approver_id,
         status,

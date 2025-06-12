@@ -1,13 +1,13 @@
 // RequestForm.jsx
 import React, { use, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../Context/AuthContext';
-import axios from 'axios';
 import { useToast } from './ui/ToastContainer';
 import HolidaysList from '../utils/Holidays';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
 import HolidaysCalendar from './HolidayCalendar';
-;
+import api from '../utils/BaseUrl';
+
 import { useNavigate } from "react-router-dom";
 
 const RequestForm = () => {
@@ -62,8 +62,8 @@ const RequestForm = () => {
   useEffect(() => {
     const fetchLeaveTypes = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8080/api/employee/leave-id/${user.EmployeeID}`
+        const res = await api.get(
+          `/api/employee/leave-id/${user.EmployeeID}`
         );
         setLeaveTypes(res.data);
       } catch (err) {
@@ -106,7 +106,7 @@ const RequestForm = () => {
         ...formData,
         requestAt: new Date().toISOString(), // e.g. "2025-06-04T09:23:15.123Z"
       };
-      await axios.post('http://localhost:8080/api/leave/request-leave', payload);
+      await api.post('/api/leave/request-leave', payload);
       setMessage('Leave request submitted successfully!');
       setError('');
       setFormData({

@@ -1,8 +1,8 @@
 import React, { useEffect, useContext, useState } from 'react';
-import axios from 'axios';
 import dayjs from 'dayjs';
 import { AuthContext } from '../Context/AuthContext';
 import { useToast } from './ui/ToastContainer';
+import api from '../utils/BaseUrl';
 
 const TeamCalendar = () => {
   const [teamData, setTeamData] = useState([]);
@@ -14,8 +14,8 @@ const TeamCalendar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8080/api/employee/team-calendar/${user.EmployeeID}`
+        const res = await api.get(
+          `/api/employee/team-calendar/${user.EmployeeID}`
         );
         setTeamData(res.data);
       } catch (err) {

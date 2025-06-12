@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
 import { AuthContext } from "../Context/AuthContext";
+import api from '../utils/BaseUrl';
 
 const ApprovalList = () => {
   const { user } = useContext(AuthContext);
@@ -16,7 +16,7 @@ const ApprovalList = () => {
       try {
         setLoading(true);
         const employeeID = user.EmployeeID;
-        const response = await axios.get(`http://localhost:8080/api/leave/incoming-history/${employeeID}`);
+        const response = await api.get(`/api/leave/incoming-history/${employeeID}`);
         setApprovalData(response.data);
       } catch (err) {
         const message = err.response?.data?.message;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Pencil, Trash2, Save, Plus, X } from 'lucide-react';
 import { useToast } from '../employee/ui/ToastContainer';
+import api from '../utils/BaseUrl';
 
 const LeaveTypeManagement = () => {
   const [leaveTypes, setLeaveTypes] = useState([]);
@@ -20,8 +20,8 @@ const LeaveTypeManagement = () => {
   useEffect(() => {
     const fetchLeaveTypes = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8080/api/leave-type/leave-type'
+        const response = await api.get(
+          '/api/leave-type/leave-type'
         );
         setLeaveTypes(response.data);
       } catch (err) {
@@ -56,8 +56,8 @@ const LeaveTypeManagement = () => {
     };
 
     try {
-      await axios.put(
-        `http://localhost:8080/api/leave-type/leave-type/${updatedLeaveType.id}`,
+      await api.put(
+        `/api/leave-type/leave-type/${updatedLeaveType.id}`,
         payload
       );
       setEditIndex(null);
@@ -81,8 +81,8 @@ const LeaveTypeManagement = () => {
       return;
 
     try {
-      await axios.delete(
-        `http://localhost:8080/api/leave-type/leave-type/${id}`
+      await api.delete(
+        `/api/leave-type/leave-type/${id}`
       );
       setLeaveTypes(leaveTypes.filter((lt) => lt.id !== id));
       showToast('Leave type deleted successfully!', 'success');
@@ -98,8 +98,8 @@ const LeaveTypeManagement = () => {
     }
 
     try {
-      const res = await axios.post(
-        'http://localhost:8080/api/leave-type/leave-type',
+      const res = await api.post(
+        '/api/leave-type/leave-type',
         newLeaveType
       );
       setLeaveTypes([...leaveTypes, res.data]);

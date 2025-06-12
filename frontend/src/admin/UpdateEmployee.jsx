@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useToast } from '../employee/ui/ToastContainer';
+import api from '../utils/BaseUrl';
 
 const UpdateEmployee = () => {
   const { id } = useParams();
@@ -22,7 +22,7 @@ const UpdateEmployee = () => {
     console.log('hello')
     const fetchEmployee = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/admin/employee/${id}`);
+        const response = await api.get(`/api/admin/employee/${id}`);
         setValues(response.data);
 
       } catch (err) {
@@ -57,7 +57,7 @@ const UpdateEmployee = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8080/api/admin/employee/${id}`, values);
+      await api.put(`/api/admin/employee/${id}`, values);
       showToast('Employee updated successfully!', 'success');
       navigate('/ViewEmployee'); 
     } catch (error) {

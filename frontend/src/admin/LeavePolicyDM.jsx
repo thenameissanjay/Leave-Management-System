@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useToast } from '../employee/ui/ToastContainer';
 import { Save, Undo } from 'lucide-react';
+import api from '../utils/BaseUrl';
 
 const LeavePolicyManager = () => {
   const [leavePolicies, setLeavePolicies] = useState([]);
@@ -13,7 +13,7 @@ const LeavePolicyManager = () => {
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/leave-policy/leave-policy");
+        const res = await api.get("/api/leave-policy/leave-policy");
         setLeavePolicies(res.data);
         setOriginalPolicies(JSON.parse(JSON.stringify(res.data)));
       } catch (err) {
@@ -72,7 +72,7 @@ const LeavePolicyManager = () => {
         return;
       }
 
-      await axios.put("http://localhost:8080/api/leave-policy/leave-policy", changes);
+      await api.put("/api/leave-policy/leave-policy", changes);
       showToast("Leave policies updated successfully", "success");
       setOriginalPolicies(JSON.parse(JSON.stringify(leavePolicies)));
     } catch (err) {

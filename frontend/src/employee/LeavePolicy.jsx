@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../utils/BaseUrl';
 import { useNavigate } from 'react-router-dom';
 
 const ViewLeavePolicy = () => {
@@ -10,8 +10,8 @@ const ViewLeavePolicy = () => {
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        const res = await axios.get(
-          'http://localhost:8080/api/leave-policy/Leave-policy'
+        const res = await api.get(
+          '/api/leave-policy/Leave-policy'
         );
         setLeavePolicies(res.data);
       } catch (err) {
