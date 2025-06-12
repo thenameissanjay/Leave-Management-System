@@ -13,12 +13,13 @@ require('dotenv').config();
 
 const AppDataSource = new DataSource({
   type: process.env.DBTYPE,
-  host: process.env.HOST,
-  port: process.env.PORT,
-  username: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DBNAME,
-  synchronize: true,
+  url:process.env.DB_CONNECTION_URL,
+  // host: process.env.HOST,
+  // port: process.env.PORT,
+  // username: process.env.USER,
+  // password: process.env.PASSWORD,
+  // database: process.env.DBNAME,
+  synchronize: false,
   logging: false,
   entities: [employee, designation, leave_level, leave_request, leave_policy_dm, leave_type_dm, leave_balance, approval_flow]
 });
