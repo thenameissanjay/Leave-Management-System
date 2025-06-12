@@ -55,7 +55,7 @@ app.use('/api/leave',employeeAuth, leaveRoutes);
 
 
   app.listen(8080, () => {
-      console.log("Server running on http://localhost:8080");
+      console.log("Server running on http://localhost:8081");
     });
     // Monthly Accural
     cron.schedule("0 0 1 1 *", async () => {
