@@ -17,9 +17,11 @@ const AdminLoginPortal = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (username == 'admin' && password == 'admin') {
-      const response = await api.post('/api/auth/admin-login',{
-        role:"admin"
-      })
+      const response = await api.post(
+        '/api/auth/admin-login',
+        { role: "admin" },
+        { withCredentials: true } // ✅ add this here
+      );
       const access_token = response.data.access_token;
 
       setUser({ role: 'admin', 
