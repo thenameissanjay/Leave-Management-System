@@ -1,5 +1,6 @@
 const { AppDataSource } = require('../connection');
 const { leave_policy_dm } = require('../entity/leave_policy_dm');
+const logger = require('../logger/logger');
 
 const repo = AppDataSource.getRepository(leave_policy_dm);
 const { leave_balance } = require('../entity/leave_balance');
@@ -11,16 +12,18 @@ const {
   updateLeaveBalanceByLeavePolicy,
 } = require('../service/leavebalanceService');
 
-
 // GET
-// /api/leavepolicy/leave-policy 
- 
+// /api/leavepolicy/leave-policy
+
 const getLeavePolicy = async (req, res) => {
   try {
     const records = await repo
       .createQueryBuilder('lp')
       .leftJoin('lp.designation', 'designation')
       .leftJoin('lp.leave_type', 'leave_type')
+      .where('lp.deletedAt IS NULL')
+      .andWhere('designation.deletedAt IS NULL')
+      .andWhere('leave_type.deletedAt IS NULL')
       .select([
         'designation.id AS designation_id',
         'designation.name AS designation',
@@ -97,8 +100,8 @@ const getLeavePolicy = async (req, res) => {
  */
     res.json(result);
   } catch (error) {
-    console.error('Error fetching leave policies:', error);
-    res.status(500).json({ error: 'Database error' });
+    logger.error(`leavePolicyHandler/getLeavePolicy: ${error}`);
+    res.status(500).json({ message: 'Database error' });
   }
 };
 
@@ -160,8 +163,8 @@ const updateLeavePolicy = async (req, res) => {
       message: 'Leave policies updated (only existing records).',
     });
   } catch (err) {
-    console.error('Error updating leave policies:', err);
-    return res.status(500).json({ error: 'Internal server error' });
+    logger.error(`leavePolicyHandler/updateLeavePolicy: ${err}`);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
 

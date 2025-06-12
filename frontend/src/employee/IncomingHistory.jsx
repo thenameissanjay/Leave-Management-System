@@ -39,16 +39,11 @@ const ApprovalList = () => {
     setSelectedRequest(null);
   };
 
-  const getStatusLabel = (statusCode) => {
-    return statusCode === 500 ? "Rejected" : statusCode === 400 ? "Approved" : "Pending";
-  };
 
   const getStatusClass = (statusCode) => {
     return statusCode === 500
       ? "bg-red-100 text-red-800"
-      : statusCode === 400
-      ? "bg-green-100 text-green-800"
-      : "bg-yellow-100 text-yellow-800";
+      : "bg-green-100 text-green-800"
   };
 
   const formatDate = (dateString) => {
@@ -112,7 +107,7 @@ const ApprovalList = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusClass(approval.leave_request.status)}`}>
-                        {getStatusLabel(approval.leave_request.status)}
+                        {approval.leave_request.status_label}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -186,7 +181,7 @@ const ApprovalList = () => {
                 <div>
                   <p className="text-sm font-medium text-gray-500">Status</p>
                   <p className={`text-sm ${getStatusClass(selectedRequest.approval_status)} px-2 py-1 rounded inline-block`}>
-                    {getStatusLabel(selectedRequest.approval_status)}
+                    {selectedRequest.approval_status_label}
                   </p>
                 </div>
                 <div>

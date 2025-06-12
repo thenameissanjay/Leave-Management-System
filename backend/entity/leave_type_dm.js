@@ -21,7 +21,12 @@ const leave_type_dm = new EntitySchema({
     },
     monthAccrual:{
       type: Boolean
-    }
+    },
+    deletedAt: {
+      type: 'timestamp',
+      nullable: true,
+      deleteDate: true, // important for soft delete support
+    },
   },
 });
 

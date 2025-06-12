@@ -12,6 +12,7 @@ const {
 const leaveTypeRepo = AppDataSource.getRepository(leave_type_dm);
 const leavePolicyRepo = AppDataSource.getRepository(leave_policy_dm);
 const leaveBalanceRepo = AppDataSource.getRepository(leave_balance);
+const logger = require('../logger/logger');
 
 /**
  * POST
@@ -28,12 +29,6 @@ const leaveBalanceRepo = AppDataSource.getRepository(leave_balance);
 const CreateLeaveType = async (req, res) => {
   try {
     const { name, description, yearAccrual, monthAccrual } = req.body;
-
-    if (!name || !description) {
-      return res
-        .status(400)
-        .json({ message: 'Name and description are required' });
-    }
 
     // creating new Leave Type
     const newLeaveType = leaveTypeRepo.create({
@@ -57,10 +52,9 @@ const CreateLeaveType = async (req, res) => {
       leaveType: savedLeaveType,
     });
   } catch (err) {
-    console.error(err);
+    logger.error(`leaveTypeHandler/CreateLeaveType: ${err}`);
     return res.status(500).json({
-      error: 'Failed to create leave type and assign policies',
-      details: err.message,
+      message: 'Failed to create leave type and assign policies',
     });
   }
 };
@@ -74,7 +68,8 @@ const GetLeaveType = async (req, res) => {
     const allLeaveType = await leaveTypeRepo.find();
     res.json(allLeaveType);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch designations' });
+    logger.error(`leaveTypeHandler/GetLeaveType: ${err}`);
+    res.status(500).json({ message: 'Failed to fetch designations' });
   }
 };
 
@@ -85,22 +80,20 @@ const GetLeaveType = async (req, res) => {
 const deleteLeaveType = async (req, res) => {
   try {
     const id = req.params.leaveTypeID;
-    if (!id) {
-      return res.json({ message: 'required name and description' });
-    }
+
     // deleting Leave type in Leave Policy entity
-    await leavePolicyRepo.delete({ leave_type_id: id });
+    await leavePolicyRepo.softDelete({ leave_type_id: id });
     // deleting Leave Type in Leave Balance entity
-    await leaveBalanceRepo.delete({ leave_type_id: id });
+    await leaveBalanceRepo.softDelete({ leave_type_id: id });
     // deleting Leave type in Leave Type entity
-    await leaveTypeRepo.delete({ id });
+    await leaveTypeRepo.softDelete({ id });
 
     res.json({ success: true, message: 'Designation deleted successfully' });
   } catch (err) {
-    console.log(err);
+    logger.error(`leaveTypeHandler/deleteLeaveType: ${err}`);
     res
       .status(500)
-      .json({ error: 'Failed to delete designation', details: err.message });
+      .json({ message: 'Failed to delete designation'});
   }
 };
 
@@ -118,12 +111,7 @@ const deleteLeaveType = async (req, res) => {
 const updateLeaveType = async (req, res) => {
   const id = req.params.leaveTypeID;
 
-  if (!id) {
-    return res.json({ message: 'required name and description' });
-  }
-
   const { name, description, yearAccrual, monthAccrual } = req.body;
-
   try {
     // Update Leave type
     await leaveTypeRepo.update(id, {
@@ -132,12 +120,12 @@ const updateLeaveType = async (req, res) => {
       yearAccrual: yearAccrual,
       monthAccrual: monthAccrual,
     });
-
     res.json({ success: true, message: 'Designation updated successfully' });
   } catch (err) {
+    logger.error(`leaveTypeHandler/updateLeaveType: ${err}`);
     res
       .status(500)
-      .json({ error: 'Failed to update designation', details: err.message });
+      .json({ message: 'Failed to update designation' });
   }
 };
 

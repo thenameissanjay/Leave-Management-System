@@ -12,9 +12,13 @@ const { EntitySchema } = require("typeorm");
 }
 
 const LeaveStatusLabel = {
-  [LeaveStatus.pending]: 'pending',
-  [LeaveStatus.approved]: 'approved',
-  [LeaveStatus.rejected]: 'rejected',
+  [LeaveStatus.pending]: 'Pending',
+  [LeaveStatus.developer_approved]: 'Developer approved',
+  [LeaveStatus.manager_approved]: 'Manager approved',
+  [LeaveStatus.hr_approved]: 'HR approved',
+  [LeaveStatus.director_approved]: 'Director approved',
+  [LeaveStatus.approved]: 'Approved',
+  [LeaveStatus.rejected]: 'Rejected',
 };
 
     const leave_request = new EntitySchema({
@@ -54,7 +58,12 @@ const LeaveStatusLabel = {
             requestedAt:{
               type:"datetime",
 
-            }
+            },
+            deletedAt: {
+              type: 'timestamp',
+              nullable: true,
+              deleteDate: true, // important for soft delete support
+            },
          
         },
         relations: {

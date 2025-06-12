@@ -5,14 +5,14 @@ const { leave_type_dm } = require('../entity/leave_type_dm');
 const employeeTypeRepo = AppDataSource.getRepository(designation);
 const leavePolicyRepo = AppDataSource.getRepository(leave_policy_dm)
 const leaveTypeRepo = AppDataSource.getRepository(leave_type_dm);
+const logger = require('../logger/logger');
 
 
 const updateLeavePolicyByLeaveType = async (leavetypeId) => {
-         // 2. Get all employee types
-         const employeeTypes = await employeeTypeRepo.find(); // assuming employeeTypeRepo is your repository
+         const employeeTypes = await employeeTypeRepo.find(); 
   
          if (!employeeTypes.length) {
-           return res.status(404).json({ message: 'No employee types found to assign the leave policy' });
+           logger.error(`service/updateLeavePolicyByLeaveType: No Employee found`);
          }
      
          // 3. Prepare leave policy records (initialize with 0 days)
@@ -45,7 +45,8 @@ const updateLeavePolicyByDesignation = async (designationId) =>{
     }))
     await leavePolicyRepo.save(leavePolicies);
   } catch (error) {
-    return console.log(error)
+     logger.error(`service/updateLeavePolicyByDesignation: ${error}`);
+
   }
 
 }

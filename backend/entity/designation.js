@@ -15,6 +15,11 @@ const { EntitySchema } = require("typeorm");
           description: {
             type: "varchar",
           },
+          deletedAt: {
+            type: 'timestamp',
+            nullable: true,
+            deleteDate: true, // important for soft delete support
+          },
         },
       });  
 

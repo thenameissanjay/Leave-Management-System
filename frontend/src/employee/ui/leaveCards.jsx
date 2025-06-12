@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../../Context/AuthContext';
+import { useToast } from "../ui/ToastContainer";
 
 const LeaveCards = () => {
     const [leaveData , setLeaveData] = useState([]);
     const { user } = useContext(AuthContext);
+    const { showToast } = useToast();
 
 
     useEffect(() => {
@@ -18,13 +20,13 @@ const LeaveCards = () => {
             {
               const message = err.response?.data?.message;
               if (err.response?.status === 403) {
-                alert(message || "You are not authorized to access this resource.");
+                showToast(message || "You are not authorized to access this resource.", 'error');
                 navigate('/');
               } else if (err.response?.status === 401) {
-                alert(message || "Session expired. Please log in again.");
+                showToast(message || "Session expired. Please log in again.", 'error');
                 navigate('/');
               } else {
-                alert("An unexpected error occurred.");
+                showToast("An unexpected error occurred.", 'error');
               }
             }
           } finally {

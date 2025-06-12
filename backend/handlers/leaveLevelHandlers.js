@@ -4,6 +4,7 @@ const {designation} = require('../entity/designation');
 const { leave_level } = require('../entity/leave_level');
 const { leave_policy_dm } = require('../entity/leave_policy_dm');
 const { leave_type_dm } = require('../entity/leave_type_dm');
+const logger = require('../logger/logger');
 
 const designationRepo = AppDataSource.getRepository(designation)
 const leaveTypeRepo = AppDataSource.getRepository(leave_type_dm);
@@ -24,15 +25,7 @@ const leaveLeaveRepo = AppDataSource.getRepository(leave_level)
 const createLeaveLevel = async (req, res) => {
   try {
     const { start_count, end_count, approval_order } = req.body;
-    if (
-      start_count === undefined ||
-      end_count === undefined ||
-      approval_order === undefined
-    ) {
-      return res
-        .status(400)
-        .json({ message: "start_count, end_count, and approval_order are required" });
-    }
+
     const newLevel = leaveLeaveRepo.create({
       start_count,
       end_count,
@@ -43,8 +36,8 @@ const createLeaveLevel = async (req, res) => {
 
     res.status(200).json({ success: true, message: "Leave level created", data: newLevel });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to create leave level", details: err.message });
+    logger.error(`leaveLevelHandler/requestLeave: ${err}`);
+    res.status(500).json({ message: "Failed to create leave level" });
   }
 };
 
@@ -57,8 +50,8 @@ const getLeaveLevels = async (req, res) => {
     const levels = await leaveLeaveRepo.find({ order: { leave_level_id: "ASC" } });
     res.json(levels);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch leave levels", details: err.message });
+    logger.error(`leaveLevelHandler/getLeaveLevels: ${err}`);
+    res.status(500).json({ message: "No leave Level Found" });
   }
 };
 
@@ -77,10 +70,6 @@ const updateLeaveLevel = async (req, res) => {
     const id = req.params.levelID;
     const { start_count, end_count, approval_order } = req.body;
 
-    if (!id) {
-      return res.status(400).json({ message: "Invalid or missing ID" });
-    }
-
 
     const result = await leaveLeaveRepo.update(id, {
       start_count,
@@ -89,13 +78,14 @@ const updateLeaveLevel = async (req, res) => {
     });
 
     if (result.affected === 0) {
-      return res.status(404).json({ error: "Leave level not found" });
+      logger.error(`leaveLevelHandler/updateLeaveLevel: Leave level not found`);
+      return res.status(404).json({ message: "Leave level not found" });
     }
 
     res.json({ success: true, message: "Leave level updated" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to update leave level", details: err.message });
+    logger.error(`leaveLevelHandler/updateLeaveLevel: ${err}`);
+    res.status(500).json({ message: "Failed to update leave level" });
   }
 };
 
@@ -107,19 +97,16 @@ const deleteLeaveLevel = async (req, res) => {
   try {
     const id = req.params.levelID;
 
-    if (!id) {
-      return res.status(400).json({ message: "Invalid or missing ID" });
-    }
-    const result = await leaveLeaveRepo.delete(id);
+    const result = await leaveLeaveRepo.softDelete(id);
 
     if (result.affected === 0) {
-      return res.status(404).json({ error: "Leave level not found" });
+      logger.error(`leaveLevelHandler/deleteLeaveLevel: Leave level not found`);
+      return res.status(404).json({ message: "Leave level not found" });
     }
-
     res.json({ success: true, message: "Leave level deleted successfully" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to delete leave level", details: err.message });
+    logger.error(`leaveLevelHandler/deleteLeaveLevel: ${err}`);
+    res.status(500).json({ message: "Failed to delete leave level" });
   }
 };
 

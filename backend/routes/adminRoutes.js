@@ -17,7 +17,7 @@ const validator = require('express-joi-validation').createValidator({});
 
 router.post(
     '/employee', 
-    validator.body(createEmployeeSchema), 
+
     createEmployee);
 
 router.get('/employee', getEmployee);

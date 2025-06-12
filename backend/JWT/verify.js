@@ -12,9 +12,9 @@ const adminAuth = (req, res, next) => {
 
   try {
    const decoded = jwt.verify(token, process.env.SECRETKEY);
-   if(decoded.role == "admin")
+   if(decoded.role == process.env.ADMIN_ROLE)
     next();
-   if(decoded.role != "admin")
+   if(decoded.role != process.env.ADMIN_ROLE)
    {  
     return  res.status(403).json({ message: "admin authorized is need" });
    }
@@ -37,14 +37,11 @@ const employeeAuth = (req, res, next) => {
   try {
 
     const decoded = jwt.verify(token, process.env.SECRETKEY); 
-   if(decoded.role == "employee")
+   if(decoded.role == process.env.EMPLOYEE_ROLE)
     next();
-   if(decoded.role != "employee")
+   if(decoded.role != process.env.EMPLOYEE_ROLE)
     return res.status(403).json({ message: "employee authorized is need" });
-
-
   } catch (err) {
-
     return res.status(401).json({ message: 'Token verification failed' });
   }
 };

@@ -3,13 +3,18 @@ const { AppDataSource } = require('../connection');
 const { designation } = require('../entity/designation');
 const { leave_policy_dm } = require('../entity/leave_policy_dm');
 const { leave_type_dm } = require('../entity/leave_type_dm');
+const { employee } = require('../entity/employee');
+const logger = require('../logger/logger');
 
 const designationRepo = AppDataSource.getRepository(designation);
+const employeeRepo = AppDataSource.getRepository(employee);
+
 const leaveTypeRepo = AppDataSource.getRepository(leave_type_dm);
 const leavePolicyRepo = AppDataSource.getRepository(leave_policy_dm);
 const {
   updateLeavePolicyByDesignation,
 } = require('../service/leavePolicyService');
+const { exist } = require('joi');
 
 /**
  * POST
@@ -25,10 +30,6 @@ const CreateDesignation = async (req, res) => {
     // name = 'intern'
     const { name, description } = req.body;
 
-    if (!name || !description) {
-      return res.json({ message: 'required name and description' });
-    }
-
     const newDesignation = designationRepo.create({ name, description });
     const designationId = await designationRepo.save(newDesignation);
 
@@ -37,9 +38,10 @@ const CreateDesignation = async (req, res) => {
 
     res.status(201).json({ success: true, message: 'Designation created' });
   } catch (err) {
+    logger.error(`designation/CreateDesignation: ${err}`);
     res
       .status(500)
-      .json({ error: 'Failed to create designation', details: err.message });
+      .json({ message: 'Failed to create designation' });
   }
 };
 
@@ -52,7 +54,9 @@ const GetDesignation = async (req, res) => {
     const allDesignation = await designationRepo.find();
     res.json(allDesignation);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch designations' });
+    logger.error(`designation/GetDesignation: ${err}`);
+
+    res.status(500).json({ message: 'Failed to fetch designations' });
   }
 };
 
@@ -65,22 +69,29 @@ const deleteDesignation = async (req, res) => {
   try {
     const id = req.params.DesignationID;
 
-    if (!id) {
-      return res.json({ message: 'required name and description' });
+    // checking employee table
+    const exists = await employeeRepo.find({
+      where: { designation: id },
+    });
+
+    // if no employee assigned to this role
+    if (exists.length == 0) {
+      // deleting designation in Leave Policy Entity
+      await leavePolicyRepo.softDelete({ employee_type_id: id });
+      // deleting designation in Designation entity
+      await designationRepo.softDelete(id);
+    } else {
+      logger.error(`designation/deleteDesignation: NO Employee Exists in that role`);
+      return res.status(400).json({ message: 'NO Employee exists in that role' });
     }
-    // aslo delet the employee table
-    // deleting designation in Leave Policy Entity
-    await leavePolicyRepo.delete({ employee_type_id: id });
-    // deleting designation in Designation entity
-    await designationRepo.delete(id);
 
-    res.json({ success: true, message: 'Designation deleted successfully' });
+    return res.json({
+      success: true,
+      message: 'Designation deleted successfully',
+    });
   } catch (err) {
-    console.log(err);
-
-    res
-      .status(500)
-      .json({ error: 'Failed to delete designation', details: err.message });
+    logger.error(`designation/deleteDesignation: ${err}`);
+    return res.status(500).json({ message: 'Failed to delete designation' });
   }
 };
 
@@ -96,9 +107,6 @@ const deleteDesignation = async (req, res) => {
 const updateDesignation = async (req, res) => {
   const id = req.params.DesignationID;
 
-  if (!id) {
-    return res.json({ message: 'required name and description' });
-  }
   const { name, description } = req.body;
 
   try {
@@ -110,9 +118,10 @@ const updateDesignation = async (req, res) => {
 
     res.json({ success: true, message: 'Designation updated successfully' });
   } catch (err) {
+    logger.error(`designation/updateDesignation: ${err}`);
     res
       .status(500)
-      .json({ error: 'Failed to update designation', details: err.message });
+      .json({ message: 'Failed to update designation' });
   }
 };
 

@@ -5,7 +5,7 @@ const {
   leaveStatus,
   cancelLeave,
   incomingHistory,
-  reportingLeaveStatus,
+  incomingLeaveRequest,
   updateLeaveStatus,
 } = require('../handlers/leaveHandlers');
 const {
@@ -29,9 +29,9 @@ router.get(
 );
 
 router.get(
-  '/reporting-leave-status',
+  '/incoming-leave-request',
   validator.query(incomingLeaveSchema),
-  reportingLeaveStatus
+  incomingLeaveRequest
 );
 router.put(
   '/update-leave-status',

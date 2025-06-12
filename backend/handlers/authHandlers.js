@@ -5,6 +5,8 @@ const CryptoJS = require('crypto-js');
 const bcrypt = require('bcryptjs');
 const { decryptFunction } = require('../utils/decrypt');
 const { hashGenerate } = require('../utils/hashPassword');
+const logger = require('../logger/logger');
+
 require('dotenv').config();
 
 /**Create New Employee Password
@@ -22,12 +24,6 @@ const createPassword = async (req, res) => {
   const { encryptedPassword, id, email } = req.body;
 
   try {
-    if (!email || !encryptedPassword || !id) {
-      return res.status(400).json({
-        success: false,
-        error: 'Email and password are required',
-      });
-    }
 
     const employee = await repo.findOne({
       where: {
@@ -38,8 +34,9 @@ const createPassword = async (req, res) => {
     });
 
     if (!employee) {
+      logger.error(`/authHandler/createPassword: Employee not found`)
       return res.status(404).json({
-        error: 'Employee not found or password already set',
+        message: 'Employee not found or password already set',
       });
     }
     // decrypting password using crypto JS
@@ -56,8 +53,8 @@ const createPassword = async (req, res) => {
       message: 'Password created successfully',
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Database error' });
+    logger.error(`/authHandler/createPassword: ${err}`)
+    res.status(500).json({ message: 'Database error' });
   }
 };
 
@@ -75,12 +72,7 @@ const createPassword = async (req, res) => {
 const employeeLogin = async (req, res) => {
   const { email, encryptedPassword } = req.body;
 
-  if (!email || !encryptedPassword) {
-    return res.status(400).json({
-      success: false,
-      error: 'Email and password are required',
-    });
-  }
+
 
   try {
     // decrypting password using crypto JS
@@ -90,9 +82,10 @@ const employeeLogin = async (req, res) => {
     const isMatch = await bcrypt.compare(decryptedPassword, employee.password);
 
     if (!employee || !isMatch) {
+      logger.error(`/authHandler/employeeLogin: Invalid email or password`)
+
       return res.status(401).json({
-        success: false,
-        error: 'Invalid email or password',
+        message: 'Invalid email or password',
       });
     }
 
@@ -110,10 +103,9 @@ const employeeLogin = async (req, res) => {
       access_token: token, // JWT Token
     });
   } catch (err) {
-    console.error('Login error:', err);
+    logger.error(`/authHandler/employeeLogin: ${err}`)
     res.status(500).json({
-      success: false,
-      error: 'Internal server error',
+      message: 'Internal server error',
     });
   }
 };
@@ -130,9 +122,9 @@ const employeeLogin = async (req, res) => {
 const adminLogin = (req, res) => {
   const { role } = req.body;
   if (!role) {
+    logger.error(`/authHandler/adminLogin: Role is not Found`)
     return res.status(400).json({
-      success: false,
-      error: 'Role is required',
+      message: 'Role is required',
     });
   }
 

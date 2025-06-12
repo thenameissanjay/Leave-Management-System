@@ -30,7 +30,12 @@ const leave_balance = new EntitySchema({
     },
     balance_leave:{
         type: 'int'
-    }
+    },
+    deletedAt: {
+      type: 'timestamp',
+      nullable: true,
+      deleteDate: true, // important for soft delete support
+    },
   },
   relations:{
     employee: { 

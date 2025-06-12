@@ -1,0 +1,15 @@
+[2025-06-12 10:26:49] ERROR: Employee 123 requested leave
+[2025-06-12 10:36:17] ERROR: employee not Found
+[2025-06-12 10:37:03] ERROR: /adminHandler/GetEmployee MESSAGE: employee not Found
+[2025-06-12 10:37:56] ERROR: /adminHandler/GetEmployee: employee not Found
+[2025-06-12 10:42:19] ERROR: /adminHandler/createEmployee: QueryFailedError: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-12 10:42:59] ERROR: /adminHandler/createEmployee: QueryFailedError: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-12 10:43:15] ERROR: /adminHandler/createEmployee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-12 10:48:11] ERROR: /adminHandler/createEmployee: INSERT INTO `employee`(`employee_id`, `name`, `email`, `phone`, `designation`, `date_of_joining`, `reporting_to`, `password`, `deletedAt`) VALUES (DEFAULT, 'sanjay kumar', 'sanjaykumar@gmail.com', '1234567890', 34, '', 21, '', DEFAULT)
+[2025-06-12 10:48:47] ERROR: /adminHandler/createEmployee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-12 12:47:06] ERROR: leaveHandler/leaveStatus: TypeError: Cannot read properties of undefined (reading 'designation')
+[2025-06-12 12:47:11] ERROR: leaveHandler/leaveStatus: TypeError: Cannot read properties of undefined (reading 'designation')
+[2025-06-12 13:06:20] ERROR: leaveHandler/requestLeave: TypeError: approvers.forEach is not a function
+[2025-06-12 13:07:25] ERROR: leaveHandler/requestLeave: TypeError: approvers.forEach is not a function
+[2025-06-12 15:18:43] ERROR: leaveHandler/leaveStatus: TypeError: Cannot read properties of undefined (reading 'status')
+[2025-06-12 15:18:44] ERROR: leaveHandler/leaveStatus: TypeError: Cannot read properties of undefined (reading 'status')

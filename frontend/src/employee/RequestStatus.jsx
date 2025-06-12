@@ -31,26 +31,7 @@ const RequestStatus = () => {
     fetchRequests();
   }, [user]);
 
-  const getStatusLabel = (statusCode) => {
-    switch (statusCode) {
-      case 100:
-        return 'Pending';
-      case 150:
-        return 'Developer Approved';
-      case 200:
-        return 'Manager Approved';
-      case 250:
-        return 'HR Approved';
-      case 300:
-        return 'Director Approved';
-      case 400:
-        return 'Approved';
-      case 500:
-        return 'Rejected';
-      default:
-        return 'Unknown';
-    }
-  };
+
 
   const getStatusClass = (statusCode) => {
     switch (statusCode) {
@@ -134,7 +115,7 @@ const RequestStatus = () => {
                 <p
                   className={`text-sm ${getStatusClass(flow.approval_status)} px-2 py-1 rounded mt-1`}
                 >
-                  {getStatusLabel(flow.approval_status)}
+                  {flow.approval_status_label}
                 </p>
                 {flow.approval_at && (
                   <p className="text-xs text-gray-500 mt-1">
@@ -229,7 +210,7 @@ const RequestStatus = () => {
                             request.status
                           )}`}
                         >
-                          {getStatusLabel(request.status)}
+                          {request.request_status_label}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -332,7 +313,7 @@ const RequestStatus = () => {
                       selectedRequest.status
                     )} px-2 py-1 rounded inline-block`}
                   >
-                    {getStatusLabel(selectedRequest.status)}
+                    {selectedRequest.request_status_label}
                   </p>
                 </div>
                 <div>

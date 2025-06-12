@@ -80,8 +80,9 @@ const DesignationManagement = () => {
       );
       setDesignations(designations.filter((item) => item.id !== id));
       showToast('Designation deleted successfully!', 'success');
-    } catch {
-      showToast('Delete failed. Please try again.', 'error');
+    } catch(err) {
+      const message = err.response?.data?.message;
+      showToast( message, 'error');
     }
   };
 

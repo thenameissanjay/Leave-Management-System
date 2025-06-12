@@ -3,7 +3,6 @@ import axios from 'axios';
 import { AuthContext } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import ApprovalList from './IncomingHistory';
-import Toast from "./ui/toast";
 import { useToast } from "./ui/ToastContainer";
 
 
@@ -25,7 +24,7 @@ const IncomingRequest = () => {
         const EmployeeID = user?.EmployeeID;
         const role = user?.Designation;
 
-        const res = await axios.get(`http://localhost:8080/api/leave/reporting-leave-status?EmployeeID=${EmployeeID}&role=${role}`);
+        const res = await axios.get(`http://localhost:8080/api/leave/incoming-leave-request?EmployeeID=${EmployeeID}&role=${role}`);
         const approvals = res.data;
 
         approvals.sort((a, b) => b.leave_request.request_id - a.leave_request.request_id);
@@ -100,15 +99,10 @@ const IncomingRequest = () => {
       minute: '2-digit'
     });
   };
-
+ // confoirm pending only 
   const getStatusLabel = (statusCode) => {
     switch (statusCode) {
       case 100: return 'Pending';
-      case 150: return 'Developer Approved';
-      case 200: return 'Approved';
-      case 250: return 'HR Approved';
-      case 300: return 'Director Approved';
-      case 400: return 'Rejected';
       default: return 'Unknown';
     }
   };

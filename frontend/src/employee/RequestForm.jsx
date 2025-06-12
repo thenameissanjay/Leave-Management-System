@@ -48,7 +48,7 @@ const RequestForm = () => {
   // Convert to a lookup map for efficiency
   const dateMap = Object.fromEntries(
     HolidaysList.map(({ date, isFloater }) => [date, isFloater])
-  );
+  );  // {date: true}, {......}
   
   const getClassForDate = (date) => {
     const key = date.toISOString().split('T')[0]; // full YYYY-MM-DD

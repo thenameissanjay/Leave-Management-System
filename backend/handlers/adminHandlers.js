@@ -6,7 +6,7 @@ const { leave_request } = require('../entity/leave_requests');
 const {
   updateLeaveBalanceByEmployee,
 } = require('../service/leavebalanceService');
-
+const logger = require('../logger/logger');
 const employeeRepo = AppDataSource.getRepository(employee);
 const leaveRepo = AppDataSource.getRepository(leave_request);
 const designationRepo = AppDataSource.getRepository(designation);
@@ -38,7 +38,7 @@ const getEmployee = async (req, res) => {
 
     res.json(formattedEmployees);
   } catch (err) {
-    console.error('Failed to fetch employees:', err);
+    logger.error(`adminHandler/getEmployee: ${err.message}`);
     res.status(500).json({ error: 'Failed to fetch employees' });
   }
 };
@@ -82,8 +82,8 @@ const createEmployee = async (req, res) => {
       .status(201)
       .json({ success: true, employeeId: newEmployee.employee_id });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to create employee' });
+    logger.error(`/adminHandler/createEmployee: ${err}`);
+    res.status(500).json({ message: 'Failed to create employee' });
   }
 };
 
@@ -94,20 +94,17 @@ const createEmployee = async (req, res) => {
 const GetEmployee = async (req, res) => {
   try {
     const employeeId = req.params.EmployeeID;
-    if (!employeeId) {
-      return res
-        .status(400)
-        .json({ error: 'Delete confirmation is required.' });
-    }
 
     const emp = await employeeRepo.findOneBy({ employee_id: employeeId });
 
-    if (!emp) return res.status(404).json({ error: 'Employee not found' });
-
+    if (!emp) {
+      logger.error('/adminHandler/GetEmployee: employee not Found');
+      return res.status(404).json({ message: 'Employee not found' });
+    }
     res.json(emp);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to fetch employee' });
+    logger.error(`adminHandler/GetEmployee: ${err}`);
+    res.status(500).json({ message: 'Failed to fetch employee' });
   }
 };
 
@@ -128,16 +125,14 @@ const GetEmployee = async (req, res) => {
 const updateEmployee = async (req, res) => {
   try {
     const employeeId = req.params.EmployeeID;
-    console.log(JSON.stringify(req.body, null, 2));
-    if (!employeeId) {
-      return res
-        .status(400)
-        .json({ error: 'Delete confirmation is required.' });
-    }
+
     // return only one row
     const employee = await employeeRepo.findOneBy({ employee_id: employeeId });
 
-    if (!employee) return res.status(404).json({ error: 'Employee not found' });
+    if (!employee) {
+      logger.error('/adminHandler/updateEmployee: Employee not found');
+      return res.status(404).json({ message: 'Employee not found' });
+    }
 
     // employeeRepo.merge(employee, req.body);
     employee.name = req.body.name;
@@ -150,8 +145,8 @@ const updateEmployee = async (req, res) => {
 
     res.json({ success: true, message: 'Employee updated successfully' });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to update employee' });
+    logger.error(`adminHandler/updateEmployee: ${err}`);
+    res.status(500).json({ message: 'Failed to update employee' });
   }
 };
 
@@ -163,22 +158,18 @@ const updateEmployee = async (req, res) => {
 const deleteEmployee = async (req, res) => {
   try {
     const employeeId = req.params.EmployeeID;
-    if (!employeeId) {
-      return res
-        .status(400)
-        .json({ error: 'Delete confirmation is required.' });
-    }
+
     // deleting Employee in Leave Request Entity
-    await leaveRepo.delete({ employee_id: employeeId });
+    await leaveRepo.softDelete({ employee_id: employeeId });
     // deleting Employee in Leave Balance Entity
-    await leaveBalanceRepo.delete({ employee_id: employeeId });
+    await leaveBalanceRepo.softDelete({ employee_id: employeeId });
     // deleting Employee in Employee Entity
-    await employeeRepo.delete({ employee_id: employeeId });
+    await employeeRepo.softDelete({ employee_id: employeeId });
 
     res.json({ success: true, message: 'Employee deleted successfully' });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to delete employee' });
+    logger.error(`adminHandler/deleteEmployee: ${err}`);
+    res.status(500).json({ message: 'Failed to delete employee' });
   }
 };
 
@@ -209,8 +200,9 @@ const EmployeeIdNameDesg = async (req, res) => {
 
     res.json(response);
   } catch (err) {
-    console.error('Failed to fetch employees:', err);
-    res.status(500).json({ error: 'Failed to fetch employees' });
+    logger.error(`adminHandler/EmployeeIdNameDesg: ${err}`);
+
+    return res.status(500).json({ message: 'Failed to fetch employees' });
   }
 };
 

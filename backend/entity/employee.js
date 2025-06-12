@@ -35,6 +35,11 @@ const { designation } = require("./designation");
             password: {
               type: "varchar",
             },
+            deletedAt: {
+              type: 'timestamp',
+              nullable: true,
+              deleteDate: true, // important for soft delete support
+            },
         },
         relations: {
           designation:{

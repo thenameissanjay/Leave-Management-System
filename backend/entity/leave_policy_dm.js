@@ -23,7 +23,12 @@ const leave_policy_dm = new EntitySchema({
     },
     accrual_leave:{
       type: "int",
-    }
+    },
+    deletedAt: {
+      type: 'timestamp',
+      nullable: true,
+      deleteDate: true, // important for soft delete support
+    },
   },
   relations:{
     designation: { 

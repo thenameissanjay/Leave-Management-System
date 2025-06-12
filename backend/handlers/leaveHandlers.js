@@ -1,28 +1,29 @@
 const { AppDataSource } = require('../connection');
 const { LessThanOrEqual, MoreThanOrEqual, In } = require('typeorm');
+const logger = require('../logger/logger');
 
-const { employee } = require('../entity/employee');
 const {
   leave_request,
   LeaveStatus,
   LeaveStatusLabel,
 } = require('../entity/leave_requests');
+
 const { leave_level } = require('../entity/leave_level');
 const { designation } = require('../entity/designation');
 const { approval_flow } = require('../entity/approval_flow');
 const leaveLevelRepo = AppDataSource.getRepository(leave_level);
-const employeeRepo = AppDataSource.getRepository(employee);
 const designationRepo = AppDataSource.getRepository(designation);
 const leaveRequestRepo = AppDataSource.getRepository(leave_request);
 const approvalFlowRepo = AppDataSource.getRepository(approval_flow);
 const {
-  getLeaveTypeName,
   getBalanceLeave,
 } = require('../service/leavebalanceService');
+
 const { leave_balance } = require('../entity/leave_balance');
 const leaveBalanceRepo = AppDataSource.getRepository(leave_balance);
+const {getReportingManager} = require('../service/leaveRequestService');
 
-const employeeLevel = {
+const UpperLevel = {
   director: 0,
   manager: 1,
   hr: 2,
@@ -30,12 +31,12 @@ const employeeLevel = {
   intern: 4,
 };
 
-const LeaveStatusFlow = [
-  { role: 'intern', status: LeaveStatus.pending },
-  { role: 'developer', status: LeaveStatus.developer_approved },
-  { role: 'manager', status: LeaveStatus.manager_approved },
-  { role: 'hr', status: LeaveStatus.hr_approved },
-  { role: 'director', status: LeaveStatus.approved },
+const RoleStatus = [
+  { role: 'intern', status: LeaveStatus.pending }, // 100
+  { role: 'developer', status: LeaveStatus.developer_approved }, // 150
+  { role: 'manager', status: LeaveStatus.manager_approved }, // 200
+  { role: 'hr', status: LeaveStatus.hr_approved }, //250
+  { role: 'director', status: LeaveStatus.approved }, //300
 ];
 
 /**   create leave request 
@@ -65,32 +66,22 @@ const requestLeave = async (req, res) => {
       requestAt,
     } = req.body;
 
-    // Validating
-    if (
-      leaveCount === undefined ||
-      Number.isNaN(Number(leaveCount)) ||
-      !designation
-    ) {
-      return res.status(400).json({
-        message: 'leaveCount (number) and designation (id) are required',
-      });
-    }
-
     // get designation = {id: 37, name: "developer", description: "developer"}
     const desgRow = await designationRepo.findOne({
       where: { id: designation },
     });
 
     if (!desgRow) {
+      logger.error(`leaveHandler/requestLeave: Invalid designation id`);
       return res.status(404).json({ message: 'Invalid designation id' });
     }
 
-    // desgName = "developer"
+    // desgName = "intern"
     const desgName = desgRow.name.toLowerCase().trim();
-    // Maximum Approval for "developer" = 3
-    const levelFromDesignation = employeeLevel[desgName];
-    // Enum Status of "developer" = 150
-    const LeaveFlowStatus = LeaveStatusFlow.find((l) => l.role === desgName);
+    // Maximum Approval for "intern" = 3
+    const levelFromDesignation = UpperLevel[desgName];
+    // Enum Status of "intern" = 100
+    const LeaveFlowStatus = RoleStatus.find((l) => l.role === desgName);
     const status = LeaveFlowStatus.status;
 
     // getting Approval Level based on Leave count = "3"
@@ -102,30 +93,19 @@ const requestLeave = async (req, res) => {
     });
 
     if (!leaveLevel) {
+      logger.error(`leaveHandler/requestLeave: No approval rule configured for this leaveCount`);
       return res.status(404).json({
         message: 'No approval rule configured for this leaveCount',
       });
     }
+
     // min(approval_level, maximum_approval)
     const approval_order = Math.min(
       leaveLevel.approval_order,
       levelFromDesignation
     );
-    // approver array
-    const approvers = [];
-    let current = employee_id;
 
-    for (let step = 0; step < approval_order; step++) {
-      const emp = await employeeRepo.findOne({
-        where: { employee_id: current }, // employee_id, name, phone, reporting_to, dateofjoining
-        select: ['reporting_to'],
-      });
-
-      if (!emp || !emp.reporting_to) break;
-
-      current = emp.reporting_to; // change currect => employee.Reporting_to
-      approvers.push(current); // pushing reporting_to
-    }
+    const approvers = await getReportingManager(employee_id, approval_order);
 
     const leaveRequest = leaveRequestRepo.create({
       employee_id: employee_id,
@@ -133,17 +113,16 @@ const requestLeave = async (req, res) => {
       from_date: fromDate,
       to_date: toDate,
       reason: reason,
-      status: status,
+      status: status,  // 100
       requestedAt: requestAt,
     });
     await leaveRequestRepo.save(leaveRequest);
-    console.log(approvers);
 
     approvers.forEach(async (approverId) => {
       const approvalFlow = approvalFlowRepo.create({
         leave_request_id: leaveRequest.request_id,
-        approver_id: approverId,
-        approval_status: LeaveStatus.pending,
+        approver_id: approverId,   // Approvers ID
+        approval_status: LeaveStatus.pending,   // PENDING
         approval_at: '',
         comments: '',
       });
@@ -154,55 +133,43 @@ const requestLeave = async (req, res) => {
       message: `Successfully updated `,
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error', details: err.message });
+    logger.error(`leaveHandler/requestLeave: ${err}`);
+    res.status(500).json({ message: err.message });
   }
 };
 
 /**  Fetching Incoming Leave Request 
  // GET http://localhost:8080/api/leave/reporting-leave-status?EmployeeID=${EmployeeID}&role=${role} 
  */
-const reportingLeaveStatus = async (req, res) => {
+const incomingLeaveRequest = async (req, res) => {
   const { EmployeeID, role } = req.query;
 
-  if (!EmployeeID || !role) {
-    return res
-      .status(400)
-      .json({ message: 'EmployeeID and role are required' });
-  }
-
   try {
-    const designationRepo = AppDataSource.getRepository(designation);
     // find designationName by ID
     const desigRecord = await designationRepo.findOneBy({ id: role });
 
     if (!desigRecord) {
+      logger.error(`leaveHandler/reportingLeaveStatus: Designation not found`);
       return res.status(401).json({ message: 'Designation not found' });
     }
 
     const lowercaseRole = desigRecord.name.toLowerCase(); // "developer"
     // Enum status of "developer" = 150
-    const currentIndex = LeaveStatusFlow.findIndex(
+    const currentIndex = RoleStatus.findIndex(
       (entry) => entry.role === lowercaseRole
     );
     if (currentIndex === 0) {
       return res.status(401).json({ message: 'No Access for Intern Role' });
     }
     // find previous index of ENUM status = 100
-    const status_code = LeaveStatusFlow[currentIndex - 1].status;
-    console.log(status_code);
-    if (status_code === undefined) {
-      return res
-        .status(404)
-        .json({ message: 'Invalid status mapping for role' });
-    }
+    const status_code = RoleStatus[currentIndex - 1].status;
 
     const result = await approvalFlowRepo.find({
       where: {
         approver_id: EmployeeID,
         approval_status: '100',
         leave_request: {
-          status: status_code.toString(),
+          status: status_code.toString(),  // checking 1 step down ENUM status
         },
       },
       relations: [
@@ -217,7 +184,7 @@ const reportingLeaveStatus = async (req, res) => {
     for (const item of result) {
       const leaveRequest = item.leave_request;
       const employee_id = leaveRequest.employee_id;
-      const leave_type_id = leaveRequest.leave_type?.id;
+      const leave_type_id = leaveRequest.leave_type.id;
 
       // Fetch leave balance of leave request
       if (employee_id && leave_type_id) {
@@ -232,7 +199,7 @@ const reportingLeaveStatus = async (req, res) => {
 
     return res.json(result);
   } catch (err) {
-    console.error('Error fetching approval records:', err);
+    logger.error(`leaveHandler/reportingLeaveStatus: ${err}`);
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
@@ -248,37 +215,36 @@ const reportingLeaveStatus = async (req, res) => {
   role:37
   }}
  */
-const updateLeaveStatus = async (req, res) => {
-  const { request_id, approver_id, status, comments, role, approvedAt } =
-    req.body;
 
-  if (!request_id || !approver_id || !status || !role) {
-    return res.status(400).json({ message: 'Missing required fields' });
-  }
+const updateLeaveStatus = async (req, res) => {
+  const { request_id, approver_id, status, comments, role, approvedAt } = req.body;
   try {
     // 1. Fetch designation name from role id
     const desgRecord = await designationRepo.findOneBy({ id: role });
 
     if (!desgRecord) {
+      logger.error(`leaveHandler/updateLeaveStatus: Invalid role ID`);
       return res.status(404).json({ message: 'Invalid role ID' });
     }
 
     const roleName = desgRecord.name.toLowerCase().trim(); // Manager
-    const statusEntry = LeaveStatusFlow.find((item) => item.role === roleName);
+    const statusEntry = RoleStatus.find((item) => item.role === roleName);
     // manager's ENUM status = 200
     const statusFromRole = statusEntry.status;
 
     //  Get approval_flow record
     const record = await approvalFlowRepo.findOneBy({
-      leave_request_id: parseInt(request_id),
-      approver_id: parseInt(approver_id),
+      leave_request_id: request_id,
+      approver_id: approver_id,
     });
 
+    // get request record
     const requestRecord = await leaveRequestRepo.findOneBy({
-      request_id: parseInt(request_id),
+      request_id: request_id,
     });
 
     if (!record) {
+      logger.error(`leaveHandler/updateLeaveStatus:Approval record not found`);
       return res.status(404).json({ message: 'Approval record not found' });
     }
 
@@ -299,16 +265,16 @@ const updateLeaveStatus = async (req, res) => {
     //  Update the approval status
     if (status === 'approved') {
       // updating Approval Flow's status
-      record.approval_status = statusFromRole;
+      record.approval_status = statusFromRole;  //200
       // updating Leave Request's status
-      requestRecord.status = statusFromRole;
+      requestRecord.status = statusFromRole;   // 200
 
       await leaveRequestRepo.save(requestRecord);
       await approvalFlowRepo.save(record);
 
       // checking all other approvers having pending
       if (await checkAllApproved(request_id)) {
-        requestRecord.status = LeaveStatus.approved; // Final Approved
+        requestRecord.status = LeaveStatus.approved; // Final Approved -> 400
         await leaveRequestRepo.save(requestRecord);
 
         // Update leave_balance record
@@ -327,10 +293,6 @@ const updateLeaveStatus = async (req, res) => {
           leaveBalanceRecord.balance_leave -= 1;
 
           await leaveBalanceRepo.save(leaveBalanceRecord);
-        } else {
-          console.warn(
-            `Leave balance not found for employee_id ${employeeId} and leave_type_id ${leaveTypeId}`
-          );
         }
       }
     } else if (status === 'rejected') {
@@ -339,6 +301,7 @@ const updateLeaveStatus = async (req, res) => {
       await leaveRequestRepo.save(requestRecord);
       await approvalFlowRepo.save(record);
     } else {
+      logger.error(`leaveHandler/updateLeaveStatus: Invalid status value`);
       return res.status(400).json({ message: 'Invalid status value' });
     }
 
@@ -346,7 +309,7 @@ const updateLeaveStatus = async (req, res) => {
       .status(200)
       .json({ message: 'Leave status updated successfully' });
   } catch (error) {
-    console.error('Error updating approval status:', error);
+    logger.error(`leaveHandler/updateLeaveStatus: ${error}`);
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
@@ -354,21 +317,19 @@ const updateLeaveStatus = async (req, res) => {
 //list out the previous Leave Status
 /**
    GET  http://localhost:8080/api/leave/incoming-history/${EmpolyeeID}
-   */
+*/
 const incomingHistory = async (req, res) => {
   const employeeID = req.params.EmployeeID;
-  if (!employeeID) {
-    return res.status(400).json({ message: 'EmployeeID is required' });
-  }
+
   try {
     const approvalFlowRepo = AppDataSource.getRepository('approval_flow');
 
     // Fetch all approval_flow records where approver_id == employeeID and approval_status != pending (100)
     const approvalRecords = await approvalFlowRepo.find({
       where: {
-        approver_id: parseInt(employeeID),
+        approver_id: employeeID,
         leave_request: {
-          status: In(['400', '500']),
+          status: In(['400', '500']), // either approved or rejected
         },
       },
       relations: [
@@ -382,24 +343,25 @@ const incomingHistory = async (req, res) => {
       },
     });
 
+  
     // ENUM status "100" -> "Pending"
     const result = approvalRecords.map((record) => {
       return {
         ...record,
-        approval_status_label: LeaveStatusLabel[record.approval_status],
+        approval_status_label: LeaveStatusLabel[record.approval_status], // "400" -> "Approved"
         leave_request: {
           ...record.leave_request,
-          status_label: LeaveStatusLabel[record.leave_request.status],
+          status_label: LeaveStatusLabel[record.leave_request.status],  
         },
       };
     });
 
     return res.json(result);
   } catch (err) {
-    console.error('Error fetching leave status:', err);
+    logger.error(`leaveHandler/incomingHistory: ${err}`);
     return res
       .status(500)
-      .json({ error: 'Failed to fetch leave approval status' });
+      .json({ message: 'Failed to fetch leave approval status' });
   }
 };
 
@@ -407,9 +369,7 @@ const incomingHistory = async (req, res) => {
 // GET `http://localhost:8080/api/leave/leave-status/${employeeID}`
 const leaveStatus = async (req, res) => {
   const employeeID = req.params.EmployeeID;
-  if (!employeeID) {
-    return res.status(400).json({ message: 'EmployeeID is required' });
-  }
+
   try {
     // Fetch all approval_flow records where approver_id == employeeID and approval_status != pending (100)
     const leaveRequests = await leaveRequestRepo.find({
@@ -430,16 +390,27 @@ const leaveStatus = async (req, res) => {
       },
     });
 
-    return res.json(leaveRequests);
+    const result = leaveRequests.map((record) => {
+      return {
+        ...record,
+        request_status_label: LeaveStatusLabel[record.status], // "400" -> "Approved"
+        approval_flow: record.approval_flow.map((approval)=>(
+          {
+            ...approval, 
+            approval_status_label:  LeaveStatusLabel[approval.approval_status]
+          }
+        ))
+      };
+    });
+
+   return res.json(result);
   } catch (err) {
-    console.error('Error fetching leave status:', err);
+    logger.error(`leaveHandler/leaveStatus: ${err}`);
     return res
       .status(500)
-      .json({ error: 'Failed to fetch leave approval status' });
+      .json({ message: 'Failed to fetch leave approval status' });
   }
 };
-
-
 
 const cancelLeave = async (req, res) => {
   const requestId = req.params.requestId;
@@ -508,7 +479,7 @@ module.exports = {
   requestLeave,
   leaveStatus,
   cancelLeave,
-  reportingLeaveStatus,
+  incomingLeaveRequest,
   updateLeaveStatus,
   incomingHistory,
 };

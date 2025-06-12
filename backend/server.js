@@ -13,6 +13,7 @@ const leaveTypeRoutes  = require('./routes/leavetypeRoutes');
 const leavePolicyRouteDM = require('./routes/leavePolicyRoutesDM');
 const {MonthlyAccrual} = require('./utils/monthlyAccrual')
 const {carryForwardLeaveBalance} = require('./utils/NextYearCarryFwd')
+const logger = require('./logger/logger');
 
 const {adminAuth, employeeAuth} = require('./JWT/verify');
 
@@ -31,16 +32,16 @@ AppDataSource.initialize()
 app.use('/api/auth', authRoutes);
 
 // Admin
-app.use('/api/admin', adminRoutes);
-app.use('/api/designation',  designationRoutes);
-app.use('/api/leave-level',  leaveLevelRoutes);
+app.use('/api/admin',adminAuth, adminRoutes);
+app.use('/api/designation', adminAuth, designationRoutes);
+app.use('/api/leave-level',adminAuth ,   leaveLevelRoutes);
 app.use('/api/leave-type', adminAuth, leaveTypeRoutes);
-app.use('/api/leave-policy', leavePolicyRouteDM);
+app.use('/api/leave-policy',adminAuth ,  leavePolicyRouteDM);
 
 
 // Employee   
-app.use('/api/employee', employeeRoutes);
-app.use('/api/leave',leaveRoutes);
+app.use('/api/employee',employeeAuth, employeeRoutes);
+app.use('/api/leave',employeeAuth, leaveRoutes);
 
 
   app.listen(8080, () => {
