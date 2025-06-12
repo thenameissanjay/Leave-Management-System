@@ -21,12 +21,27 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
+<<<<<<< HEAD
   origin: 'http://localhost:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Authorization', 'Role'],
   optionsSuccessStatus: 200, // for legacy browsers that can't handle 204
 };
 
+=======
+  origin: function (origin, callback) {
+    const allowedOrigins = ['http://localhost:3000', 'https://your-frontend.vercel.app'];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Authorization', 'Content-Type'],
+};
+>>>>>>> b1629276204d0c4c2cdc8c6a574d143883af8223
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // to handle preflight requests
 
@@ -51,7 +66,7 @@ app.use('/api/leave',employeeAuth, leaveRoutes);
 
 
   app.listen(8080, () => {
-      console.log("Server running on http://localhost:8080");
+      console.log("Server running on http://localhost:8081");
     });
     // Monthly Accural
     cron.schedule("0 0 1 1 *", async () => {
