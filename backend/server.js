@@ -20,12 +20,16 @@ const {adminAuth, employeeAuth} = require('./JWT/verify');
 const app = express();
 app.use(express.json());
 
-const corsOptions ={
-    origin:'http://localhost:3000', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200
-}
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Authorization', 'Role'],
+  optionsSuccessStatus: 200, // for legacy browsers that can't handle 204
+};
+
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // to handle preflight requests
+
 
 AppDataSource.initialize()
   .then(() => { console.log("DB connected successfully");

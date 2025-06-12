@@ -21,6 +21,8 @@ const App = () => {
   const {user} = useContext(AuthContext);
   axios.defaults.headers.common['Authorization'] = `Bearer ${user.access_token}`;
   axios.defaults.headers.common['Role'] = ` ${user.role}`; // admin or employee
+  axios.defaults.headers.common['Access-Control-Allow-Origin'] = `*`; // admin or employee
+
 
 
   return (

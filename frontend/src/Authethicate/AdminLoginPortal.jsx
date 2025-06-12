@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import api from '../utils/BaseUrl';
-import { useToast } from "../employee/ui/ToastContainer";
-
+import { useToast } from '../employee/ui/ToastContainer';
 
 const AdminLoginPortal = () => {
   const [username, setUsername] = useState('');
@@ -19,20 +18,16 @@ const AdminLoginPortal = () => {
     if (username == 'admin' && password == 'admin') {
       const response = await api.post(
         '/api/auth/admin-login',
-        { role: "admin" },
-        { withCredentials: true } // ✅ add this here
+        { role: 'admin' },
       );
       const access_token = response.data.access_token;
 
-      setUser({ role: 'admin', 
-        access_token: access_token
-       });
+      setUser({ role: 'admin', access_token: access_token });
 
-      
       navigate('/Admin');
-      showToast('Logged Successfully', 'success')
+      showToast('Logged Successfully', 'success');
     } else {
-      showToast('Invalid credentials', 'error')
+      showToast('Invalid credentials', 'error');
     }
   };
 
@@ -41,7 +36,9 @@ const AdminLoginPortal = () => {
       <h2 className="text-2xl font-bold mb-6 text-center">Admin Portal</h2>
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Username</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Username
+          </label>
           <input
             type="text"
             value={username}
@@ -51,7 +48,9 @@ const AdminLoginPortal = () => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Password</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Password
+          </label>
           <input
             type="password"
             value={password}
@@ -70,9 +69,7 @@ const AdminLoginPortal = () => {
           </button>
         </div>
       </form>
-      <p className="mt-4 text-sm text-gray-600">
-        
-      </p>
+      <p className="mt-4 text-sm text-gray-600"></p>
     </div>
   );
 };
