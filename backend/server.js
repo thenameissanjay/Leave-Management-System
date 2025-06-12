@@ -20,12 +20,23 @@ const {adminAuth, employeeAuth} = require('./JWT/verify');
 const app = express();
 app.use(express.json());
 
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://your-frontend.vercel.app'], // Add more if needed
+const allowedOrigins = ['http://localhost:3000', 'https://your-frontend.vercel.app'];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Authorization', 'Content-Type'],
-}));
+};
+// ✅ CORS must come BEFORE any routes or DB init
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // handles preflight
 
 AppDataSource.initialize()
   .then(() => { console.log("DB connected successfully");
