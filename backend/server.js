@@ -20,17 +20,9 @@ const {adminAuth, employeeAuth} = require('./JWT/verify');
 const app = express();
 app.use(express.json());
 
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Authorization', 'Role'],
-  optionsSuccessStatus: 200, // for legacy browsers that can't handle 204
-};
-
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // to handle preflight requests
-
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
 AppDataSource.initialize()
   .then(() => { console.log("DB connected successfully");
@@ -55,11 +47,11 @@ app.use('/api/leave',employeeAuth, leaveRoutes);
       console.log("Server running on http://localhost:8081");
     });
     // Monthly Accural
-    cron.schedule("0 0 1 1 *", async () => {
+    cron.schedule("0 0 1 * *", async () => {
       await MonthlyAccrual();
     });
     // Yearly Carry Forward
-    cron.schedule('0 0 1 1 1', async() => {
+    cron.schedule('0 0 1 1 *', async() => {
       await  carryForwardLeaveBalance();
     })
   })
