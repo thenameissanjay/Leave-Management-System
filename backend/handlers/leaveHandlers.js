@@ -15,13 +15,11 @@ const leaveLevelRepo = AppDataSource.getRepository(leave_level);
 const designationRepo = AppDataSource.getRepository(designation);
 const leaveRequestRepo = AppDataSource.getRepository(leave_request);
 const approvalFlowRepo = AppDataSource.getRepository(approval_flow);
-const {
-  getBalanceLeave,
-} = require('../service/leavebalanceService');
+const { getBalanceLeave } = require('../service/leavebalanceService');
 
 const { leave_balance } = require('../entity/leave_balance');
 const leaveBalanceRepo = AppDataSource.getRepository(leave_balance);
-const {getReportingManager} = require('../service/leaveRequestService');
+const { getReportingManager } = require('../service/leaveRequestService');
 
 const UpperLevel = {
   director: 0,
@@ -93,7 +91,9 @@ const requestLeave = async (req, res) => {
     });
 
     if (!leaveLevel) {
-      logger.error(`leaveHandler/requestLeave: No approval rule configured for this leaveCount`);
+      logger.error(
+        `leaveHandler/requestLeave: No approval rule configured for this leaveCount`
+      );
       return res.status(404).json({
         message: 'No approval rule configured for this leaveCount',
       });
@@ -113,7 +113,7 @@ const requestLeave = async (req, res) => {
       from_date: fromDate,
       to_date: toDate,
       reason: reason,
-      status: status,  // 100
+      status: status, // 100
       requestedAt: requestAt,
     });
     await leaveRequestRepo.save(leaveRequest);
@@ -121,8 +121,8 @@ const requestLeave = async (req, res) => {
     approvers.forEach(async (approverId) => {
       const approvalFlow = approvalFlowRepo.create({
         leave_request_id: leaveRequest.request_id,
-        approver_id: approverId,   // Approvers ID
-        approval_status: LeaveStatus.pending,   // PENDING
+        approver_id: approverId, // Approvers ID
+        approval_status: LeaveStatus.pending, // PENDING
         approval_at: '',
         comments: '',
       });
@@ -139,10 +139,12 @@ const requestLeave = async (req, res) => {
 };
 
 /**  Fetching Incoming Leave Request 
- // GET http://localhost:8080/api/leave/reporting-leave-status?EmployeeID=${EmployeeID}&role=${role} 
+ // GET http://localhost:8080/api/leave/incoming-leave-request?EmployeeID=${EmployeeID}&role=${role}&offset=${offset}&limit=${limit} 
  */
 const incomingLeaveRequest = async (req, res) => {
   const { EmployeeID, role } = req.query;
+  const {offset, limit} = req.query;
+
 
   try {
     // find designationName by ID
@@ -164,12 +166,12 @@ const incomingLeaveRequest = async (req, res) => {
     // find previous index of ENUM status = 100
     const status_code = RoleStatus[currentIndex - 1].status;
 
-    const result = await approvalFlowRepo.find({
+    const result = await approvalFlowRepo.findAndCount({
       where: {
         approver_id: EmployeeID,
         approval_status: '100',
         leave_request: {
-          status: status_code.toString(),  // checking 1 step down ENUM status
+          status: status_code.toString(), // checking 1 step down ENUM status
         },
       },
       relations: [
@@ -178,10 +180,14 @@ const incomingLeaveRequest = async (req, res) => {
         'leave_request.employee',
         'leave_request.employee.designation',
       ],
+      skip: offset, // OFFSET 
+      take: limit,  // LIMIT 
     });
+    // result = [actual_response, totalRow]
+
 
     // Loop through each result and append leave_balance
-    for (const item of result) {
+    for (const item of result[0]) {
       const leaveRequest = item.leave_request;
       const employee_id = leaveRequest.employee_id;
       const leave_type_id = leaveRequest.leave_type.id;
@@ -196,8 +202,8 @@ const incomingLeaveRequest = async (req, res) => {
         leaveRequest.leave_balance = null;
       }
     }
-
-    return res.json(result);
+    const totalRow = result[1] // total count of rows
+    return res.json({result, totalRow });
   } catch (err) {
     logger.error(`leaveHandler/reportingLeaveStatus: ${err}`);
     return res.status(500).json({ message: 'Internal server error' });
@@ -217,7 +223,8 @@ const incomingLeaveRequest = async (req, res) => {
  */
 
 const updateLeaveStatus = async (req, res) => {
-  const { request_id, approver_id, status, comments, role, approvedAt } = req.body;
+  const { request_id, approver_id, status, comments, role, approvedAt } =
+    req.body;
   try {
     // 1. Fetch designation name from role id
     const desgRecord = await designationRepo.findOneBy({ id: role });
@@ -265,9 +272,9 @@ const updateLeaveStatus = async (req, res) => {
     //  Update the approval status
     if (status === 'approved') {
       // updating Approval Flow's status
-      record.approval_status = statusFromRole;  //200
+      record.approval_status = statusFromRole; //200
       // updating Leave Request's status
-      requestRecord.status = statusFromRole;   // 200
+      requestRecord.status = statusFromRole; // 200
 
       await leaveRequestRepo.save(requestRecord);
       await approvalFlowRepo.save(record);
@@ -316,16 +323,16 @@ const updateLeaveStatus = async (req, res) => {
 
 //list out the previous Leave Status
 /**
-   GET  http://localhost:8080/api/leave/incoming-history/${EmpolyeeID}
+   GET  http://localhost:8080/api/leave/incoming-history/${EmpolyeeID}/offset=${offset}limit=${limit}
 */
 const incomingHistory = async (req, res) => {
   const employeeID = req.params.EmployeeID;
+  const {offset, limit} = req.query;
 
   try {
     const approvalFlowRepo = AppDataSource.getRepository('approval_flow');
-
     // Fetch all approval_flow records where approver_id == employeeID and approval_status != pending (100)
-    const approvalRecords = await approvalFlowRepo.find({
+    const approvalRecords = await approvalFlowRepo.findAndCount({
       where: {
         approver_id: employeeID,
         leave_request: {
@@ -341,23 +348,27 @@ const incomingHistory = async (req, res) => {
       order: {
         id: 'DESC',
       },
+      skip: offset, // OFFSET 
+      take: limit,  // LIMIT 
     });
 
-  
+
     // ENUM status "100" -> "Pending"
-    const result = approvalRecords.map((record) => {
+    const result = approvalRecords[0].map((record) => {
       return {
         ...record,
         approval_status_label: LeaveStatusLabel[record.approval_status], // "400" -> "Approved"
         leave_request: {
           ...record.leave_request,
-          status_label: LeaveStatusLabel[record.leave_request.status],  
+          status_label: LeaveStatusLabel[record.leave_request.status],
         },
       };
     });
-
-    return res.json(result);
+    const totalRow = approvalRecords[1];
+    
+    return res.json({result, totalRow});
   } catch (err) {
+    console.log(err)
     logger.error(`leaveHandler/incomingHistory: ${err}`);
     return res
       .status(500)
@@ -366,13 +377,14 @@ const incomingHistory = async (req, res) => {
 };
 
 // Employee Leave Status
-// GET `http://localhost:8080/api/leave/leave-status/${employeeID}`
+// GET `http://localhost:8080/api/leave/leave-status/${employeeID}?offset=${offset}&limit=${limit}`
 const leaveStatus = async (req, res) => {
   const employeeID = req.params.EmployeeID;
+  const {offset, limit} = req.query;
 
   try {
     // Fetch all approval_flow records where approver_id == employeeID and approval_status != pending (100)
-    const leaveRequests = await leaveRequestRepo.find({
+    const leaveRequests = await leaveRequestRepo.findAndCount({
       where: {
         employee: {
           employee_id: employeeID,
@@ -388,22 +400,23 @@ const leaveStatus = async (req, res) => {
       order: {
         request_id: 'DESC',
       },
+      skip: offset, // OFFSET 
+      take: limit,  // LIMIT 
     });
 
-    const result = leaveRequests.map((record) => {
+    const result = leaveRequests[0].map((record) => {
       return {
         ...record,
         request_status_label: LeaveStatusLabel[record.status], // "400" -> "Approved"
-        approval_flow: record.approval_flow.map((approval)=>(
-          {
-            ...approval, 
-            approval_status_label:  LeaveStatusLabel[approval.approval_status]
-          }
-        ))
+        approval_flow: record.approval_flow.map((approval) => ({
+          ...approval,
+          approval_status_label: LeaveStatusLabel[approval.approval_status],
+        })),
       };
     });
+    const totalRow = leaveRequests[1];
 
-   return res.json(result);
+    return res.json({result, totalRow});
   } catch (err) {
     logger.error(`leaveHandler/leaveStatus: ${err}`);
     return res
@@ -412,66 +425,35 @@ const leaveStatus = async (req, res) => {
   }
 };
 
+
+
 const cancelLeave = async (req, res) => {
   const requestId = req.params.requestId;
-  if (!requestId) {
-    return res.json({ message: 'required name and description' });
-  }
-
   try {
-    // Step 1: Fetch all leave entries for the request_id
-    const leaveRequests = await AppDataSource.getRepository(leave_request).find(
-      {
-        where: { request_id: requestId },
-      }
-    );
-
-    if (leaveRequests.length === 0) {
-      return res.status(404).json({ error: 'Leave request not found' });
-    }
-
-    const allApproved = leaveRequests.every(
-      (request) => request.status === LeaveStatus.approved
-    ); // 200 === status[approved]
-    const { employee_id, leave_type } = leaveRequests[0]; // all rows have same employee_id and leave_type
-
-    // Step 2: Delete the leave request
-    await AppDataSource.getRepository(leave_request).delete({
-      request_id: requestId,
+    const result = await leaveRequestRepo.findOne({
+      where: { request_id: requestId },
     });
+    const approved = result.status === 400;
 
-    // Step 3: If all were approved, decrement the leave count
-    if (allApproved) {
-      const employeeRepo = AppDataSource.getRepository(employee);
-      const employee = await employeeRepo.findOne({ where: { employee_id } });
-
-      if (!employee) {
-        return res.status(404).json({ error: 'Employee not found' });
-      }
-
-      // Decrement leave balance
-      const leaveTypeColumn = leave_type.toLowerCase();
-      if (employee[leaveTypeColumn] > 0) {
-        employee[leaveTypeColumn] -= 1;
-        await employeeRepo.save(employee);
-
-        return res.status(200).json({
-          success: true,
-          message: 'Leave request deleted and leave balance updated',
-        });
-      } else {
-        return res.status(400).json({ error: 'Leave balance is already zero' });
-      }
-    } else {
-      // Skip decrementing leave count
-      return res.status(200).json({
-        success: true,
-        message: 'Leave request deleted (no leave balance updated)',
+    if (approved) {
+      const leaveBalance = await leaveBalanceRepo.findOne({
+        where: {
+          employee_id: result.employee_id,
+          leave_type_id: result.leave_type,
+        },
       });
+      leaveBalance.balance_leave +=1;
+      leaveBalance.leave_taken -=1;
+      await leaveBalanceRepo.save(leaveBalance);
     }
+    // cancel status put in leave request
+    result.status = 600  // Cancel Status Code
+    await leaveRequestRepo.save(result)
+
+    return res.json({message: 'Cancel the Leave Request'});
   } catch (err) {
-    console.error('TypeORM error:', err);
-    res.status(500).json({ error: 'Failed to delete leave request' });
+    logger.error(`Error: ${err}`)
+    res.status(500).json({ message: 'Failed to delete leave request' });
   }
 };
 

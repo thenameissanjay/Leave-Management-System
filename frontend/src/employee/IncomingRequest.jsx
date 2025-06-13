@@ -16,6 +16,9 @@ const IncomingRequest = () => {
   const [showHistory, setShowHistory] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(5);
+  const [total, setTotal] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,13 +27,16 @@ const IncomingRequest = () => {
         const EmployeeID = user?.EmployeeID;
         const role = user?.Designation;
 
-        const res = await axios.get(`http://localhost:8080/api/leave/incoming-leave-request?EmployeeID=${EmployeeID}&role=${role}`);
-        const approvals = res.data;
+        const res = await axios.get(`http://localhost:8080/api/leave/incoming-leave-request?EmployeeID=${EmployeeID}&role=${role}&offset=${offset}&limit=${limit}`);
+        console.log(res.data)
+        const approvals = res.data.result[0];
+        setTotal(res.data.result[1]);
 
-        approvals.sort((a, b) => b.leave_request.request_id - a.leave_request.request_id);
+        // approvals.sort((a, b) => b.leave_request.request_id - a.leave_request.request_id);
         setLeaveRequests(approvals);
         setLoading(false);
       } catch (err) {
+        console.log(err)
         const message = err.response?.data?.message;
         if (err.response?.status === 403) {
           showToast(message, "error")
@@ -43,7 +49,19 @@ const IncomingRequest = () => {
     };
 
     fetchLeaveRequests();
-  }, [user, navigate]);
+  }, [user, navigate, offset]);
+
+  const handleNext = () => {
+    if (offset + limit < total) {
+      setOffset(offset + limit);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (offset > 0) {
+      setOffset(Math.max(0, offset - limit));
+    }
+  };
 
   const handleApproval = async (requestId, approver_id, status) => {
     const approvedAt = new Date();
@@ -250,6 +268,50 @@ const IncomingRequest = () => {
               </tbody>
             </table>
           </div>
+          <div className="flex justify-end gap-8 m-6">
+        <button
+          onClick={handlePrevious}
+          className="px-4 py-2 rounded font-medium text-sm bg-white text-blue-600 border border-blue-600 hover:bg-blue-50 flex items-center gap-2 transition"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M15.7071 18.7071C16.0976 18.3166 16.0976 17.6834 15.7071 17.2929L10.4142 12L15.7071 6.70711C16.0976 6.31658 16.0976 5.68342 15.7071 5.29289C15.3166 4.90237 14.6834 4.90237 14.2929 5.29289L8.29289 11.2929C7.90237 11.6834 7.90237 12.3166 8.29289 12.7071L14.2929 18.7071C14.6834 19.0976 15.3166 19.0976 15.7071 18.7071Z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>Previous</span>
+        </button>
+
+        <button
+          onClick={handleNext}
+          className="px-4 py-2 rounded font-medium text-sm bg-white text-blue-600 border border-blue-600 hover:bg-blue-50 flex items-center gap-2 transition"
+        >
+          Next
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M9 6L15 12L9 18"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
         </div>
       )}
 

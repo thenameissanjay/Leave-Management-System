@@ -19,6 +19,8 @@ const LeaveStatusLabel = {
   [LeaveStatus.director_approved]: 'Director approved',
   [LeaveStatus.approved]: 'Approved',
   [LeaveStatus.rejected]: 'Rejected',
+  [LeaveStatus.cancelled]: 'Cancelled',
+
 };
 
     const leave_request = new EntitySchema({

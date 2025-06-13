@@ -22,7 +22,8 @@ const createRequestSchema = Joi.object({
 const incomingLeaveSchema = Joi.object({
   EmployeeID: Joi.number().integer().required(),
   role: Joi.number().integer().required(),
-
+  offset: Joi.number().integer().required(),
+  limit: Joi.number().integer().required(),
 });
 
 // const reportingIdSchema = Joi.object({
@@ -44,8 +45,14 @@ const approveLeaveSchema = Joi.object({
     role: Joi.number().integer().required(),
 });
 
+const offsetLimit = Joi.object({
+    offset: Joi.number().integer().required(),
+    limit: Joi.number().integer().required(),
+  });
+
 module.exports = {
     createRequestSchema,
     incomingLeaveSchema,
-    approveLeaveSchema
+    approveLeaveSchema,
+    offsetLimit
 };

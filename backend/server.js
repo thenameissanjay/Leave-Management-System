@@ -41,7 +41,7 @@ app.use('/api/leave-policy',adminAuth ,  leavePolicyRouteDM);
 
 // Employee   
 app.use('/api/employee',employeeAuth, employeeRoutes);
-app.use('/api/leave',employeeAuth, leaveRoutes);
+app.use('/api/leave', leaveRoutes);
 
 
   app.listen(8080, () => {

@@ -20,6 +20,7 @@ const employeeIdSchema = Joi.object({
   EmployeeID: Joi.number().integer().required(),
 });
 
+
 const reportingIdSchema = Joi.object({
   ReportingManagerID: Joi.number().integer().required(),
 });
@@ -47,5 +48,6 @@ module.exports = {
   createEmployeeSchema,
   employeeIdSchema,
   updateEmployeeSchema,
-  reportingIdSchema
+  reportingIdSchema,
+  
 };

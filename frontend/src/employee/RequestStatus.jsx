@@ -11,15 +11,19 @@ const RequestStatus = () => {
   const [error, setError] = useState('');
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(5);
+  const [total, setTotal] = useState(0);
   useEffect(() => {
     const fetchRequests = async () => {
       try {
         const employeeID = user.EmployeeID;
         const res = await axios.get(
-          `http://localhost:8080/api/leave/leave-status/${employeeID}`
+          `http://localhost:8080/api/leave/leave-status/${employeeID}?offset=${offset}&limit=${limit}`
         );
-        setRequests(res.data);
+        setRequests(res.data.result);
+        setTotal(res.data.totalRow); // rows count
+
       } catch (err) {
         const message = err.response?.data?.message;
         showToast(message, 'error')
@@ -29,7 +33,7 @@ const RequestStatus = () => {
     };
 
     fetchRequests();
-  }, [user]);
+  }, [user, offset]);
 
 
 
@@ -48,13 +52,12 @@ const RequestStatus = () => {
 
   const handleCancel = async (requestId) => {
     try {
-      await axios.put(`http://localhost:8080/api/leave/cancel/${requestId}`);
+      await axios.delete(`http://localhost:8080/api/leave/cancelLeave/${requestId}`);
       setRequests((prev) => prev.filter((r) => r.request_id !== requestId));
       showToast('Updated Successfully', 'success')
     } catch (err) {
       const message = err.response?.data?.message;
       showToast(message, 'error');
-      alert('Failed to cancel the request. Please try again.');
     }
   };
 
@@ -88,6 +91,20 @@ const RequestStatus = () => {
     setSelectedRequest(null);
   };
 
+  const handleNext = () => {
+    console.log(total)
+    if (offset + limit < total) {
+      console.log('button is pressed')
+
+      setOffset(offset + limit);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (offset > 0) {
+      setOffset(Math.max(0, offset - limit));
+    }
+  };
   const renderApprovalTimeline = (approvalFlow) => {
     return (
       <div className="mt-4">
@@ -182,7 +199,7 @@ const RequestStatus = () => {
                 {requests.map((request) => {
                   const today = new Date();
                   const startDate = new Date(request.from_date);
-                  const canCancel = startDate > today && request.status === 100;
+                  const canCancel = startDate > today && ( request.status != 500 && request.status != 600);
 
                   return (
                     <tr key={request.request_id} className="hover:bg-gray-50">
@@ -238,6 +255,50 @@ const RequestStatus = () => {
               </tbody>
             </table>
           </div>
+          <div className="flex justify-end gap-8 m-6">
+        <button
+          onClick={handlePrevious}
+          className="px-4 py-2 rounded font-medium text-sm bg-white text-blue-600 border border-blue-600 hover:bg-blue-50 flex items-center gap-2 transition"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M15.7071 18.7071C16.0976 18.3166 16.0976 17.6834 15.7071 17.2929L10.4142 12L15.7071 6.70711C16.0976 6.31658 16.0976 5.68342 15.7071 5.29289C15.3166 4.90237 14.6834 4.90237 14.2929 5.29289L8.29289 11.2929C7.90237 11.6834 7.90237 12.3166 8.29289 12.7071L14.2929 18.7071C14.6834 19.0976 15.3166 19.0976 15.7071 18.7071Z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>Previous</span>
+        </button>
+
+        <button
+          onClick={handleNext}
+          className="px-4 py-2 rounded font-medium text-sm bg-white text-blue-600 border border-blue-600 hover:bg-blue-50 flex items-center gap-2 transition"
+        >
+          Next
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M9 6L15 12L9 18"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
         </div>
       )}
 

@@ -13,3 +13,14 @@
 [2025-06-12 13:07:25] ERROR: leaveHandler/requestLeave: TypeError: approvers.forEach is not a function
 [2025-06-12 15:18:43] ERROR: leaveHandler/leaveStatus: TypeError: Cannot read properties of undefined (reading 'status')
 [2025-06-12 15:18:44] ERROR: leaveHandler/leaveStatus: TypeError: Cannot read properties of undefined (reading 'status')
+[2025-06-13 11:21:35] ERROR: leaveHandler/incomingHistory: TypeError: Cannot read properties of undefined (reading 'status')
+[2025-06-13 11:21:36] ERROR: leaveHandler/incomingHistory: TypeError: Cannot read properties of undefined (reading 'status')
+[2025-06-13 11:21:46] ERROR: leaveHandler/incomingHistory: TypeError: Cannot read properties of undefined (reading 'status')
+[2025-06-13 11:21:46] ERROR: leaveHandler/incomingHistory: TypeError: Cannot read properties of undefined (reading 'status')
+[2025-06-13 11:21:46] ERROR: leaveHandler/incomingHistory: TypeError: Cannot read properties of undefined (reading 'status')
+[2025-06-13 11:21:47] ERROR: leaveHandler/incomingHistory: TypeError: Cannot read properties of undefined (reading 'status')
+[2025-06-13 11:23:44] ERROR: leaveHandler/incomingHistory: TypeError: Cannot read properties of undefined (reading 'status')
+[2025-06-13 11:24:34] ERROR: leaveHandler/incomingHistory: TypeError: Cannot read properties of undefined (reading 'status')
+[2025-06-13 11:25:45] ERROR: leaveHandler/incomingHistory: TypeError: Cannot read properties of undefined (reading 'status')
+[2025-06-13 12:20:14] ERROR: leaveHandler/reportingLeaveStatus: TypeError: Cannot read properties of undefined (reading 'employee_id')
+[2025-06-13 12:47:33] ERROR: leaveHandler/leaveStatus: TypeError: leaveRequests[0].map is not a function

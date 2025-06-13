@@ -12,6 +12,7 @@ const {
   createRequestSchema,
   incomingLeaveSchema,
   approveLeaveSchema,
+  offsetLimit
 } = require('../joi_schema/leaveSchema');
 const { employeeIdSchema } = require('../joi_schema/adminSchema');
 const validator = require('express-joi-validation').createValidator({});
@@ -20,11 +21,13 @@ router.post('/request-leave', validator.body(createRequestSchema), requestLeave)
 router.get(
   '/incoming-history/:EmployeeID',
   validator.params(employeeIdSchema),
+  validator.query(offsetLimit),
   incomingHistory
 );
 router.get(
   '/leave-status/:EmployeeID',
   validator.params(employeeIdSchema),
+  validator.query(offsetLimit),
   leaveStatus
 );
 
