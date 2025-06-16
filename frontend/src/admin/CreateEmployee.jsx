@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../employee/ui/ToastContainer';
+import BulkUpload from './BulkUpload';
 const CreateEmployee = () => {
   const [employees, setEmployees] = useState([]);
   const [designations, setDesignations] = useState([]); // new for designation list
   const navigate = useNavigate();
   const { showToast } = useToast();
-  
 
   const [values, setValues] = useState({
     name: '',
@@ -16,14 +16,14 @@ const CreateEmployee = () => {
     designation: '',
     reporting_to: '',
     date_of_joining: '',
-    password: ''
+    password: '',
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setValues((prevValues) => ({
       ...prevValues,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -32,11 +32,16 @@ const CreateEmployee = () => {
     try {
       const payload = {
         ...values,
-        designation: values.designation === "" ? null : parseInt(values.designation),
-        reporting_to: values.reporting_to === "" ? null : parseInt(values.reporting_to),  
+        designation:
+          values.designation === '' ? null : parseInt(values.designation),
+        reporting_to:
+          values.reporting_to === '' ? null : parseInt(values.reporting_to),
       };
-      const response = await axios.post('http://localhost:8080/api/admin/employee', payload);
-      showToast('Employee Added Successfully', 'success')
+      const response = await axios.post(
+        'http://localhost:8080/api/admin/employee',
+        payload
+      );
+      showToast('Employee Added Successfully', 'success');
       setValues({
         name: '',
         email: '',
@@ -44,20 +49,19 @@ const CreateEmployee = () => {
         designation: '',
         reporting_to: '',
         date_of_joining: '',
-        password: ''
+        password: '',
       });
     } catch (err) {
       {
         const message = err.response?.data?.message;
         if (err.response?.status === 403) {
-          showToast(message, 'error')
+          showToast(message, 'error');
           navigate('/');
         } else if (err.response?.status === 401) {
-          showToast(message, 'error')
+          showToast(message, 'error');
           navigate('/');
-
         } else {
-          showToast('An unexpected error occurred.', 'error')
+          showToast('An unexpected error occurred.', 'error');
         }
       }
     }
@@ -66,7 +70,9 @@ const CreateEmployee = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/admin/employee-id-name-desg');
+        const res = await axios.get(
+          'http://localhost:8080/api/admin/employee-id-name-desg'
+        );
         if (Array.isArray(res.data)) {
           setEmployees(res.data);
           console.log(res.data);
@@ -76,24 +82,26 @@ const CreateEmployee = () => {
         }
       } catch (err) {
         const message = err.response?.data?.message;
-        showToast(message, 'error')
+        showToast(message, 'error');
         setEmployees([]);
       }
     };
 
     const fetchDesignations = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/designation/designation');
+        const res = await axios.get(
+          'http://localhost:8080/api/designation/designation'
+        );
         if (Array.isArray(res.data)) {
           setDesignations(res.data);
-          console.log(res.data)
+          console.log(res.data);
         } else {
           console.error('Expected array but got:', res.data);
           setDesignations([]);
         }
       } catch (err) {
         const message = err.response?.data?.message;
-        showToast(message, 'error')
+        showToast(message, 'error');
         setDesignations([]);
       }
     };
@@ -104,10 +112,13 @@ const CreateEmployee = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-grey-100">
+      <div className="flex gap-4 w-full">
       <div className="bg-white shadow-lg rounded-xl w-full max-w-md p-6">
-        <h2 className="text-2xl font-bold text-center text-red-300 mb-6">Create Employee</h2>
+        <h2 className="text-2xl font-bold text-center text-red-300 mb-6">
+          Create Employee
+        </h2>
+
         <form onSubmit={handleSubmit} className="space-y-4">
-          
           <div>
             <label className="block text-sm font-medium mb-1">Full Name</label>
             <input
@@ -131,7 +142,9 @@ const CreateEmployee = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Phone Number</label>
+            <label className="block text-sm font-medium mb-1">
+              Phone Number
+            </label>
             <input
               name="phone"
               type="tel"
@@ -144,48 +157,48 @@ const CreateEmployee = () => {
           </div>
 
           <div>
-  <label className="block text-sm font-medium mb-1">
-    Designation <span className="text-gray-400">(optional)</span>
-  </label>
-  <select
-    name="designation"
-    value={values.designation || ""}
-    onChange={handleChange} 
-    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-  >
-    <option value="">None</option> {/* Nullable Option */}
-    {designations.map((desg, idx) => (
-      <option key={idx} value={desg.id}>
-        {desg.name}
-      </option>
-    ))}
-  </select>
-</div>
-
+            <label className="block text-sm font-medium mb-1">
+              Designation <span className="text-gray-400">(optional)</span>
+            </label>
+            <select
+              name="designation"
+              value={values.designation || ''}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              <option value="">None</option> {/* Nullable Option */}
+              {designations.map((desg, idx) => (
+                <option key={idx} value={desg.id}>
+                  {desg.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <div>
-  <label className="block text-sm font-medium mb-1">
-    Reporting Manager <span className="text-gray-400">(optional)</span>
-  </label>
-  <select
-    name="reporting_to"
-    value={values.reporting_to || ""}
-    onChange={handleChange}
-    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-  >
-    <option value="">None</option> {/* Nullable option */}
-    {employees.map((emp) => (
-      <option key={emp.employee_id} value={emp.employee_id}>
-        {emp.name} ({emp.designation}) - [{emp.employee_id}]
-      </option>
-    ))}
-  </select>
-</div>
+            <label className="block text-sm font-medium mb-1">
+              Reporting Manager{' '}
+              <span className="text-gray-400">(optional)</span>
+            </label>
+            <select
+              name="reporting_to"
+              value={values.reporting_to || ''}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              <option value="">None</option> {/* Nullable option */}
+              {employees.map((emp) => (
+                <option key={emp.employee_id} value={emp.employee_id}>
+                  {emp.name} ({emp.designation}) - [{emp.employee_id}]
+                </option>
+              ))}
+            </select>
+          </div>
 
-
-       
           <div>
-            <label className="block text-sm font-medium mb-1">Date of Joining</label>
+            <label className="block text-sm font-medium mb-1">
+              Date of Joining
+            </label>
             <input
               name="date_of_joining"
               type="date"
@@ -205,6 +218,9 @@ const CreateEmployee = () => {
           </div>
         </form>
       </div>
+        <BulkUpload />
+      </div>
+    
     </div>
   );
 };

@@ -1,4 +1,4 @@
-const { AppDataSource } = require('../connection');
+const { AppDataSource } = require('../config/connection');
 const { LessThanOrEqual, MoreThanOrEqual, In } = require('typeorm');
 const logger = require('../logger/logger');
 

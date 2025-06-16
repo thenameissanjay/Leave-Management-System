@@ -24,3 +24,768 @@
 [2025-06-13 11:25:45] ERROR: leaveHandler/incomingHistory: TypeError: Cannot read properties of undefined (reading 'status')
 [2025-06-13 12:20:14] ERROR: leaveHandler/reportingLeaveStatus: TypeError: Cannot read properties of undefined (reading 'employee_id')
 [2025-06-13 12:47:33] ERROR: leaveHandler/leaveStatus: TypeError: leaveRequests[0].map is not a function
+[2025-06-13 15:38:59] ERROR: leaveHandler/leaveStatus: TypeError: Cannot read properties of undefined (reading 'designation')
+[2025-06-13 15:40:25] ERROR: leaveHandler/leaveStatus: TypeError: Cannot read properties of undefined (reading 'designation')
+[2025-06-13 15:44:15] ERROR: leaveHandler/leaveStatus: TypeError: record.employee.designation.name.toLowecase is not a function
+[2025-06-13 15:44:53] ERROR: leaveHandler/leaveStatus: TypeError: record.employee.designation.name.toLoweCase is not a function
+[2025-06-13 15:45:07] ERROR: leaveHandler/leaveStatus: ReferenceError: Cannot access 'roleStatus' before initialization
+[2025-06-16 11:42:40] ERROR: Error processing employee: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`employee`, CONSTRAINT `FK_2728e36aa77388e4a7493b424d6` FOREIGN KEY (`designation`) REFERENCES `designation` (`id`))
+[2025-06-16 11:42:40] INFO: Job 1 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`employee`, CONSTRAINT `FK_2728e36aa77388e4a7493b424d6` FOREIGN KEY (`designation`) REFERENCES `designation` (`id`))
+[2025-06-16 11:42:40] INFO: Job 2 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Incorrect integer value: '' for column 'designation' at row 1
+[2025-06-16 11:42:40] INFO: Job 3 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`employee`, CONSTRAINT `FK_2728e36aa77388e4a7493b424d6` FOREIGN KEY (`designation`) REFERENCES `designation` (`id`))
+[2025-06-16 11:42:40] INFO: Job 4 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`employee`, CONSTRAINT `FK_2728e36aa77388e4a7493b424d6` FOREIGN KEY (`designation`) REFERENCES `designation` (`id`))
+[2025-06-16 11:42:40] INFO: Job 5 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 11:42:40] INFO: Job 6 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`employee`, CONSTRAINT `FK_2728e36aa77388e4a7493b424d6` FOREIGN KEY (`designation`) REFERENCES `designation` (`id`))
+[2025-06-16 11:42:40] INFO: Job 7 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Incorrect integer value: '' for column 'designation' at row 1
+[2025-06-16 11:42:40] INFO: Job 8 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 11:42:40] INFO: Job 9 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 11:42:40] INFO: Job 10 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`employee`, CONSTRAINT `FK_2728e36aa77388e4a7493b424d6` FOREIGN KEY (`designation`) REFERENCES `designation` (`id`))
+[2025-06-16 11:42:40] INFO: Job 11 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`employee`, CONSTRAINT `FK_2728e36aa77388e4a7493b424d6` FOREIGN KEY (`designation`) REFERENCES `designation` (`id`))
+[2025-06-16 11:42:40] INFO: Job 12 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Incorrect integer value: '' for column 'designation' at row 1
+[2025-06-16 11:42:40] INFO: Job 13 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`employee`, CONSTRAINT `FK_2728e36aa77388e4a7493b424d6` FOREIGN KEY (`designation`) REFERENCES `designation` (`id`))
+[2025-06-16 11:42:40] INFO: Job 14 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`employee`, CONSTRAINT `FK_2728e36aa77388e4a7493b424d6` FOREIGN KEY (`designation`) REFERENCES `designation` (`id`))
+[2025-06-16 11:42:40] INFO: Job 15 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 11:42:40] INFO: Job 16 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`employee`, CONSTRAINT `FK_2728e36aa77388e4a7493b424d6` FOREIGN KEY (`designation`) REFERENCES `designation` (`id`))
+[2025-06-16 11:42:40] INFO: Job 17 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Incorrect integer value: '' for column 'designation' at row 1
+[2025-06-16 11:42:40] INFO: Job 18 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 11:42:40] INFO: Job 19 completed
+[2025-06-16 11:42:40] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 11:42:40] INFO: Job 20 completed
+[2025-06-16 11:57:05] INFO: Added employee: alice.johnson@example.com
+[2025-06-16 11:57:05] INFO: Job 21 completed
+[2025-06-16 11:57:05] INFO: Added employee: bob.smith@example.com
+[2025-06-16 11:57:05] INFO: Job 22 completed
+[2025-06-16 11:57:05] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 11:57:05] INFO: Job 23 completed
+[2025-06-16 11:57:05] INFO: Added employee: diana.prince@example.com
+[2025-06-16 11:57:05] INFO: Job 24 completed
+[2025-06-16 11:57:05] INFO: Added employee: ethan.hunt@example.com
+[2025-06-16 11:57:05] INFO: Job 25 completed
+[2025-06-16 11:57:05] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 11:57:05] INFO: Job 26 completed
+[2025-06-16 11:57:06] INFO: Added employee: george.miller@example.com
+[2025-06-16 11:57:06] INFO: Job 27 completed
+[2025-06-16 11:57:06] INFO: Added employee: hannah.wells@example.com
+[2025-06-16 11:57:06] INFO: Job 28 completed
+[2025-06-16 11:57:06] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 11:57:06] INFO: Job 29 completed
+[2025-06-16 11:57:06] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 11:57:06] INFO: Job 30 completed
+[2025-06-16 11:58:15] WARN: Duplicate email skipped: alice.johnson@example.com
+[2025-06-16 11:58:15] INFO: Job 31 completed
+[2025-06-16 11:58:15] WARN: Duplicate email skipped: bob.smith@example.com
+[2025-06-16 11:58:15] INFO: Job 32 completed
+[2025-06-16 11:58:15] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 11:58:15] INFO: Job 33 completed
+[2025-06-16 11:58:15] WARN: Duplicate email skipped: diana.prince@example.com
+[2025-06-16 11:58:15] INFO: Job 34 completed
+[2025-06-16 11:58:15] WARN: Duplicate email skipped: ethan.hunt@example.com
+[2025-06-16 11:58:15] INFO: Job 35 completed
+[2025-06-16 11:58:15] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 11:58:15] INFO: Job 36 completed
+[2025-06-16 11:58:15] WARN: Duplicate email skipped: george.miller@example.com
+[2025-06-16 11:58:15] INFO: Job 37 completed
+[2025-06-16 11:58:15] WARN: Duplicate email skipped: hannah.wells@example.com
+[2025-06-16 11:58:15] INFO: Job 38 completed
+[2025-06-16 11:58:15] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 11:58:15] INFO: Job 39 completed
+[2025-06-16 11:58:15] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 11:58:15] INFO: Job 40 completed
+[2025-06-16 11:59:44] WARN: Duplicate email skipped: alice.johnson@example.com
+[2025-06-16 11:59:44] INFO: Job 41 completed
+[2025-06-16 11:59:44] WARN: Duplicate email skipped: bob.smith@example.com
+[2025-06-16 11:59:44] INFO: Job 42 completed
+[2025-06-16 11:59:44] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 11:59:44] INFO: Job 43 completed
+[2025-06-16 11:59:44] WARN: Duplicate email skipped: diana.prince@example.com
+[2025-06-16 11:59:44] INFO: Job 44 completed
+[2025-06-16 11:59:44] WARN: Duplicate email skipped: ethan.hunt@example.com
+[2025-06-16 11:59:44] INFO: Job 45 completed
+[2025-06-16 11:59:44] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 11:59:44] INFO: Job 46 completed
+[2025-06-16 11:59:44] WARN: Duplicate email skipped: george.miller@example.com
+[2025-06-16 11:59:44] INFO: Job 47 completed
+[2025-06-16 11:59:44] WARN: Duplicate email skipped: hannah.wells@example.com
+[2025-06-16 11:59:44] INFO: Job 48 completed
+[2025-06-16 11:59:44] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 11:59:44] INFO: Job 49 completed
+[2025-06-16 11:59:44] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 11:59:44] INFO: Job 50 completed
+[2025-06-16 11:59:58] WARN: Duplicate email skipped: alice.johnson@example.com
+[2025-06-16 11:59:58] INFO: Job 51 completed
+[2025-06-16 11:59:58] WARN: Duplicate email skipped: bob.smith@example.com
+[2025-06-16 11:59:58] INFO: Job 52 completed
+[2025-06-16 11:59:58] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 11:59:58] INFO: Job 53 completed
+[2025-06-16 11:59:58] WARN: Duplicate email skipped: diana.prince@example.com
+[2025-06-16 11:59:58] INFO: Job 54 completed
+[2025-06-16 11:59:58] WARN: Duplicate email skipped: ethan.hunt@example.com
+[2025-06-16 11:59:58] INFO: Job 55 completed
+[2025-06-16 11:59:58] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 11:59:58] INFO: Job 56 completed
+[2025-06-16 11:59:58] WARN: Duplicate email skipped: george.miller@example.com
+[2025-06-16 11:59:58] INFO: Job 57 completed
+[2025-06-16 11:59:58] WARN: Duplicate email skipped: hannah.wells@example.com
+[2025-06-16 11:59:58] INFO: Job 58 completed
+[2025-06-16 11:59:58] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 11:59:58] INFO: Job 59 completed
+[2025-06-16 11:59:58] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 11:59:58] INFO: Job 60 completed
+[2025-06-16 12:01:09] WARN: Duplicate email skipped: alice.johnson@example.com
+[2025-06-16 12:01:09] INFO: Job 61 completed
+[2025-06-16 12:01:09] WARN: Duplicate email skipped: bob.smith@example.com
+[2025-06-16 12:01:09] INFO: Job 62 completed
+[2025-06-16 12:01:09] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:01:09] INFO: Job 63 completed
+[2025-06-16 12:01:09] WARN: Duplicate email skipped: diana.prince@example.com
+[2025-06-16 12:01:09] INFO: Job 64 completed
+[2025-06-16 12:01:09] WARN: Duplicate email skipped: ethan.hunt@example.com
+[2025-06-16 12:01:09] INFO: Job 65 completed
+[2025-06-16 12:01:09] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:01:09] INFO: Job 66 completed
+[2025-06-16 12:01:09] WARN: Duplicate email skipped: george.miller@example.com
+[2025-06-16 12:01:09] INFO: Job 67 completed
+[2025-06-16 12:01:09] WARN: Duplicate email skipped: hannah.wells@example.com
+[2025-06-16 12:01:09] INFO: Job 68 completed
+[2025-06-16 12:01:09] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:01:09] INFO: Job 69 completed
+[2025-06-16 12:01:09] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:01:09] INFO: Job 70 completed
+[2025-06-16 12:01:51] WARN: Duplicate email skipped: alice.johnson@example.com
+[2025-06-16 12:01:51] INFO: Job 71 completed
+[2025-06-16 12:01:51] WARN: Duplicate email skipped: bob.smith@example.com
+[2025-06-16 12:01:51] INFO: Job 72 completed
+[2025-06-16 12:01:51] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:01:51] INFO: Job 73 completed
+[2025-06-16 12:01:51] WARN: Duplicate email skipped: diana.prince@example.com
+[2025-06-16 12:01:51] INFO: Job 74 completed
+[2025-06-16 12:01:51] WARN: Duplicate email skipped: ethan.hunt@example.com
+[2025-06-16 12:01:51] INFO: Job 75 completed
+[2025-06-16 12:01:51] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:01:51] INFO: Job 76 completed
+[2025-06-16 12:01:51] WARN: Duplicate email skipped: george.miller@example.com
+[2025-06-16 12:01:51] INFO: Job 77 completed
+[2025-06-16 12:01:51] WARN: Duplicate email skipped: hannah.wells@example.com
+[2025-06-16 12:01:51] INFO: Job 78 completed
+[2025-06-16 12:01:51] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:01:51] INFO: Job 79 completed
+[2025-06-16 12:01:51] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:01:51] INFO: Job 80 completed
+[2025-06-16 12:04:43] WARN: Duplicate email skipped: alice.johnson@example.com
+[2025-06-16 12:04:43] INFO: Job 81 completed
+[2025-06-16 12:04:43] WARN: Duplicate email skipped: bob.smith@example.com
+[2025-06-16 12:04:43] INFO: Job 82 completed
+[2025-06-16 12:04:43] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:04:43] INFO: Job 83 completed
+[2025-06-16 12:04:43] WARN: Duplicate email skipped: diana.prince@example.com
+[2025-06-16 12:04:43] INFO: Job 84 completed
+[2025-06-16 12:04:43] WARN: Duplicate email skipped: ethan.hunt@example.com
+[2025-06-16 12:04:43] INFO: Job 85 completed
+[2025-06-16 12:04:43] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:04:43] INFO: Job 86 completed
+[2025-06-16 12:04:43] WARN: Duplicate email skipped: george.miller@example.com
+[2025-06-16 12:04:43] INFO: Job 87 completed
+[2025-06-16 12:04:43] WARN: Duplicate email skipped: hannah.wells@example.com
+[2025-06-16 12:04:43] INFO: Job 88 completed
+[2025-06-16 12:04:43] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:04:43] INFO: Job 89 completed
+[2025-06-16 12:04:43] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:04:43] INFO: Job 90 completed
+[2025-06-16 12:04:55] WARN: Duplicate email skipped: alice.johnson@example.com
+[2025-06-16 12:04:55] INFO: Job 91 completed
+[2025-06-16 12:04:55] WARN: Duplicate email skipped: bob.smith@example.com
+[2025-06-16 12:04:55] INFO: Job 92 completed
+[2025-06-16 12:04:55] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:04:55] INFO: Job 93 completed
+[2025-06-16 12:04:55] WARN: Duplicate email skipped: diana.prince@example.com
+[2025-06-16 12:04:55] INFO: Job 94 completed
+[2025-06-16 12:04:55] WARN: Duplicate email skipped: ethan.hunt@example.com
+[2025-06-16 12:04:55] INFO: Job 95 completed
+[2025-06-16 12:04:55] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:04:55] INFO: Job 96 completed
+[2025-06-16 12:04:55] WARN: Duplicate email skipped: george.miller@example.com
+[2025-06-16 12:04:55] INFO: Job 97 completed
+[2025-06-16 12:04:55] WARN: Duplicate email skipped: hannah.wells@example.com
+[2025-06-16 12:04:55] INFO: Job 98 completed
+[2025-06-16 12:04:55] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:04:55] INFO: Job 99 completed
+[2025-06-16 12:04:55] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:04:55] INFO: Job 100 completed
+[2025-06-16 12:06:04] WARN: Duplicate email skipped: alice.johnson@example.com
+[2025-06-16 12:06:04] INFO: Job 101 completed
+[2025-06-16 12:06:04] WARN: Duplicate email skipped: bob.smith@example.com
+[2025-06-16 12:06:04] INFO: Job 102 completed
+[2025-06-16 12:06:04] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:06:04] INFO: Job 103 completed
+[2025-06-16 12:06:04] WARN: Duplicate email skipped: diana.prince@example.com
+[2025-06-16 12:06:04] INFO: Job 104 completed
+[2025-06-16 12:06:04] WARN: Duplicate email skipped: ethan.hunt@example.com
+[2025-06-16 12:06:04] INFO: Job 105 completed
+[2025-06-16 12:06:04] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:06:04] INFO: Job 106 completed
+[2025-06-16 12:06:04] WARN: Duplicate email skipped: george.miller@example.com
+[2025-06-16 12:06:04] INFO: Job 107 completed
+[2025-06-16 12:06:04] WARN: Duplicate email skipped: hannah.wells@example.com
+[2025-06-16 12:06:04] INFO: Job 108 completed
+[2025-06-16 12:06:04] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:06:04] INFO: Job 109 completed
+[2025-06-16 12:06:04] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:06:04] INFO: Job 110 completed
+[2025-06-16 12:06:14] WARN: Duplicate email skipped: alice.johnson@example.com
+[2025-06-16 12:06:14] INFO: Job 111 completed
+[2025-06-16 12:06:14] WARN: Duplicate email skipped: bob.smith@example.com
+[2025-06-16 12:06:14] INFO: Job 112 completed
+[2025-06-16 12:06:14] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:06:14] INFO: Job 113 completed
+[2025-06-16 12:06:14] WARN: Duplicate email skipped: diana.prince@example.com
+[2025-06-16 12:06:14] INFO: Job 114 completed
+[2025-06-16 12:06:14] WARN: Duplicate email skipped: ethan.hunt@example.com
+[2025-06-16 12:06:14] INFO: Job 115 completed
+[2025-06-16 12:06:14] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:06:14] INFO: Job 116 completed
+[2025-06-16 12:06:14] WARN: Duplicate email skipped: george.miller@example.com
+[2025-06-16 12:06:14] INFO: Job 117 completed
+[2025-06-16 12:06:14] WARN: Duplicate email skipped: hannah.wells@example.com
+[2025-06-16 12:06:14] INFO: Job 118 completed
+[2025-06-16 12:06:14] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:06:14] INFO: Job 119 completed
+[2025-06-16 12:06:14] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:06:14] INFO: Job 120 completed
+[2025-06-16 12:07:15] WARN: Duplicate email skipped: alice.johnson@example.com
+[2025-06-16 12:07:15] INFO: Job 121 completed
+[2025-06-16 12:07:15] WARN: Duplicate email skipped: bob.smith@example.com
+[2025-06-16 12:07:15] INFO: Job 122 completed
+[2025-06-16 12:07:15] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:07:15] INFO: Job 123 completed
+[2025-06-16 12:07:15] WARN: Duplicate email skipped: diana.prince@example.com
+[2025-06-16 12:07:15] INFO: Job 124 completed
+[2025-06-16 12:07:15] WARN: Duplicate email skipped: ethan.hunt@example.com
+[2025-06-16 12:07:15] INFO: Job 125 completed
+[2025-06-16 12:07:15] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:07:15] INFO: Job 126 completed
+[2025-06-16 12:07:15] WARN: Duplicate email skipped: george.miller@example.com
+[2025-06-16 12:07:15] INFO: Job 127 completed
+[2025-06-16 12:07:15] WARN: Duplicate email skipped: hannah.wells@example.com
+[2025-06-16 12:07:15] INFO: Job 128 completed
+[2025-06-16 12:07:15] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:07:15] INFO: Job 129 completed
+[2025-06-16 12:07:15] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:07:15] INFO: Job 130 completed
+[2025-06-16 12:07:52] WARN: Duplicate email skipped: alice.johnson@example.com
+[2025-06-16 12:07:52] INFO: Job 131 completed
+[2025-06-16 12:07:52] WARN: Duplicate email skipped: bob.smith@example.com
+[2025-06-16 12:07:52] INFO: Job 132 completed
+[2025-06-16 12:07:52] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:07:52] INFO: Job 133 completed
+[2025-06-16 12:07:52] WARN: Duplicate email skipped: diana.prince@example.com
+[2025-06-16 12:07:52] INFO: Job 134 completed
+[2025-06-16 12:07:52] WARN: Duplicate email skipped: ethan.hunt@example.com
+[2025-06-16 12:07:52] INFO: Job 135 completed
+[2025-06-16 12:07:52] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:07:52] INFO: Job 136 completed
+[2025-06-16 12:07:52] WARN: Duplicate email skipped: george.miller@example.com
+[2025-06-16 12:07:52] INFO: Job 137 completed
+[2025-06-16 12:07:52] WARN: Duplicate email skipped: hannah.wells@example.com
+[2025-06-16 12:07:52] INFO: Job 138 completed
+[2025-06-16 12:07:52] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:07:52] INFO: Job 139 completed
+[2025-06-16 12:07:52] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:07:52] INFO: Job 140 completed
+[2025-06-16 12:11:28] WARN: Duplicate email skipped: alice.johnson@example.com
+[2025-06-16 12:11:28] INFO: Job 141 completed
+[2025-06-16 12:11:28] WARN: Duplicate email skipped: bob.smith@example.com
+[2025-06-16 12:11:28] INFO: Job 142 completed
+[2025-06-16 12:11:28] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:11:28] INFO: Job 143 completed
+[2025-06-16 12:11:28] WARN: Duplicate email skipped: diana.prince@example.com
+[2025-06-16 12:11:28] INFO: Job 144 completed
+[2025-06-16 12:11:28] WARN: Duplicate email skipped: ethan.hunt@example.com
+[2025-06-16 12:11:28] INFO: Job 145 completed
+[2025-06-16 12:11:28] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:11:28] INFO: Job 146 completed
+[2025-06-16 12:11:28] WARN: Duplicate email skipped: george.miller@example.com
+[2025-06-16 12:11:28] INFO: Job 147 completed
+[2025-06-16 12:11:28] WARN: Duplicate email skipped: hannah.wells@example.com
+[2025-06-16 12:11:28] INFO: Job 148 completed
+[2025-06-16 12:11:28] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:11:28] INFO: Job 149 completed
+[2025-06-16 12:11:28] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:11:28] INFO: Job 150 completed
+[2025-06-16 12:12:37] INFO: Added employee: alicejohnson@example.com
+[2025-06-16 12:12:37] INFO: Job 151 completed
+[2025-06-16 12:12:37] INFO: Added employee: bobsmith@example.com
+[2025-06-16 12:12:37] INFO: Job 152 completed
+[2025-06-16 12:12:37] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:12:37] INFO: Job 153 completed
+[2025-06-16 12:12:37] INFO: Added employee: dianaprince@example.com
+[2025-06-16 12:12:37] INFO: Job 154 completed
+[2025-06-16 12:12:37] INFO: Added employee: ethanhunt@example.com
+[2025-06-16 12:12:37] INFO: Job 155 completed
+[2025-06-16 12:12:37] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:12:37] INFO: Job 156 completed
+[2025-06-16 12:12:37] INFO: Added employee: georgemiller@example.com
+[2025-06-16 12:12:37] INFO: Job 157 completed
+[2025-06-16 12:12:38] INFO: Added employee: hannahwells@example.com
+[2025-06-16 12:12:38] INFO: Job 158 completed
+[2025-06-16 12:12:38] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:12:38] INFO: Job 159 completed
+[2025-06-16 12:12:38] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:12:38] INFO: Job 160 completed
+[2025-06-16 12:14:12] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:14:12] INFO: Job 161 completed
+[2025-06-16 12:14:12] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:14:12] INFO: Job 162 completed
+[2025-06-16 12:14:12] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:14:12] INFO: Job 163 completed
+[2025-06-16 12:14:12] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:14:12] INFO: Job 164 completed
+[2025-06-16 12:14:12] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:14:12] INFO: Job 165 completed
+[2025-06-16 12:14:12] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:14:12] INFO: Job 166 completed
+[2025-06-16 12:14:12] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:14:12] INFO: Job 167 completed
+[2025-06-16 12:14:12] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:14:12] INFO: Job 168 completed
+[2025-06-16 12:14:12] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:14:12] INFO: Job 169 completed
+[2025-06-16 12:14:12] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:14:12] INFO: Job 170 completed
+[2025-06-16 12:14:18] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:14:18] INFO: Job 171 completed
+[2025-06-16 12:14:18] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:14:18] INFO: Job 172 completed
+[2025-06-16 12:14:18] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:14:18] INFO: Job 173 completed
+[2025-06-16 12:14:18] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:14:18] INFO: Job 174 completed
+[2025-06-16 12:14:18] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:14:18] INFO: Job 175 completed
+[2025-06-16 12:14:18] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:14:18] INFO: Job 176 completed
+[2025-06-16 12:14:18] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:14:18] INFO: Job 177 completed
+[2025-06-16 12:14:18] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:14:18] INFO: Job 178 completed
+[2025-06-16 12:14:18] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:14:18] INFO: Job 179 completed
+[2025-06-16 12:14:18] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:14:18] INFO: Job 180 completed
+[2025-06-16 12:16:56] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:16:56] INFO: Job 181 completed
+[2025-06-16 12:16:56] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:16:56] INFO: Job 182 completed
+[2025-06-16 12:16:56] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:16:56] INFO: Job 183 completed
+[2025-06-16 12:16:56] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:16:56] INFO: Job 184 completed
+[2025-06-16 12:16:56] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:16:56] INFO: Job 185 completed
+[2025-06-16 12:16:56] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:16:56] INFO: Job 186 completed
+[2025-06-16 12:16:56] INFO: Added employee: georgemiller@example.com
+[2025-06-16 12:16:56] INFO: Job 187 completed
+[2025-06-16 12:16:56] INFO: Added employee: hannahwells@example.com
+[2025-06-16 12:16:56] INFO: Job 188 completed
+[2025-06-16 12:16:56] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:16:56] INFO: Job 189 completed
+[2025-06-16 12:16:56] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:16:56] INFO: Job 190 completed
+[2025-06-16 12:18:09] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:18:09] INFO: Job 191 completed
+[2025-06-16 12:18:09] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:18:09] INFO: Job 192 completed
+[2025-06-16 12:18:09] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:18:09] INFO: Job 193 completed
+[2025-06-16 12:18:09] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:18:09] INFO: Job 194 completed
+[2025-06-16 12:18:09] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:18:09] INFO: Job 195 completed
+[2025-06-16 12:18:09] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:18:09] INFO: Job 196 completed
+[2025-06-16 12:18:09] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:18:09] INFO: Job 197 completed
+[2025-06-16 12:18:09] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:18:09] INFO: Job 198 completed
+[2025-06-16 12:18:09] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:18:09] INFO: Job 199 completed
+[2025-06-16 12:18:09] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:18:09] INFO: Job 200 completed
+[2025-06-16 12:19:45] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:19:45] INFO: Job 201 completed
+[2025-06-16 12:19:45] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:19:45] INFO: Job 202 completed
+[2025-06-16 12:19:45] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:19:45] INFO: Job 203 completed
+[2025-06-16 12:19:45] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:19:45] INFO: Job 204 completed
+[2025-06-16 12:19:45] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:19:45] INFO: Job 205 completed
+[2025-06-16 12:19:45] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:19:45] INFO: Job 206 completed
+[2025-06-16 12:19:45] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:19:45] INFO: Job 207 completed
+[2025-06-16 12:19:45] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:19:45] INFO: Job 208 completed
+[2025-06-16 12:19:45] ERROR: Error processing employee: Incorrect date value: '' for column 'date_of_joining' at row 1
+[2025-06-16 12:19:45] INFO: Job 209 completed
+[2025-06-16 12:19:45] ERROR: Error processing employee: Incorrect integer value: '' for column 'reporting_to' at row 1
+[2025-06-16 12:19:45] INFO: Job 210 completed
+[2025-06-16 12:20:19] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:20:19] INFO: Job 211 completed
+[2025-06-16 12:20:19] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:20:19] INFO: Job 212 completed
+[2025-06-16 12:20:19] ERROR: Error processing employee: savedEmp is not defined
+[2025-06-16 12:20:19] INFO: Job 213 completed
+[2025-06-16 12:20:19] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:20:19] INFO: Job 214 completed
+[2025-06-16 12:20:19] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:20:19] INFO: Job 215 completed
+[2025-06-16 12:20:19] ERROR: Error processing employee: savedEmp is not defined
+[2025-06-16 12:20:19] INFO: Job 216 completed
+[2025-06-16 12:20:19] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:20:19] INFO: Job 217 completed
+[2025-06-16 12:20:19] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:20:19] INFO: Job 218 completed
+[2025-06-16 12:20:19] ERROR: Error processing employee: savedEmp is not defined
+[2025-06-16 12:20:19] INFO: Job 219 completed
+[2025-06-16 12:20:19] ERROR: Error processing employee: savedEmp is not defined
+[2025-06-16 12:20:19] INFO: Job 220 completed
+[2025-06-16 12:21:02] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:21:02] INFO: Job 221 completed
+[2025-06-16 12:21:02] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:21:02] INFO: Job 222 completed
+[2025-06-16 12:21:02] ERROR: Error processing employee: savedEmp is not defined
+[2025-06-16 12:21:02] INFO: Job 223 completed
+[2025-06-16 12:21:02] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:21:02] INFO: Job 224 completed
+[2025-06-16 12:21:02] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:21:02] INFO: Job 225 completed
+[2025-06-16 12:21:02] ERROR: Error processing employee: savedEmp is not defined
+[2025-06-16 12:21:02] INFO: Job 226 completed
+[2025-06-16 12:21:02] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:21:02] INFO: Job 227 completed
+[2025-06-16 12:21:02] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:21:02] INFO: Job 228 completed
+[2025-06-16 12:21:02] ERROR: Error processing employee: savedEmp is not defined
+[2025-06-16 12:21:02] INFO: Job 229 completed
+[2025-06-16 12:21:02] ERROR: Error processing employee: savedEmp is not defined
+[2025-06-16 12:21:02] INFO: Job 230 completed
+[2025-06-16 12:21:56] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:21:56] INFO: Job 231 completed
+[2025-06-16 12:21:56] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:21:56] INFO: Job 232 completed
+[2025-06-16 12:21:56] INFO: Job 233 completed
+[2025-06-16 12:21:56] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:21:56] INFO: Job 234 completed
+[2025-06-16 12:21:56] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:21:56] INFO: Job 235 completed
+[2025-06-16 12:21:56] INFO: Job 236 completed
+[2025-06-16 12:21:56] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:21:56] INFO: Job 237 completed
+[2025-06-16 12:21:56] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:21:56] INFO: Job 238 completed
+[2025-06-16 12:21:56] INFO: Job 239 completed
+[2025-06-16 12:21:56] INFO: Job 240 completed
+[2025-06-16 12:23:13] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:23:13] INFO: Job 241 completed
+[2025-06-16 12:23:13] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:23:13] INFO: Job 242 completed
+[2025-06-16 12:23:13] INFO: Job 243 completed
+[2025-06-16 12:23:13] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:23:13] INFO: Job 244 completed
+[2025-06-16 12:23:13] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:23:13] INFO: Job 245 completed
+[2025-06-16 12:23:13] INFO: Job 246 completed
+[2025-06-16 12:23:13] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:23:13] INFO: Job 247 completed
+[2025-06-16 12:23:13] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:23:13] INFO: Job 248 completed
+[2025-06-16 12:23:13] INFO: Job 249 completed
+[2025-06-16 12:23:13] INFO: Job 250 completed
+[2025-06-16 12:23:43] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:23:43] INFO: Job 251 completed
+[2025-06-16 12:23:43] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:23:43] INFO: Job 252 completed
+[2025-06-16 12:23:43] INFO: Job 253 completed
+[2025-06-16 12:23:43] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:23:43] INFO: Job 254 completed
+[2025-06-16 12:23:43] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:23:43] INFO: Job 255 completed
+[2025-06-16 12:23:43] INFO: Job 256 completed
+[2025-06-16 12:23:43] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:23:43] INFO: Job 257 completed
+[2025-06-16 12:23:43] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:23:43] INFO: Job 258 completed
+[2025-06-16 12:23:43] INFO: Job 259 completed
+[2025-06-16 12:23:43] INFO: Job 260 completed
+[2025-06-16 12:24:03] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:24:03] INFO: Job 261 completed
+[2025-06-16 12:24:03] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:24:03] INFO: Job 262 completed
+[2025-06-16 12:24:03] INFO: Job 263 completed
+[2025-06-16 12:24:03] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:24:03] INFO: Job 264 completed
+[2025-06-16 12:24:03] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:24:03] INFO: Job 265 completed
+[2025-06-16 12:24:03] INFO: Job 266 completed
+[2025-06-16 12:24:03] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:24:03] INFO: Job 267 completed
+[2025-06-16 12:24:03] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:24:03] INFO: Job 268 completed
+[2025-06-16 12:24:03] INFO: Job 269 completed
+[2025-06-16 12:24:03] INFO: Job 270 completed
+[2025-06-16 12:24:10] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:24:10] INFO: Job 271 completed
+[2025-06-16 12:24:10] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:24:10] INFO: Job 272 completed
+[2025-06-16 12:24:10] INFO: Job 273 completed
+[2025-06-16 12:24:10] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:24:10] INFO: Job 274 completed
+[2025-06-16 12:24:10] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:24:10] INFO: Job 275 completed
+[2025-06-16 12:24:10] INFO: Job 276 completed
+[2025-06-16 12:24:10] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:24:10] INFO: Job 277 completed
+[2025-06-16 12:24:10] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:24:10] INFO: Job 278 completed
+[2025-06-16 12:24:10] INFO: Job 279 completed
+[2025-06-16 12:24:10] INFO: Job 280 completed
+[2025-06-16 12:26:07] INFO: Job 281 completed
+[2025-06-16 12:26:07] INFO: Job 282 completed
+[2025-06-16 12:26:07] INFO: Job 283 completed
+[2025-06-16 12:26:07] INFO: Job 284 completed
+[2025-06-16 12:26:07] INFO: Job 285 completed
+[2025-06-16 12:26:07] INFO: Job 286 completed
+[2025-06-16 12:26:07] INFO: Job 287 completed
+[2025-06-16 12:26:07] INFO: Job 288 completed
+[2025-06-16 12:26:07] INFO: Job 289 completed
+[2025-06-16 12:26:07] INFO: Job 290 completed
+[2025-06-16 12:29:32] INFO: Job 291 completed
+[2025-06-16 12:29:32] INFO: Job 292 completed
+[2025-06-16 12:29:32] INFO: Job 293 completed
+[2025-06-16 12:29:32] INFO: Job 294 completed
+[2025-06-16 12:29:32] INFO: Job 295 completed
+[2025-06-16 12:29:32] INFO: Job 296 completed
+[2025-06-16 12:29:32] INFO: Job 297 completed
+[2025-06-16 12:29:32] INFO: Job 298 completed
+[2025-06-16 12:29:32] INFO: Job 299 completed
+[2025-06-16 12:29:32] INFO: Job 300 completed
+[2025-06-16 12:30:26] INFO: Job 301 completed
+[2025-06-16 12:30:26] INFO: Job 302 completed
+[2025-06-16 12:30:26] INFO: Job 303 completed
+[2025-06-16 12:30:26] INFO: Job 304 completed
+[2025-06-16 12:30:26] INFO: Job 305 completed
+[2025-06-16 12:30:26] INFO: Job 306 completed
+[2025-06-16 12:30:26] INFO: Job 307 completed
+[2025-06-16 12:30:26] INFO: Job 308 completed
+[2025-06-16 12:30:26] INFO: Job 309 completed
+[2025-06-16 12:30:26] INFO: Job 310 completed
+[2025-06-16 12:31:11] INFO: Job 311 completed
+[2025-06-16 12:31:11] INFO: Job 312 completed
+[2025-06-16 12:31:11] INFO: Job 313 completed
+[2025-06-16 12:31:11] INFO: Job 314 completed
+[2025-06-16 12:31:11] INFO: Job 315 completed
+[2025-06-16 12:31:11] INFO: Job 316 completed
+[2025-06-16 12:31:11] INFO: Job 317 completed
+[2025-06-16 12:31:11] INFO: Job 318 completed
+[2025-06-16 12:31:11] INFO: Job 319 completed
+[2025-06-16 12:31:11] INFO: Job 320 completed
+[2025-06-16 12:32:23] INFO: Added employee: alicejohnson@example.com
+[2025-06-16 12:32:23] INFO: Job 321 completed
+[2025-06-16 12:32:23] INFO: Added employee: bobsmith@example.com
+[2025-06-16 12:32:23] INFO: Job 322 completed
+[2025-06-16 12:32:23] INFO: Added employee: charlielee@example.com
+[2025-06-16 12:32:23] INFO: Job 323 completed
+[2025-06-16 12:32:23] INFO: Added employee: dianaprince@example.com
+[2025-06-16 12:32:23] INFO: Job 324 completed
+[2025-06-16 12:32:23] INFO: Added employee: ethanhunt@example.com
+[2025-06-16 12:32:23] INFO: Job 325 completed
+[2025-06-16 12:32:23] INFO: Added employee: fionagallagher@example.com
+[2025-06-16 12:32:23] INFO: Job 326 completed
+[2025-06-16 12:32:23] INFO: Added employee: georgemiller@example.com
+[2025-06-16 12:32:23] INFO: Job 327 completed
+[2025-06-16 12:32:23] INFO: Added employee: hannahwells@example.com
+[2025-06-16 12:32:23] INFO: Job 328 completed
+[2025-06-16 12:32:23] INFO: Added employee: iancurtis@example.com
+[2025-06-16 12:32:23] INFO: Job 329 completed
+[2025-06-16 12:32:23] INFO: Added employee: jennylopez@example.com
+[2025-06-16 12:32:23] INFO: Job 330 completed
+[2025-06-16 12:32:57] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:32:57] INFO: Job 331 completed
+[2025-06-16 12:32:57] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:32:57] INFO: Job 332 completed
+[2025-06-16 12:32:57] WARN: Duplicate email skipped: charlielee@example.com
+[2025-06-16 12:32:57] INFO: Job 333 completed
+[2025-06-16 12:32:57] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:32:57] INFO: Job 334 completed
+[2025-06-16 12:32:57] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:32:57] INFO: Job 335 completed
+[2025-06-16 12:32:57] WARN: Duplicate email skipped: fionagallagher@example.com
+[2025-06-16 12:32:57] INFO: Job 336 completed
+[2025-06-16 12:32:57] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:32:57] INFO: Job 337 completed
+[2025-06-16 12:32:57] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:32:57] INFO: Job 338 completed
+[2025-06-16 12:32:57] WARN: Duplicate email skipped: iancurtis@example.com
+[2025-06-16 12:32:57] INFO: Job 339 completed
+[2025-06-16 12:32:57] WARN: Duplicate email skipped: jennylopez@example.com
+[2025-06-16 12:32:57] INFO: Job 340 completed
+[2025-06-16 12:35:33] INFO: Added employee: alicejohnson@example.com
+[2025-06-16 12:35:33] INFO: Job 341 completed
+[2025-06-16 12:35:34] INFO: Added employee: bobsmith@example.com
+[2025-06-16 12:35:34] INFO: Job 342 completed
+[2025-06-16 12:35:34] INFO: Added employee: charlielee@example.com
+[2025-06-16 12:35:34] INFO: Job 343 completed
+[2025-06-16 12:35:34] INFO: Added employee: dianaprince@example.com
+[2025-06-16 12:35:34] INFO: Job 344 completed
+[2025-06-16 12:35:34] INFO: Added employee: ethanhunt@example.com
+[2025-06-16 12:35:34] INFO: Job 345 completed
+[2025-06-16 12:35:34] INFO: Added employee: fionagallagher@example.com
+[2025-06-16 12:35:34] INFO: Job 346 completed
+[2025-06-16 12:35:34] INFO: Added employee: georgemiller@example.com
+[2025-06-16 12:35:34] INFO: Job 347 completed
+[2025-06-16 12:35:34] INFO: Added employee: hannahwells@example.com
+[2025-06-16 12:35:34] INFO: Job 348 completed
+[2025-06-16 12:35:34] INFO: Added employee: iancurtis@example.com
+[2025-06-16 12:35:34] INFO: Job 349 completed
+[2025-06-16 12:35:35] INFO: Added employee: jennylopez@example.com
+[2025-06-16 12:35:35] INFO: Job 350 completed
+[2025-06-16 12:39:24] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:39:24] INFO: Job 351 completed
+[2025-06-16 12:39:24] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:39:24] INFO: Job 352 completed
+[2025-06-16 12:39:24] WARN: Duplicate email skipped: charlielee@example.com
+[2025-06-16 12:39:24] INFO: Job 353 completed
+[2025-06-16 12:39:24] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:39:24] INFO: Job 354 completed
+[2025-06-16 12:39:24] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:39:24] INFO: Job 355 completed
+[2025-06-16 12:39:24] WARN: Duplicate email skipped: fionagallagher@example.com
+[2025-06-16 12:39:24] INFO: Job 356 completed
+[2025-06-16 12:39:24] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:39:24] INFO: Job 357 completed
+[2025-06-16 12:39:24] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:39:24] INFO: Job 358 completed
+[2025-06-16 12:39:24] WARN: Duplicate email skipped: iancurtis@example.com
+[2025-06-16 12:39:24] INFO: Job 359 completed
+[2025-06-16 12:39:24] WARN: Duplicate email skipped: jennylopez@example.com
+[2025-06-16 12:39:24] INFO: Job 360 completed
+[2025-06-16 12:41:02] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:41:02] INFO: Job 361 completed
+[2025-06-16 12:41:02] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:41:02] INFO: Job 362 completed
+[2025-06-16 12:41:02] WARN: Duplicate email skipped: charlielee@example.com
+[2025-06-16 12:41:02] INFO: Job 363 completed
+[2025-06-16 12:41:02] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:41:02] INFO: Job 364 completed
+[2025-06-16 12:41:02] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:41:02] INFO: Job 365 completed
+[2025-06-16 12:41:02] WARN: Duplicate email skipped: fionagallagher@example.com
+[2025-06-16 12:41:02] INFO: Job 366 completed
+[2025-06-16 12:41:02] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:41:02] INFO: Job 367 completed
+[2025-06-16 12:41:02] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:41:02] INFO: Job 368 completed
+[2025-06-16 12:41:02] WARN: Duplicate email skipped: iancurtis@example.com
+[2025-06-16 12:41:02] INFO: Job 369 completed
+[2025-06-16 12:41:02] WARN: Duplicate email skipped: jennylopez@example.com
+[2025-06-16 12:41:02] INFO: Job 370 completed
+[2025-06-16 12:42:53] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:42:53] INFO: Job 371 completed
+[2025-06-16 12:42:53] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:42:53] INFO: Job 372 completed
+[2025-06-16 12:42:53] WARN: Duplicate email skipped: charlielee@example.com
+[2025-06-16 12:42:53] INFO: Job 373 completed
+[2025-06-16 12:42:54] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:42:54] INFO: Job 374 completed
+[2025-06-16 12:42:54] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:42:54] INFO: Job 375 completed
+[2025-06-16 12:42:54] WARN: Duplicate email skipped: fionagallagher@example.com
+[2025-06-16 12:42:54] INFO: Job 376 completed
+[2025-06-16 12:42:54] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:42:54] INFO: Job 377 completed
+[2025-06-16 12:42:54] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:42:54] INFO: Job 378 completed
+[2025-06-16 12:42:54] WARN: Duplicate email skipped: iancurtis@example.com
+[2025-06-16 12:42:54] INFO: Job 379 completed
+[2025-06-16 12:42:54] WARN: Duplicate email skipped: jennylopez@example.com
+[2025-06-16 12:42:54] INFO: Job 380 completed
+[2025-06-16 12:45:50] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:45:50] INFO: Job 381 completed
+[2025-06-16 12:45:50] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:45:50] INFO: Job 382 completed
+[2025-06-16 12:45:50] WARN: Duplicate email skipped: charlielee@example.com
+[2025-06-16 12:45:50] INFO: Job 383 completed
+[2025-06-16 12:45:50] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:45:50] INFO: Job 384 completed
+[2025-06-16 12:45:50] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:45:50] INFO: Job 385 completed
+[2025-06-16 12:45:50] WARN: Duplicate email skipped: fionagallagher@example.com
+[2025-06-16 12:45:50] INFO: Job 386 completed
+[2025-06-16 12:45:50] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:45:50] INFO: Job 387 completed
+[2025-06-16 12:45:50] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:45:50] INFO: Job 388 completed
+[2025-06-16 12:45:50] WARN: Duplicate email skipped: iancurtis@example.com
+[2025-06-16 12:45:50] INFO: Job 389 completed
+[2025-06-16 12:45:50] WARN: Duplicate email skipped: jennylopez@example.com
+[2025-06-16 12:45:50] INFO: Job 390 completed
+[2025-06-16 12:46:07] WARN: Duplicate email skipped: alicejohnson@example.com
+[2025-06-16 12:46:07] INFO: Job 391 completed
+[2025-06-16 12:46:07] WARN: Duplicate email skipped: bobsmith@example.com
+[2025-06-16 12:46:07] INFO: Job 392 completed
+[2025-06-16 12:46:07] WARN: Duplicate email skipped: charlielee@example.com
+[2025-06-16 12:46:07] INFO: Job 393 completed
+[2025-06-16 12:46:07] WARN: Duplicate email skipped: dianaprince@example.com
+[2025-06-16 12:46:07] INFO: Job 394 completed
+[2025-06-16 12:46:07] WARN: Duplicate email skipped: ethanhunt@example.com
+[2025-06-16 12:46:07] INFO: Job 395 completed
+[2025-06-16 12:46:07] WARN: Duplicate email skipped: fionagallagher@example.com
+[2025-06-16 12:46:07] INFO: Job 396 completed
+[2025-06-16 12:46:07] WARN: Duplicate email skipped: georgemiller@example.com
+[2025-06-16 12:46:07] INFO: Job 397 completed
+[2025-06-16 12:46:07] WARN: Duplicate email skipped: hannahwells@example.com
+[2025-06-16 12:46:07] INFO: Job 398 completed
+[2025-06-16 12:46:07] WARN: Duplicate email skipped: iancurtis@example.com
+[2025-06-16 12:46:07] INFO: Job 399 completed
+[2025-06-16 12:46:07] WARN: Duplicate email skipped: jennylopez@example.com
+[2025-06-16 12:46:07] INFO: Job 400 completed
+[2025-06-16 14:33:37] INFO: Added employee: alicejohnson@example.com
+[2025-06-16 14:33:37] INFO: Job 401 completed
+[2025-06-16 14:33:37] INFO: Added employee: bobsmith@example.com
+[2025-06-16 14:33:37] INFO: Job 402 completed
+[2025-06-16 14:33:37] INFO: Added employee: charlielee@example.com
+[2025-06-16 14:33:37] INFO: Job 403 completed
+[2025-06-16 14:33:37] INFO: Added employee: dianaprince@example.com
+[2025-06-16 14:33:37] INFO: Job 404 completed
+[2025-06-16 14:33:38] INFO: Added employee: ethanhunt@example.com
+[2025-06-16 14:33:38] INFO: Job 405 completed
+[2025-06-16 14:33:38] INFO: Added employee: fionagallagher@example.com
+[2025-06-16 14:33:38] INFO: Job 406 completed
+[2025-06-16 14:33:38] INFO: Added employee: georgemiller@example.com
+[2025-06-16 14:33:38] INFO: Job 407 completed
+[2025-06-16 14:33:38] INFO: Added employee: hannahwells@example.com
+[2025-06-16 14:33:38] INFO: Job 408 completed
+[2025-06-16 14:33:38] INFO: Added employee: iancurtis@example.com
+[2025-06-16 14:33:38] INFO: Job 409 completed
+[2025-06-16 14:33:38] INFO: Added employee: jennylopez@example.com
+[2025-06-16 14:33:38] INFO: Job 410 completed

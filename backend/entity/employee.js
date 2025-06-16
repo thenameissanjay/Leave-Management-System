@@ -22,7 +22,6 @@ const { designation } = require("./designation");
             designation: {
               type: "int",
               nullable: true
-
             },
             date_of_joining: {
               type: "date",

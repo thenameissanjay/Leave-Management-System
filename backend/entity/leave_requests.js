@@ -20,7 +20,6 @@ const LeaveStatusLabel = {
   [LeaveStatus.approved]: 'Approved',
   [LeaveStatus.rejected]: 'Rejected',
   [LeaveStatus.cancelled]: 'Cancelled',
-
 };
 
     const leave_request = new EntitySchema({
@@ -30,7 +29,7 @@ const LeaveStatusLabel = {
           request_id: {
             type: "int",
             primary: true,
-            generated: true, // Auto-incremented surrogate key
+            generated: true, 
           },
           employee_id: {  // many
             type: "int",

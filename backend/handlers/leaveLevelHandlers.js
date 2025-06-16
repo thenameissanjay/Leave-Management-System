@@ -1,5 +1,4 @@
-const conn = require('../connection');
-const {AppDataSource} = require('../connection')
+const {AppDataSource} = require('../config/connection')
 const {designation} = require('../entity/designation');
 const { leave_level } = require('../entity/leave_level');
 const { leave_policy_dm } = require('../entity/leave_policy_dm');

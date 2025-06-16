@@ -1,4 +1,4 @@
-const { AppDataSource } = require('../connection');
+const { AppDataSource } = require('../config/connection');
 const { designation } = require('../entity/designation');
 const { employee } = require('../entity/employee');
 const { leave_balance } = require('../entity/leave_balance');

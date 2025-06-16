@@ -16,16 +16,16 @@ const leave_type_dm = new EntitySchema({
     description: {
       type: "varchar",
     },
-    yearAccrual:{
+    yearAccrual:{       // Casual - True
       type: Boolean
     },
-    monthAccrual:{
+    monthAccrual:{     // floater - False
       type: Boolean
     },
     deletedAt: {
       type: 'timestamp',
       nullable: true,
-      deleteDate: true, // important for soft delete support
+      deleteDate: true, // For typeorm 
     },
   },
 });

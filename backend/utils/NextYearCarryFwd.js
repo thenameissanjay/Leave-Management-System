@@ -1,7 +1,7 @@
 const { leave_balance } = require('../entity/leave_balance');
 const { leave_type_dm } = require('../entity/leave_type_dm');
 const { employee } = require('../entity/employee');
-const { AppDataSource } = require('../connection');
+const { AppDataSource } = require('../config/connection');
 
 const carryForwardLeaveBalance = async () => {
   try {

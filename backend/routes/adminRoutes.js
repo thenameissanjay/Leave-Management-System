@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const {
   getEmployee,
   createEmployee,
@@ -7,6 +8,7 @@ const {
   updateEmployee,
   deleteEmployee,
   EmployeeIdNameDesg,
+  bulkUpload
 } = require('../handlers/adminHandlers');
 const {
   createEmployeeSchema,
@@ -16,16 +18,17 @@ const {
 const validator = require('express-joi-validation').createValidator({});
 
 router.post(
-    '/employee', 
-
-    createEmployee);
+  '/employee', 
+  validator.body(createEmployeeSchema), 
+  createEmployee);
 
 router.get('/employee', getEmployee);
 
 router.get(
-    '/employee/:EmployeeID', 
-    validator.params(employeeIdSchema), 
-    GetEmployee);
+  '/employee/:EmployeeID',
+  validator.params(employeeIdSchema),
+  GetEmployee
+);
 
 router.put(
   '/employee/:EmployeeID',
@@ -35,10 +38,15 @@ router.put(
 );
 
 router.delete(
-    '/employee/:EmployeeID', 
-    validator.params(employeeIdSchema),
-    deleteEmployee);
+  '/employee/:EmployeeID',
+  validator.params(employeeIdSchema),
+  deleteEmployee
+);
 
 router.get('/employee-id-name-desg', EmployeeIdNameDesg);
+
+
+const upload = multer({ storage: multer.memoryStorage() });
+router.post('/employee/bulk-upload',upload.single('uploadedFile'),  bulkUpload)
 
 module.exports = router;

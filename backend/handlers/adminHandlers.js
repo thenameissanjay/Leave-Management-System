@@ -1,12 +1,17 @@
-const { AppDataSource } = require('../connection');
+const { AppDataSource } = require('../config/connection');
 const { designation } = require('../entity/designation');
 const { employee } = require('../entity/employee');
 const { leave_balance } = require('../entity/leave_balance');
 const { leave_request } = require('../entity/leave_requests');
+const { parse } = require('csv-parse/sync');
+const {employeeQueue} = require('../config/redis-queue')
+
 const {
   updateLeaveBalanceByEmployee,
 } = require('../service/leavebalanceService');
 const logger = require('../logger/logger');
+const multer = require('multer');
+
 const employeeRepo = AppDataSource.getRepository(employee);
 const leaveRepo = AppDataSource.getRepository(leave_request);
 const designationRepo = AppDataSource.getRepository(designation);
@@ -206,6 +211,39 @@ const EmployeeIdNameDesg = async (req, res) => {
   }
 };
 
+
+
+
+const bulkUpload =  async (req, res) => {
+  try {
+
+    const csvBuffer = req.file.buffer; // file content stored as raw binary data
+    
+    // string to JSON
+    const records = parse(csvBuffer.toString(), {
+      columns: true,
+      skip_empty_lines: true,
+      trim: true,
+    });
+
+
+    const BATCH_SIZE = 1;  // n-rows added to the queue
+    for (let i = 0; i < records.length; i += BATCH_SIZE) {
+      const batch = records.slice(i, i + BATCH_SIZE);
+     
+      // Adding in Queue
+      await employeeQueue.add('bulk-upload-queue', batch, {
+        removeOnComplete: true,
+        removeOnFail: true,
+      });
+    }
+    res.json({message : `Queued Added`});
+  } catch (err) {
+    console.log('Upload failed:', err);
+    res.status(500).send('Error processing file');
+  }
+};
+
 module.exports = {
   getEmployee,
   createEmployee,
@@ -213,4 +251,5 @@ module.exports = {
   updateEmployee,
   deleteEmployee,
   EmployeeIdNameDesg,
+  bulkUpload
 };

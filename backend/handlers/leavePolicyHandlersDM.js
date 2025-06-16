@@ -1,4 +1,4 @@
-const { AppDataSource } = require('../connection');
+const { AppDataSource } = require('../config/connection');
 const { leave_policy_dm } = require('../entity/leave_policy_dm');
 const logger = require('../logger/logger');
 

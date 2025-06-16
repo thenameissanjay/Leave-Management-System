@@ -1,5 +1,4 @@
-const conn = require('../connection');
-const { AppDataSource } = require('../connection');
+const { AppDataSource } = require('../config/connection');
 const { leave_balance } = require('../entity/leave_balance');
 const { leave_policy_dm } = require('../entity/leave_policy_dm');
 const { leave_type_dm } = require('../entity/leave_type_dm');
@@ -54,6 +53,7 @@ const CreateLeaveType = async (req, res) => {
   } catch (err) {
     logger.error(`leaveTypeHandler/CreateLeaveType: ${err}`);
     return res.status(500).json({
+      
       message: 'Failed to create leave type and assign policies',
     });
   }

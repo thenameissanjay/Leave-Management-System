@@ -1,4 +1,4 @@
-const { AppDataSource } = require('../connection');
+const { AppDataSource } = require('../config/connection');
 const { LessThanOrEqual, MoreThanOrEqual, In } = require('typeorm');
 const logger = require('../logger/logger');
 
@@ -403,11 +403,15 @@ const leaveStatus = async (req, res) => {
       skip: offset, // OFFSET 
       take: limit,  // LIMIT 
     });
-
+   
+    // check if the role status === request status
     const result = leaveRequests[0].map((record) => {
+    const role = record.employee.designation.name.toLowerCase();
+    const roleStatus = RoleStatus.find((item) => item.role === role).status;
+
       return {
         ...record,
-        request_status_label: LeaveStatusLabel[record.status], // "400" -> "Approved"
+        request_status_label: record.status == roleStatus ? "Pending" : LeaveStatusLabel[record.status], // "400" -> "Approved"
         approval_flow: record.approval_flow.map((approval) => ({
           ...approval,
           approval_status_label: LeaveStatusLabel[approval.approval_status],

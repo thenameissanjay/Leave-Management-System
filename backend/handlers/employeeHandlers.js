@@ -1,4 +1,4 @@
-const { AppDataSource } = require('../connection');
+const { AppDataSource } = require('../config/connection');
 const { leave_request } = require('../entity/leave_requests');
 const { convertToCalendarFormat } = require('../utils/calendarFunction');
 const employeeRepo = AppDataSource.getRepository('employee');
@@ -166,6 +166,8 @@ const TeamCalendar = async (req, res) => {
     return res.status(500).json({message: error.message})
   }
 };
+
+
 
 module.exports = {
   getReportingManagerName,

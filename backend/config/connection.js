@@ -1,13 +1,13 @@
 require("reflect-metadata");
 const { DataSource } = require("typeorm");
-const { employee } = require("./entity/employee");
-const { designation } = require("./entity/designation");
-const { leave_level } = require("./entity/leave_level");
-const { leave_request } = require("./entity/leave_requests");
-const { leave_policy_dm } = require("./entity/leave_policy_dm");
-const { leave_type_dm } = require("./entity/leave_type_dm");
-const { leave_balance } = require("./entity/leave_balance");
-const { approval_flow } = require("./entity/approval_flow");
+const { employee } = require("../entity/employee");
+const { designation } = require("../entity/designation");
+const { leave_level } = require("../entity/leave_level");
+const { leave_request } = require("../entity/leave_requests");
+const { leave_policy_dm } = require("../entity/leave_policy_dm");
+const { leave_type_dm } = require("../entity/leave_type_dm");
+const { leave_balance } = require("../entity/leave_balance");
+const { approval_flow } = require("../entity/approval_flow");
 
 require('dotenv').config();
 

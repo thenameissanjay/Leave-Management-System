@@ -1,4 +1,4 @@
-const { AppDataSource } = require('../connection');
+const { AppDataSource } = require('../config/connection');
 const { adminToken, employeeToken } = require('../JWT/create');
 const repo = AppDataSource.getRepository('employee');
 const CryptoJS = require('crypto-js');
