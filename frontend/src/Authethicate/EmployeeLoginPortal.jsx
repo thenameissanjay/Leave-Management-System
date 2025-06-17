@@ -50,7 +50,7 @@ const EmployeeLoginPortal = () => {
       navigate('/Employee');
       showToast('Logged Successfully', 'success')
     } catch (error) {
-      const message = err.response?.data?.message;
+      const message = error.response?.data?.message;
      showToast(message, 'error');
     }
   };

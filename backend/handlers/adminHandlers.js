@@ -226,20 +226,19 @@ const bulkUpload =  async (req, res) => {
       trim: true,
     });
 
-
-    const BATCH_SIZE = 1;  // n-rows added to the queue
-    for (let i = 0; i < records.length; i += BATCH_SIZE) {
-      const batch = records.slice(i, i + BATCH_SIZE);
+    const JOB_SIZE = 1;  //  1 row in Job
+    for (let i = 0; i < records.length; i += JOB_SIZE) {
+      const job = records.slice(i, i + JOB_SIZE);
      
       // Adding in Queue
-      await employeeQueue.add('bulk-upload-queue', batch, {
+      await employeeQueue.add('bulk-upload-queue', job, {
         removeOnComplete: true,
         removeOnFail: true,
       });
     }
     res.json({message : `Queued Added`});
   } catch (err) {
-    console.log('Upload failed:', err);
+    logger.error('Upload failed:', err);
     res.status(500).send('Error processing file');
   }
 };

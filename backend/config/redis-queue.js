@@ -6,6 +6,8 @@ const connection = new Redis({
     port: 6379,
     maxRetriesPerRequest: null, 
   });
+
+  // [job, job, job]
 const employeeQueue = new Queue('bulk-upload-queue', { connection });
 
 module.exports = { connection, employeeQueue };

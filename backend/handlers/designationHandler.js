@@ -72,6 +72,7 @@ const deleteDesignation = async (req, res) => {
     const exists = await employeeRepo.find({
       where: { designation: id },
     });
+    // []
 
     // if no employee assigned to this role
     if (exists.length == 0) {
@@ -80,8 +81,8 @@ const deleteDesignation = async (req, res) => {
       // deleting designation in Designation entity
       await designationRepo.softDelete(id);
     } else {
-      logger.error(`designation/deleteDesignation: NO Employee Exists in that role`);
-      return res.status(400).json({ message: 'NO Employee exists in that role' });
+      logger.error(`designation/deleteDesignation: Employee Exists in that role`);
+      return res.status(400).json({ message: ' Employee exists in that role' });
     }
 
     return res.json({

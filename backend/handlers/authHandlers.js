@@ -78,7 +78,7 @@ const employeeLogin = async (req, res) => {
     // decrypting password using crypto JS
     const decryptedPassword = decryptFunction(encryptedPassword); // sanjay123
     const employee = await repo.findOne({ where: { email } });
-    // matching sanjay123 with hashed Password
+    // matching sanjay123 with DB hashed Password
     const isMatch = await bcrypt.compare(decryptedPassword, employee.password);
 
     if (!employee || !isMatch) {
