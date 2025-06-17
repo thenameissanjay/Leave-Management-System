@@ -14,7 +14,7 @@ const BulkUpload = () => {
     e.preventDefault();
 
     if (!file) {
-      setStatus('⚠️ Please select a CSV file first.');
+      setStatus('Please select a CSV file first.');
       return;
     }
 
@@ -27,16 +27,16 @@ const BulkUpload = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      setStatus(`✅ Success: ${res.data}`);
+      setStatus(`Success: ${res.data}`);
     } catch (error) {
       console.error(error);
-      setStatus('❌ Upload failed. Please try again.');
+      setStatus('Upload failed. Please try again.');
     }
   };
 
   return (
     <div className="max-w-md h-60 mx-auto mt-16 p-6 bg-white rounded-xl shadow-md  border border-gray-200">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-700">📤 BULK Upload Employee</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-700"> BULK Upload Employee</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="file"

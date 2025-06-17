@@ -1,6 +1,5 @@
 const { AppDataSource } = require('../config/connection');
 const { leave_request } = require('../entity/leave_requests');
-const { convertToCalendarFormat } = require('../utils/calendarFunction');
 const employeeRepo = AppDataSource.getRepository('employee');
 const { designation } = require('../entity/designation');
 const designationRepo = AppDataSource.getRepository(designation);
@@ -60,7 +59,7 @@ const getReportingManagerName = async (req, res) => {
   }
 };
 
-/** Fetchign leave balance, leave taken , Total leave , leave type of employee
+/** Fetching leave balance, leave taken , Total leave , leave type of employee
    GET
    /api/employee/total-leave/{employeeID}
  */
@@ -142,7 +141,7 @@ const TeamCalendar = async (req, res) => {
       const leaves = await leaveRequestRepo.find({
         where: {
           employee: { employee_id: member.employee_id },
-          status: '400',
+          status: '400', // approved
         },
         select: ['request_id', 'from_date', 'to_date', 'leave_type'],
       });

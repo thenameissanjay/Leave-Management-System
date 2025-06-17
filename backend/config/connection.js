@@ -1,4 +1,3 @@
-require("reflect-metadata");
 const { DataSource } = require("typeorm");
 const { employee } = require("../entity/employee");
 const { designation } = require("../entity/designation");

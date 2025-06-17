@@ -45,8 +45,9 @@ router.delete(
 
 router.get('/employee-id-name-desg', EmployeeIdNameDesg);
 
-
+// creating the storage
 const upload = multer({ storage: multer.memoryStorage() });
+// binary data -> stored in memory
 router.post('/employee/bulk-upload',upload.single('uploadedFile'),  bulkUpload)
 
 module.exports = router;

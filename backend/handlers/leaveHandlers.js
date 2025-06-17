@@ -321,7 +321,7 @@ const updateLeaveStatus = async (req, res) => {
   }
 };
 
-//list out the previous Leave Status
+//list out the previous incoming Leave Status
 /**
    GET  http://localhost:8080/api/leave/incoming-history/${EmpolyeeID}/offset=${offset}limit=${limit}
 */
@@ -430,7 +430,10 @@ const leaveStatus = async (req, res) => {
 };
 
 
-
+/**
+ * canceling the Request
+ * DELETE `http://localhost:8080/api/leave/cancelLeave/${requestId}`
+ */
 const cancelLeave = async (req, res) => {
   const requestId = req.params.requestId;
   try {

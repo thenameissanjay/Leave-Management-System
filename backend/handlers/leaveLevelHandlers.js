@@ -11,9 +11,9 @@ const leavePolicyRepo = AppDataSource.getRepository(leave_policy_dm);
 const {updateLeavePolicyByDesignation} = require('../service/leavePolicyService')
 const leaveLeaveRepo = AppDataSource.getRepository(leave_level)
 
-/**
+/** create new leave level look up
  * POST
- * /api/leavelevel/look-up
+ * /api/leave-level/look-up
  * req.body =
  * {
   "start_count": 1,
@@ -40,9 +40,9 @@ const createLeaveLevel = async (req, res) => {
   }
 };
 
-/**
+/** fetch all the leave level
  * GET
- * /api/leavelevel/look-up
+ * /api/leave-level/look-up
  */
 const getLeaveLevels = async (req, res) => {
   try {
@@ -54,9 +54,9 @@ const getLeaveLevels = async (req, res) => {
   }
 };
 
-/**
+/** update the specific leave level
  * PUT
- * /api/leavelevel/look-up/${leave_level_id}
+ * /api/leave-level/look-up/${leave_level_id}
  * req.body =
  * {
   "start_count": 1,
@@ -88,9 +88,9 @@ const updateLeaveLevel = async (req, res) => {
   }
 };
 
-/**
+/** delete the specific leave level
  * DELETE
- * /api/leavelevel/look-up/${id}
+ * /api/leave-level/look-up/${id}
  */
 const deleteLeaveLevel = async (req, res) => {
   try {

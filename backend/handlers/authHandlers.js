@@ -24,7 +24,6 @@ const createPassword = async (req, res) => {
   const { encryptedPassword, id, email } = req.body;
 
   try {
-
     const employee = await repo.findOne({
       where: {
         employee_id: id,
@@ -34,7 +33,7 @@ const createPassword = async (req, res) => {
     });
 
     if (!employee) {
-      logger.error(`/authHandler/createPassword: Employee not found`)
+      logger.error(`/authHandler/createPassword: Employee not found`);
       return res.status(404).json({
         message: 'Employee not found or password already set',
       });
@@ -53,7 +52,7 @@ const createPassword = async (req, res) => {
       message: 'Password created successfully',
     });
   } catch (err) {
-    logger.error(`/authHandler/createPassword: ${err}`)
+    logger.error(`/authHandler/createPassword: ${err}`);
     res.status(500).json({ message: 'Database error' });
   }
 };
@@ -72,17 +71,20 @@ const createPassword = async (req, res) => {
 const employeeLogin = async (req, res) => {
   const { email, encryptedPassword } = req.body;
 
-
-
   try {
     // decrypting password using crypto JS
     const decryptedPassword = decryptFunction(encryptedPassword); // sanjay123
-    const employee = await repo.findOne({ where: { email } });
+    const employee = await repo.findOne({
+      where: {
+        email,
+        isAdmin: 0,
+      },
+    });
     // matching sanjay123 with DB hashed Password
     const isMatch = await bcrypt.compare(decryptedPassword, employee.password);
 
     if (!employee || !isMatch) {
-      logger.error(`/authHandler/employeeLogin: Invalid email or password`)
+      logger.error(`/authHandler/employeeLogin: Invalid email or password`);
 
       return res.status(401).json({
         message: 'Invalid email or password',
@@ -103,9 +105,9 @@ const employeeLogin = async (req, res) => {
       access_token: token, // JWT Token
     });
   } catch (err) {
-    logger.error(`/authHandler/employeeLogin: ${err}`)
+    logger.error(`/authHandler/employeeLogin: ${err}`);
     res.status(500).json({
-      message: 'Internal server error',
+      message: 'Invalid Credentials',
     });
   }
 };
@@ -115,22 +117,41 @@ const employeeLogin = async (req, res) => {
  * /api/auth/admin-login'
  * req.body = 
  * {
-  "role": "admin"
-   }
+  "email": "admin@gmail.com",
+  "encryptedPassword": "U2FsdGVkX18uFtqcAH3JebCU7/FefRGxjDXF3IOZMiA="
+}
  * 
  */
-const adminLogin = (req, res) => {
-  const { role } = req.body;
-  if (!role) {
-    logger.error(`/authHandler/adminLogin: Role is not Found`)
-    return res.status(400).json({
-      message: 'Role is required',
+const adminLogin = async (req, res) => {
+  const { email, encryptedPassword } = req.body;
+
+  try {
+    const decryptedPassword = decryptFunction(encryptedPassword); // admin
+    const admin = await repo.findOne({
+      where: {
+        email,
+        isAdmin: 1,
+      },
+    });
+    const isMatch = await bcrypt.compare(decryptedPassword, admin.password);
+
+    if (!admin || !isMatch) {
+      logger.error(`/authHandler/admin-login: Invalid email or password`);
+
+      return res.status(401).json({
+        message: 'Invalid email or password',
+      });
+    }
+
+    // Generatign JWT Token
+    const token = adminToken();
+    res.json({ access_token: token });
+  } catch (err) {
+    logger.error(`/authHandler/employeeLogin: ${err}`);
+    res.status(500).json({
+      message: 'Invalid Credentials',
     });
   }
-
-  // Generatign JWT Token
-  const token = adminToken();
-  res.json({ access_token: token });
 };
 
 module.exports = {

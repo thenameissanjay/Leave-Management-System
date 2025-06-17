@@ -85,8 +85,10 @@ const LeaveLevelManager = () => {
       setLevels([...levels, res.data.data]);
       setNewLevel({ start_count: '', end_count: '', approval_order: '' });
       showToast('Created!', 'success');
-    } catch {
-      showToast('Failed to create', 'error');
+    } catch(err) {
+      const message = err.response.data;
+      console.log(err)
+      showToast(message, 'error');
     }
   };
 

@@ -2,8 +2,10 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const adminAuth = (req, res, next) => {
-  const authHeader = req.headers['authorization']; // bearer m
+
+  const authHeader = req.headers['authorization']; // bearer 
   const role = req.headers.role;
+  console.log(role)
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'Access token missing or invalid' });
   }
@@ -12,14 +14,15 @@ const adminAuth = (req, res, next) => {
 
   try {
    const decoded = jwt.verify(token, process.env.SECRETKEY);
-   if(decoded.role == process.env.ADMIN_ROLE)
+   if(decoded.role == role)
     next();
-   if(decoded.role != process.env.ADMIN_ROLE)
-   {  
+   if(decoded.role != role)
+   {
+    // Authorization  
     return  res.status(403).json({ message: "admin authorized is need" });
    }
   } catch (err) {
-
+    // Authethication
     return res.status(401).json({ message: 'Token verification failed' });
   }
 };
@@ -27,6 +30,7 @@ const adminAuth = (req, res, next) => {
 const employeeAuth = (req, res, next) => {
   const authHeader = req.headers['authorization'];  // bearer Token 
   const role = req.headers.role;  // employee
+  console.log(role)
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'Access token missing or invalid' });
@@ -37,9 +41,9 @@ const employeeAuth = (req, res, next) => {
   try {
 
     const decoded = jwt.verify(token, process.env.SECRETKEY); 
-   if(decoded.role == process.env.EMPLOYEE_ROLE)
+   if(decoded.role == role)
     next();
-   if(decoded.role != process.env.EMPLOYEE_ROLE)
+   if(decoded.role != role)
     return res.status(403).json({ message: "employee authorized is need" });
   } catch (err) {
     return res.status(401).json({ message: 'Token verification failed' });

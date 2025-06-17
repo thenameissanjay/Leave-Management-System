@@ -12,8 +12,9 @@ const {
   updateLeaveBalanceByLeavePolicy,
 } = require('../service/leavebalanceService');
 
+// get all leave policy
 // GET
-// /api/leavepolicy/leave-policy
+// /api/leave-policy/leave-policy
 
 const getLeavePolicy = async (req, res) => {
   try {

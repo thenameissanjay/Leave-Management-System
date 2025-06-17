@@ -20,7 +20,7 @@ const leaveBalanceRepo = AppDataSource.getRepository(leave_balance);
 /**
  * Get All Employees
  * GET
- * /api/admin/Employee
+ * /api/admin/employee
  */
 const getEmployee = async (req, res) => {
   try {
@@ -48,9 +48,9 @@ const getEmployee = async (req, res) => {
   }
 };
 
-/**
+/** Create New Employee
  * POST  
- * /api/admin/Employee
+ * /api/admin/employee
  * req.body = 
  * {
   "name": "sanjay kumar",
@@ -94,7 +94,7 @@ const createEmployee = async (req, res) => {
 
 /**  Fetching Specific Employee
  * GET
- * /api/admin/Employee/${EmployeeID}
+ * /api/admin/employee/${EmployeeID}
  */
 const GetEmployee = async (req, res) => {
   try {
@@ -115,7 +115,7 @@ const GetEmployee = async (req, res) => {
 
 /**  Updating Specific Employee
    * PUT
-   * /api/admin/Employee/${EmployeeID}
+   * /api/admin/employee/${EmployeeID}
    * 
    * req.body =
    * {
@@ -157,7 +157,7 @@ const updateEmployee = async (req, res) => {
 
 /**  Delete Specific Employee
  * DELETE
- * /api/admin/Employee/${employeeId}
+ * /api/admin/employee/${employeeId}
  */
 
 const deleteEmployee = async (req, res) => {
@@ -178,9 +178,9 @@ const deleteEmployee = async (req, res) => {
   }
 };
 
-/** Fetch Specific EmployeeID, Name, Designation -> Dropdown UI
+/** Fetch Specific EmployeeID, Name, Designation -> [reporting Manager Selection dropdown])
  * GET
- * /api/admin/EmployeeIdNameDesg
+ * /api/admin/employee-id-name-desg
  */
 const EmployeeIdNameDesg = async (req, res) => {
   try {
@@ -212,11 +212,25 @@ const EmployeeIdNameDesg = async (req, res) => {
 };
 
 
-
+/**
+ * POST
+ * "create new employees BULK UPLOAD"
+ * form{
+ * uploadedFile: binaryData
+ * }
+ * using multer middleware 
+ *  req.file: {
+    fieldname: 'uploadedFile',
+    originalname: 'employee.csv',
+    encoding: '7bit',
+    mimetype: 'text/csv',
+    buffer: <Buffer 6e 61 6d 65 2c 65 6d 61 69 6c 2c 70 68 6f 6e 65 2c 64 65 73 69 67 6e 61 74 69 6f 6e 2c 64 61 74 65 5f 6f 66 5f 6a 6f 69 6e 69 6e 67 2c 72 65 70 6f 72 ... 743 more bytes>,
+    size: 793
+  },
+ */
 
 const bulkUpload =  async (req, res) => {
   try {
-
     const csvBuffer = req.file.buffer; // file content stored as raw binary data
     
     // string to JSON
@@ -236,7 +250,7 @@ const bulkUpload =  async (req, res) => {
         removeOnFail: true,
       });
     }
-    res.json({message : `Queued Added`});
+    res.json({message :`Queued Added`});
   } catch (err) {
     logger.error('Upload failed:', err);
     res.status(500).send('Error processing file');

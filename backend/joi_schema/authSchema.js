@@ -10,7 +10,8 @@ const createpasswordSchema = Joi.object({
 });
 
 const adminLoginSchema = Joi.object({
-  role : Joi.string().required(),
+  email: Joi.string().email().required(),
+  encryptedPassword : Joi.string().required()
 });
 
 const employeeLoginSchema = Joi.object({

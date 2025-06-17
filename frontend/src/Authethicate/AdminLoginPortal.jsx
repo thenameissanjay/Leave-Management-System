@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import axios from 'axios';
-import { useToast } from "../employee/ui/ToastContainer";
-
+import { useToast } from '../employee/ui/ToastContainer';
+import CryptoJS from 'crypto-js';
+const secretKey = import.meta.env.VITE_SECRETKEY;
 
 const AdminLoginPortal = () => {
-  const [username, setUsername] = useState('');
+  const [email, setemail] = useState('');
   const { showToast } = useToast();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -16,21 +17,27 @@ const AdminLoginPortal = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (username == 'admin' && password == 'admin') {
-      const response = await axios.post('http://localhost:8080/api/auth/admin-login',{
-        role:"admin"
-      })
+    try {
+      const encryptedPassword = CryptoJS.AES.encrypt(
+        password,
+        secretKey
+      ).toString();
+
+      const response = await axios.post(
+        'http://localhost:8080/api/auth/admin-login',
+        {
+          email: email,
+          encryptedPassword: encryptedPassword,
+        }
+      );
       const access_token = response.data.access_token;
 
-      setUser({ role: 'admin', 
-        access_token: access_token
-       });
-
-      
+      setUser({ role: 'admin', access_token: access_token });
       navigate('/Admin');
-      showToast('Logged Successfully', 'success')
-    } else {
-      showToast('Invalid credentials', 'error')
+      showToast('Logged Successfully', 'success');
+    } catch (err) {
+      const message = err.response.data.message;
+      showToast(message, 'error');
     }
   };
 
@@ -39,17 +46,21 @@ const AdminLoginPortal = () => {
       <h2 className="text-2xl font-bold mb-6 text-center">Admin Portal</h2>
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Username</label>
+          <label className="block text-sm font-medium text-gray-700">
+            email
+          </label>
           <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            value={email}
+            onChange={(e) => setemail(e.target.value)}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Enter admin username"
+            placeholder="Enter admin email"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Password</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Password
+          </label>
           <input
             type="password"
             value={password}
@@ -68,9 +79,7 @@ const AdminLoginPortal = () => {
           </button>
         </div>
       </form>
-      <p className="mt-4 text-sm text-gray-600">
-        
-      </p>
+      <p className="mt-4 text-sm text-gray-600"></p>
     </div>
   );
 };

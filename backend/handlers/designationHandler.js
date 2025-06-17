@@ -15,7 +15,7 @@ const {
 } = require('../service/leavePolicyService');
 const { exist } = require('joi');
 
-/**
+/** Create New designation
  * POST
  * /api/designation/designation
  * req.body =
@@ -95,7 +95,7 @@ const deleteDesignation = async (req, res) => {
   }
 };
 
-/**
+/** update designation 
  * PUT
  * /api/designation/designation/${designationID}
  * req.body =

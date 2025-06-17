@@ -34,6 +34,10 @@ const { designation } = require("./designation");
             password: {
               type: "varchar",
             },
+            isAdmin:{
+              type: "boolean",
+              default: false
+            },
             deletedAt: {
               type: 'timestamp',
               nullable: true,

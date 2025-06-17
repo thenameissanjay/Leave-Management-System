@@ -804,3 +804,23 @@
 [2025-06-16 17:50:13] ERROR: /authHandler/employeeLogin: Invalid email or password
 [2025-06-16 17:53:10] ERROR: /authHandler/employeeLogin: Invalid email or password
 [2025-06-16 17:54:06] ERROR: /authHandler/employeeLogin: Invalid email or password
+[2025-06-17 12:19:34] ERROR: /authHandler/employeeLogin: Invalid email or password
+[2025-06-17 12:27:02] ERROR: /authHandler/admin-login: Invalid email or password
+[2025-06-17 12:29:18] ERROR: /authHandler/admin-login: Invalid email or password
+[2025-06-17 15:09:35] ERROR: employeeHandler/getTotalLeave: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:09:35] ERROR: employeeHandler/TeamCalendar: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:09:35] ERROR: employeeHandler/getReportingManagerName: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:09:35] ERROR: employeeHandler/getDesignationName: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:10:03] ERROR: leaveHandler/reportingLeaveStatus: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:10:04] ERROR: employeeHandler/getLeaveId: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:10:05] ERROR: leaveHandler/leaveStatus: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:10:08] ERROR: employeeHandler/getLeaveId: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:10:22] ERROR: employeeHandler/getTotalLeave: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:10:22] ERROR: employeeHandler/getDesignationName: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:10:22] ERROR: employeeHandler/TeamCalendar: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:10:22] ERROR: employeeHandler/getReportingManagerName: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:10:24] ERROR: leaveHandler/reportingLeaveStatus: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:10:24] ERROR: employeeHandler/getLeaveId: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-06-17 15:28:44] ERROR: /authHandler/employeeLogin: TypeError: Cannot read properties of null (reading 'password')
+[2025-06-17 15:30:11] ERROR: /authHandler/employeeLogin: TypeError: Cannot read properties of null (reading 'password')
+[2025-06-17 15:30:33] ERROR: /authHandler/employeeLogin: TypeError: Cannot read properties of null (reading 'password')
