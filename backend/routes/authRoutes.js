@@ -15,7 +15,7 @@ const {RateLimiter} = require('../utils/rateLimit')
 router.post(
   '/employee-login',
   validator.body(employeeLoginSchema),
-  RateLimiter,
+  // RateLimiter,
   employeeLogin
 );
 

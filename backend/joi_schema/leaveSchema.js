@@ -1,29 +1,31 @@
 const Joi = require('joi');
 
 const createRequestSchema = Joi.object({
-    employee_id: Joi.number().integer().required(),
+  employee_id: Joi.number().integer().min(1).required(),
 
-    leaveType: Joi.number().integer().required(),
+  leaveType: Joi.number().integer().min(1).required(),
 
-    fromDate: Joi.date().iso().required(),
+  fromDate: Joi.string()
+    .pattern(/^\d{4}-\d{2}-\d{2}$/)
+    .empty('')
+    .required(),
 
-    toDate: Joi.date().iso().required(),
+  toDate: Joi.string()
+    .pattern(/^\d{4}-\d{2}-\d{2}$/)
+    .empty('')
+    .required(),
 
-    reason: Joi.string().required(),
-
-    leaveCount: Joi.number().integer().required(),
-
-    designation: Joi.number().integer().required(),
-
-    requestAt: Joi.string().required(),
-
-});
+  reason: Joi.string().max(100).empty('').required(),
+  leaveCount: Joi.number().integer().min(1).required(),
+  designation: Joi.number().integer().min(1).required(),
+  requestAt: Joi.string().isoDate().empty('').required(),
+}).strict();
 
 const incomingLeaveSchema = Joi.object({
-  EmployeeID: Joi.number().integer().required(),
-  role: Joi.number().integer().required(),
-  offset: Joi.number().integer().required(),
-  limit: Joi.number().integer().required(),
+  EmployeeID: Joi.number().integer().min(1).empty('').empty(null).required(),
+  role: Joi.number().integer().min(1).empty('').empty(null).required(),
+  offset: Joi.number().integer().min(0).empty('').empty(null).required(),
+  limit: Joi.number().integer().min(0).empty('').empty(null).required(),
 });
 
 // const reportingIdSchema = Joi.object({
@@ -31,28 +33,27 @@ const incomingLeaveSchema = Joi.object({
 // });
 
 const approveLeaveSchema = Joi.object({
+  request_id: Joi.number().integer().min(1).empty('').empty(null).required(),
 
-    request_id: Joi.number().integer().required(),
+  approver_id: Joi.number().integer().min(1).empty('').empty(null).required(),
 
-    approver_id: Joi.number().integer().required(),
+  status: Joi.string().empty('').empty(null).required(),
 
-    status: Joi.string().required(),
+  approvedAt: Joi.string().isoDate().empty('').required(),
 
-    approvedAt: Joi.date().iso().required(),
+  comments: Joi.string().allow('').required(),
 
-    comments: Joi.string().allow(''),
-
-    role: Joi.number().integer().required(),
+  role: Joi.number().integer().min(1).empty('').empty(null).required(),
 });
 
 const offsetLimit = Joi.object({
-    offset: Joi.number().integer().required(),
-    limit: Joi.number().integer().required(),
-  });
+  offset: Joi.number().integer().min(0).empty('').empty(null).required(),
+  limit: Joi.number().integer().min(1).empty('').empty(null).required(),
+});
 
 module.exports = {
-    createRequestSchema,
-    incomingLeaveSchema,
-    approveLeaveSchema,
-    offsetLimit
+  createRequestSchema,
+  incomingLeaveSchema,
+  approveLeaveSchema,
+  offsetLimit,
 };

@@ -5,7 +5,7 @@ import { useToast } from '../employee/ui/ToastContainer';
 import BulkUpload from './BulkUpload';
 const CreateEmployee = () => {
   const [employees, setEmployees] = useState([]);
-  const [designations, setDesignations] = useState([]); // new for designation list
+  const [designations, setDesignations] = useState([]);
   const navigate = useNavigate();
   const { showToast } = useToast();
 
@@ -13,10 +13,9 @@ const CreateEmployee = () => {
     name: '',
     email: '',
     phone: '',
-    designation: '',
-    reporting_to: '',
+    designation: null,
+    reporting_to: null,
     date_of_joining: '',
-    password: '',
   });
 
   const handleChange = (e) => {
@@ -26,49 +25,35 @@ const CreateEmployee = () => {
       [name]: value,
     }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const payload = {
-        ...values,
-        designation:
-          values.designation === '' ? null : parseInt(values.designation),
-        reporting_to:
-          values.reporting_to === '' ? null : parseInt(values.reporting_to),
-      };
+      console.log(values);
+
       const response = await axios.post(
         'http://localhost:8080/api/admin/employee',
-        payload
+        values
       );
       showToast('Employee Added Successfully', 'success');
       setValues({
         name: '',
         email: '',
         phone: '',
-        designation: '',
-        reporting_to: '',
+        designation: null,
+        reporting_to: null,
         date_of_joining: '',
-        password: '',
       });
     } catch (err) {
       {
+        console.log(err);
         const message = err.response?.data?.message;
-        if (err.response?.status === 403) {
-          showToast(message, 'error');
-          navigate('/');
-        } else if (err.response?.status === 401) {
-          showToast(message, 'error');
-          navigate('/');
-        } else {
-          showToast('An unexpected error occurred.', 'error');
-        }
+        showToast(message, 'error');
       }
     }
   };
 
   useEffect(() => {
-    const fetchEmployees = async () => {
+    const fetchReportingManager = async () => {
       try {
         const res = await axios.get(
           'http://localhost:8080/api/admin/employee-id-name-desg'
@@ -106,121 +91,127 @@ const CreateEmployee = () => {
       }
     };
 
-    fetchEmployees();
+    fetchReportingManager();
     fetchDesignations();
   }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-grey-100">
       <div className="flex gap-4 w-full">
-      <div className="bg-white shadow-lg rounded-xl w-full max-w-md p-6">
-        <h2 className="text-2xl font-bold text-center text-red-300 mb-6">
-          Create Employee
-        </h2>
+        <div className="bg-white shadow-lg rounded-xl w-full max-w-md p-6">
+          <h2 className="text-2xl font-bold text-center text-red-300 mb-6">
+            Create Employee
+          </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Full Name</label>
-            <input
-              name="name"
-              type="text"
-              value={values.name}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Full Name
+              </label>
+              <input
+                name="name"
+                type="text"
+                value={values.name}
+                onChange={handleChange}
+                required
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <input
-              name="email"
-              type="email"
-              value={values.email}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Email</label>
+              <input
+                name="email"
+                type="email"
+                value={values.email}
+                onChange={handleChange}
+                pattern = '^.+@.+.com$'
+                required
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Phone Number
-            </label>
-            <input
-              name="phone"
-              type="tel"
-              value={values.phone}
-              onChange={handleChange}
-              pattern="\d{10}"
-              title="Phone number must be exactly 10 digits"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Phone Number
+              </label>
+              <input
+                name="phone"
+                type="tel"
+                value={values.phone}
+                onChange={handleChange}
+                pattern="\d{10}"
+                title="Phone number must be exactly 10 digits"
+                required
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Designation <span className="text-gray-400">(optional)</span>
-            </label>
-            <select
-              name="designation"
-              value={values.designation || ''}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="">None</option> {/* Nullable Option */}
-              {designations.map((desg, idx) => (
-                <option key={idx} value={desg.id}>
-                  {desg.name}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Designation <span className="text-gray-400">(optional)</span>
+              </label>
+              <select
+                name="designation"
+                value={values.designation || ''}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                <option value="">None</option> {/* Nullable Option */}
+                {designations.map((desg, idx) => (
+                  <option key={idx} value={desg.id}>
+                    {desg.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Reporting Manager{' '}
-              <span className="text-gray-400">(optional)</span>
-            </label>
-            <select
-              name="reporting_to"
-              value={values.reporting_to || ''}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="">None</option> {/* Nullable option */}
-              {employees.map((emp) => (
-                <option key={emp.employee_id} value={emp.employee_id}>
-                  {emp.name} ({emp.designation}) - [{emp.employee_id}]
-                </option>
-              ))}
-            </select>
-          </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Reporting Manager{' '}
+                <span className="text-gray-400">(optional)</span>
+              </label>
+              <select
+                name="reporting_to"
+                value={values.reporting_to || ''}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                <option value="">None</option> {/* Nullable option */}
+                {employees.map((emp) => (
+                  <option key={emp.employee_id} value={emp.employee_id}>
+                    {emp.name} ({emp.designation}) - [{emp.employee_id}]
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Date of Joining
-            </label>
-            <input
-              name="date_of_joining"
-              type="date"
-              value={values.date_of_joining}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Date of Joining
+              </label>
+              <input
+                name="date_of_joining"
+                type="date"
+                value={values.date_of_joining}
+                onChange={handleChange}
+                required
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
 
-          <div className="text-center">
-            <button
-              type="submit"
-              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-200"
-            >
-              Submit
-            </button>
-          </div>
-        </form>
-      </div>
+            <div className="text-center">
+              <button
+                type="submit"
+                className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-200"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
         <BulkUpload />
       </div>
-    
     </div>
   );
 };

@@ -121,7 +121,7 @@ const IncomingRequest = () => {
   const getStatusLabel = (statusCode) => {
     switch (statusCode) {
       case 100: return 'Pending';
-      default: return 'Unknown';
+      default: return 'Updated';
     }
   };
 

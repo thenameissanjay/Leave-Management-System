@@ -1,14 +1,13 @@
 // RequestForm.jsx
 import React, { use, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../Context/AuthContext';
-import axios from 'axios';
+import axios, { formToJSON } from 'axios';
 import { useToast } from './ui/ToastContainer';
 import HolidaysList from '../utils/Holidays';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css'
+import 'react-datepicker/dist/react-datepicker.css';
 import HolidaysCalendar from './HolidayCalendar';
-;
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const RequestForm = () => {
   const { user } = useContext(AuthContext);
@@ -30,29 +29,27 @@ const RequestForm = () => {
     requestAt: '',
   });
 
-  // ✅ Updated function to exclude Saturdays and Sundays
+  // Updated function to exclude Saturdays and Sundays
   const calculateLeaveDays = (fromDate, toDate) => {
     const start = new Date(fromDate);
     const end = new Date(toDate);
     let count = 0;
-
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
       const day = d.getDay(); // 0 = Sunday, 6 = Saturday
       if (day !== 0 && day !== 6) {
         count++;
       }
     }
-
     return count;
   };
   // Convert to a lookup map for efficiency
   const dateMap = Object.fromEntries(
     HolidaysList.map(({ date, isFloater }) => [date, isFloater])
-  );  // {date: true}, {......}
-  
+  ); // {date: true}, {......}
   const getClassForDate = (date) => {
-    const key = date.toISOString().split('T')[0]; // full YYYY-MM-DD
+    const key = date.toLocaleDateString('en-CA'); // 'YYYY-MM-DD' in local timezone
     if (key in dateMap) {
+      console.log(dateMap);
       return dateMap[key]
         ? 'bg-green-300 text-white rounded-full'
         : 'bg-yellow-300 text-black rounded-full';
@@ -65,6 +62,7 @@ const RequestForm = () => {
         const res = await axios.get(
           `http://localhost:8080/api/employee/leave-id/${user.EmployeeID}`
         );
+        console.log(res.data)
         setLeaveTypes(res.data);
       } catch (err) {
         const message = err.response?.data?.message;
@@ -72,7 +70,6 @@ const RequestForm = () => {
       }
     };
     fetchLeaveTypes();
-    console.log(HolidaysList);
   }, [user.EmployeeID]);
 
   const handleChange = (e) => {
@@ -93,11 +90,47 @@ const RequestForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { leaveType, fromDate, toDate, reason } = formData;
 
+    setFormData((prev) => {
+      const updated = { ...prev, leaveType: parseInt(leaveType) };
+      return updated;
+    });
+
+    const { leaveType, fromDate, toDate, reason } = formData;
     if (!leaveType || !fromDate || !toDate || !reason) {
-      setError('All fields are required.');
+      showToast('All fields are required.', 'error');
       return;
+    }
+
+    // checking the leave balance is zero
+    if (leaveTypes[formData.leaveType]?.balance === 0) {
+      showToast('No Sufficent Leave Balance', 'error');
+    }
+
+    // checking correct floater leave
+    if (formData.leaveType == 49) {
+      const startDate = new Date(formData.fromDate);
+      const endDate = new Date(formData.toDate);
+
+      const selectedDates = [];
+      const current = new Date(startDate);
+
+      while (current <= endDate) {
+        const dateString = current.toISOString().split('T')[0];
+        selectedDates.push(dateString);
+        current.setDate(current.getDate() + 1);
+      }
+
+      const dateMap = Object.fromEntries(
+        HolidaysList.map(({ date, isFloater }) => [date, isFloater])
+      );
+
+      const allAreFloaters = selectedDates.every(
+        (date) => dateMap[date] === true
+      );
+      if (allAreFloaters == false) {
+        return showToast('Pick Correct floater Leave', 'error');
+      }
     }
 
     try {
@@ -106,7 +139,11 @@ const RequestForm = () => {
         ...formData,
         requestAt: new Date().toISOString(), // e.g. "2025-06-04T09:23:15.123Z"
       };
-      await axios.post('http://localhost:8080/api/leave/request-leave', payload);
+      console.log(payload);
+      await axios.post(
+        'http://localhost:8080/api/leave/request-leave',
+        payload
+      );
       setMessage('Leave request submitted successfully!');
       setError('');
       setFormData({
@@ -119,8 +156,11 @@ const RequestForm = () => {
         designation: user.Designation,
       });
     } catch (err) {
-      console.error(err);
-      setError('Failed to submit leave request.');
+      const message =
+        err.status === 408
+          ? err.response.data.message
+          : err.response.data.message;
+      showToast(message, 'error');
     } finally {
       setLoading(false);
     }
@@ -128,17 +168,16 @@ const RequestForm = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-md ">
-     <div className="flex justify-between items-center mb-4 gap-x-4">
-  <h2 className="text-2xl font-bold text-gray-800">Request Leave</h2>
-  
-  <button
-    onClick={() => navigate("/ViewLeavePolicy")}
-    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-  >
-    View Leave Policy
-  </button>
-</div>
+      <div className="flex justify-between items-center mb-4 gap-x-4">
+        <h2 className="text-2xl font-bold text-gray-800">Request Leave</h2>
 
+        <button
+          onClick={() => navigate('/ViewLeavePolicy')}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        >
+          View Leave Policy
+        </button>
+      </div>
 
       {error && <p className="text-red-500 mb-3 text-center">{error}</p>}
       {message && <p className="text-green-600 mb-3 text-center">{message}</p>}
@@ -160,23 +199,41 @@ const RequestForm = () => {
             </div>
           </div>
 
-          {/* Leave Type */}
-          <div>
-            <label className="block font-medium mb-1">Leave Type</label>
-            <select
-              name="leaveType"
-              value={formData.leaveType}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
-            >
-              <option value="">Select Leave Type</option>
-              {Object.entries(leaveTypes).map(([id, name]) => (
-                <option key={id} value={id}>
-                  {name}
-                </option>
-              ))}
-            </select>
+          <div className="flex gap-4">
+            <div className="flex-[3]">
+              <label className="block font-medium mb-1">Leave Type</label>
+              <select
+                name="leaveType"
+                value={formData.leaveType}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded px-3 py-2"
+              >
+                <option value="">Select Leave Type</option>
+                {Object.entries(leaveTypes).map(([id, { name, balance }]) => (
+                  <option key={id} value={id}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex-[1]">
+              <div>
+                <label className="block font-medium mb-1">
+                  Available Balance
+                </label>
+                <input
+                  type="text"
+                  value={`${
+                    leaveTypes[formData.leaveType]?.balance ?? '0'
+                  } days`}
+                  readOnly
+                  className="border border-gray-300 rounded px-3 py-2 bg-gray-100 text-gray-700"
+                />
+              </div>
+            </div>
           </div>
+          {/* Leave Type */}
 
           <div className="flex flex-row gap-4">
             {/* From Date */}
@@ -222,10 +279,11 @@ const RequestForm = () => {
             <textarea
               name="reason"
               rows="4"
+              maxLength={100}
               value={formData.reason}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded px-3 py-2"
-              placeholder="Enter reason for leave"
+              placeholder="Enter reason for leave (max 100 characters)"
             ></textarea>
           </div>
 
@@ -291,7 +349,6 @@ const RequestForm = () => {
             })}
           </ul>
         </div>
-
       </div>
     </div>
   );

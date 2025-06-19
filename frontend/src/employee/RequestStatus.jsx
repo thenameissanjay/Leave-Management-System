@@ -127,7 +127,7 @@ const RequestStatus = () => {
               <div className="flex flex-col items-center text-center">
                 <p className="text-sm font-medium text-gray-900">
                   {flow.approver.name} (
-                  {flow.approver.designation?.name || flow.approver.designation})
+                  {flow.approver.designation.name || flow.approver.designation})
                 </p>
                 <p
                   className={`text-sm ${getStatusClass(flow.approval_status)} px-2 py-1 rounded mt-1`}

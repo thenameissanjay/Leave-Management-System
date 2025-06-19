@@ -63,6 +63,23 @@ const requestLeave = async (req, res) => {
       reason,
       requestAt,
     } = req.body;
+    console.log(JSON.stringify(req.body, null, 2))
+
+    return res.status(200).json({message: "suuccesfully"})
+    const result = await leaveBalanceRepo.findOne({
+      where:{
+        employee_id,
+        leave_type_id: leaveType
+      }, 
+      select:['balance_leave']
+    })
+    if(!result){
+      return res.json({message: 'Invalid employeeID, LeaveType'})
+    }
+    if(result?.balance_leave === 0)
+    {
+      return res.status(400).json({message: "Insufficent Balance"})
+    }
 
     // get designation = {id: 37, name: "developer", description: "developer"}
     const desgRow = await designationRepo.findOne({
@@ -143,8 +160,7 @@ const requestLeave = async (req, res) => {
  */
 const incomingLeaveRequest = async (req, res) => {
   const { EmployeeID, role } = req.query;
-  const {offset, limit} = req.query;
-
+  const { offset, limit } = req.query;
 
   try {
     // find designationName by ID
@@ -180,11 +196,10 @@ const incomingLeaveRequest = async (req, res) => {
         'leave_request.employee',
         'leave_request.employee.designation',
       ],
-      skip: offset, // OFFSET 
-      take: limit,  // LIMIT 
+      skip: offset, // OFFSET
+      take: limit, // LIMIT
     });
     // result = [actual_response, totalRow]
-
 
     // Loop through each result and append leave_balance
     for (const item of result[0]) {
@@ -202,8 +217,8 @@ const incomingLeaveRequest = async (req, res) => {
         leaveRequest.leave_balance = null;
       }
     }
-    const totalRow = result[1] // total count of rows
-    return res.json({result, totalRow });
+    const totalRow = result[1]; // total count of rows
+    return res.json({ result, totalRow });
   } catch (err) {
     logger.error(`leaveHandler/reportingLeaveStatus: ${err}`);
     return res.status(500).json({ message: 'Internal server error' });
@@ -327,7 +342,7 @@ const updateLeaveStatus = async (req, res) => {
 */
 const incomingHistory = async (req, res) => {
   const employeeID = req.params.EmployeeID;
-  const {offset, limit} = req.query;
+  const { offset, limit } = req.query;
 
   try {
     const approvalFlowRepo = AppDataSource.getRepository('approval_flow');
@@ -348,10 +363,9 @@ const incomingHistory = async (req, res) => {
       order: {
         id: 'DESC',
       },
-      skip: offset, // OFFSET 
-      take: limit,  // LIMIT 
+      skip: offset, // OFFSET
+      take: limit, // LIMIT
     });
-
 
     // ENUM status "100" -> "Pending"
     const result = approvalRecords[0].map((record) => {
@@ -365,10 +379,10 @@ const incomingHistory = async (req, res) => {
       };
     });
     const totalRow = approvalRecords[1];
-    
-    return res.json({result, totalRow});
+
+    return res.json({ result, totalRow });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     logger.error(`leaveHandler/incomingHistory: ${err}`);
     return res
       .status(500)
@@ -380,7 +394,7 @@ const incomingHistory = async (req, res) => {
 // GET `http://localhost:8080/api/leave/leave-status/${employeeID}?offset=${offset}&limit=${limit}`
 const leaveStatus = async (req, res) => {
   const employeeID = req.params.EmployeeID;
-  const {offset, limit} = req.query;
+  const { offset, limit } = req.query;
 
   try {
     // Fetch all approval_flow records where approver_id == employeeID and approval_status != pending (100)
@@ -395,23 +409,26 @@ const leaveStatus = async (req, res) => {
         'employee.designation',
         'leave_type',
         'approval_flow',
-        'approval_flow.approver',
+        'approval_flow.approver.designation',
       ],
       order: {
         request_id: 'DESC',
       },
-      skip: offset, // OFFSET 
-      take: limit,  // LIMIT 
+      skip: offset, // OFFSET
+      take: limit, // LIMIT
     });
-   
+
     // check if the role status === request status
     const result = leaveRequests[0].map((record) => {
-    const role = record.employee.designation.name.toLowerCase();
-    const roleStatus = RoleStatus.find((item) => item.role === role).status;
+      const role = record.employee.designation.name.toLowerCase();
+      const roleStatus = RoleStatus.find((item) => item.role === role).status;
 
       return {
         ...record,
-        request_status_label: record.status == roleStatus ? "Pending" : LeaveStatusLabel[record.status], // "400" -> "Approved"
+        request_status_label:
+          record.status == roleStatus
+            ? 'Pending'
+            : LeaveStatusLabel[record.status], // "400" -> "Approved"
         approval_flow: record.approval_flow.map((approval) => ({
           ...approval,
           approval_status_label: LeaveStatusLabel[approval.approval_status],
@@ -420,7 +437,7 @@ const leaveStatus = async (req, res) => {
     });
     const totalRow = leaveRequests[1];
 
-    return res.json({result, totalRow});
+    return res.json({ result, totalRow });
   } catch (err) {
     logger.error(`leaveHandler/leaveStatus: ${err}`);
     return res
@@ -428,7 +445,6 @@ const leaveStatus = async (req, res) => {
       .json({ message: 'Failed to fetch leave approval status' });
   }
 };
-
 
 /**
  * canceling the Request
@@ -449,17 +465,17 @@ const cancelLeave = async (req, res) => {
           leave_type_id: result.leave_type,
         },
       });
-      leaveBalance.balance_leave +=1;
-      leaveBalance.leave_taken -=1;
+      leaveBalance.balance_leave += 1;
+      leaveBalance.leave_taken -= 1;
       await leaveBalanceRepo.save(leaveBalance);
     }
     // cancel status put in leave request
-    result.status = 600  // Cancel Status Code
-    await leaveRequestRepo.save(result)
+    result.status = 600; // Cancel Status Code
+    await leaveRequestRepo.save(result);
 
-    return res.json({message: 'Cancel the Leave Request'});
+    return res.json({ message: 'Cancel the Leave Request' });
   } catch (err) {
-    logger.error(`Error: ${err}`)
+    logger.error(`Error: ${err}`);
     res.status(500).json({ message: 'Failed to delete leave request' });
   }
 };

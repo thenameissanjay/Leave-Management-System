@@ -25,7 +25,6 @@ const updateLeavePolicyByLeaveType = async (leavetypeId) => {
      
          // 4. Save all policies
          await leavePolicyRepo.save(leavePolicies); // assuming leavePolicyRepo is your repository
-     
 }
 
 

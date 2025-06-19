@@ -4,7 +4,7 @@ const { employee } = require('../entity/employee');
 const { leave_balance } = require('../entity/leave_balance');
 const { leave_request } = require('../entity/leave_requests');
 const { parse } = require('csv-parse/sync');
-const {employeeQueue} = require('../config/redis-queue')
+const { employeeQueue } = require('../config/redis-queue');
 
 const {
   updateLeaveBalanceByEmployee,
@@ -40,7 +40,6 @@ const getEmployee = async (req, res) => {
       password: emp.password,
       designation: emp.designation?.name || null, // return designation name
     }));
-
     res.json(formattedEmployees);
   } catch (err) {
     logger.error(`adminHandler/getEmployee: ${err.message}`);
@@ -53,18 +52,17 @@ const getEmployee = async (req, res) => {
  * /api/admin/employee
  * req.body = 
  * {
-  "name": "sanjay kumar",
-  "email": "sanjaykumar@gmail.com",
-  "phone": "1234567890",
-  "designation": 34,
-  "reporting_to": 21,
-  "date_of_joining": "2025-06-06",
-  "password": ""
-  }
+  "name": "user_developer_2",
+  "email": "user_developer_2@gmail.com",
+  "phone": 9876543210,
+  "designation": null,
+  "reporting_to": null,
+  "date_of_joining": "2025-06-18"
+}
  */
 
 const createEmployee = async (req, res) => {
-  // console.log(JSON.stringify(req.body, null, 2))
+  console.log(JSON.stringify(req.body, null, 2));
   try {
     // creating instance
     const newEmployee = employeeRepo.create({
@@ -100,12 +98,35 @@ const GetEmployee = async (req, res) => {
   try {
     const employeeId = req.params.EmployeeID;
 
-    const emp = await employeeRepo.findOneBy({ employee_id: employeeId });
+    const emp = await employeeRepo.findOne({
+      where: { employee_id: employeeId },
+      // relations:{
+      //   designation: true,
+      //   reporting_to: true
+      // },
+      select:{
+        employee_id: true,
+        name: true,
+        email:true,
+        phone: true,
+        date_of_joining: true,
+        designation: true, 
+        reporting_to: true
+        // designation:{
+        //   name: true
+        // },
+        // reporting_to:{
+        //   name: true
+        // }
+      }
+    });
+
 
     if (!emp) {
       logger.error('/adminHandler/GetEmployee: employee not Found');
       return res.status(404).json({ message: 'Employee not found' });
     }
+
     res.json(emp);
   } catch (err) {
     logger.error(`adminHandler/GetEmployee: ${err}`);
@@ -196,7 +217,7 @@ const EmployeeIdNameDesg = async (req, res) => {
     });
 
     const response = employees
-      .filter((emp) => emp.name !== 'admin')
+      // .filter((emp) => emp.name !== 'admin')
       .map((emp) => ({
         employee_id: emp.employee_id,
         name: emp.name,
@@ -210,7 +231,6 @@ const EmployeeIdNameDesg = async (req, res) => {
     return res.status(500).json({ message: 'Failed to fetch employees' });
   }
 };
-
 
 /**
  * POST
@@ -229,10 +249,10 @@ const EmployeeIdNameDesg = async (req, res) => {
   },
  */
 
-const bulkUpload =  async (req, res) => {
+const bulkUpload = async (req, res) => {
   try {
     const csvBuffer = req.file.buffer; // file content stored as raw binary data
-    
+
     // string to JSON
     const records = parse(csvBuffer.toString(), {
       columns: true,
@@ -240,17 +260,17 @@ const bulkUpload =  async (req, res) => {
       trim: true,
     });
 
-    const JOB_SIZE = 1;  //  1 row in Job
+    const JOB_SIZE = 1; //  1 row in Job
     for (let i = 0; i < records.length; i += JOB_SIZE) {
       const job = records.slice(i, i + JOB_SIZE);
-     
+
       // Adding in Queue
       await employeeQueue.add('bulk-upload-queue', job, {
         removeOnComplete: true,
         removeOnFail: true,
       });
     }
-    res.json({message :`Queued Added`});
+    res.json({ message: `Queued Added` });
   } catch (err) {
     logger.error('Upload failed:', err);
     res.status(500).send('Error processing file');
@@ -264,5 +284,5 @@ module.exports = {
   updateEmployee,
   deleteEmployee,
   EmployeeIdNameDesg,
-  bulkUpload
+  bulkUpload,
 };

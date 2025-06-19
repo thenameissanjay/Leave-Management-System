@@ -12,4 +12,3 @@ const HolidaysList = [
   ];
   
   export default HolidaysList;
-  

@@ -22,7 +22,6 @@ const logger = require('../logger/logger');
   "description": "sick",
   "yearAccrual": False,
     "monthAccrual": False,
-
    }
  */
 const CreateLeaveType = async (req, res) => {

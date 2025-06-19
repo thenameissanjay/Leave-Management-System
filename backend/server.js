@@ -21,7 +21,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
 AppDataSource.initialize()
   .then(() => {
     console.log('DB connected successfully');
@@ -30,7 +29,7 @@ AppDataSource.initialize()
     app.use('/api/auth', authRoutes);
 
     // Admin
-    app.use('/api/admin', adminAuth, adminRoutes);
+    app.use('/api/admin', adminRoutes);
     app.use('/api/designation', adminAuth, designationRoutes);
     app.use('/api/leave-level', adminAuth, leaveLevelRoutes);
     app.use('/api/leave-type', adminAuth, leaveTypeRoutes);
@@ -38,17 +37,29 @@ AppDataSource.initialize()
 
     // Employee
     app.use('/api/employee', employeeAuth, employeeRoutes);
-    app.use('/api/leave', employeeAuth, leaveRoutes);
+    app.use('/api/leave', leaveRoutes);
+
+    app.use((err, req, res, next) => {
+      if (err && err.error && err.error.isJoi) {
+        return res.status(408).json({
+          type: err.type,
+          message: err.error.details[0].message,
+        });
+      }
+      res.status(500).json({
+        message: 'Internal Server Error',
+      });
+    });
 
     app.listen(8080, () => {
       console.log('Server running ...');
     });
     // Monthly Accural
-    cron.schedule('0 0 1 1 *', async () => {
+    cron.schedule('0 0 1 * *', async () => {
       await MonthlyAccrual();
     });
     // Yearly Carry Forward
-    cron.schedule('0 0 1 1 1', async () => {
+    cron.schedule('0 0 1 1 *', async () => {
       await carryForwardLeaveBalance();
     });
   })

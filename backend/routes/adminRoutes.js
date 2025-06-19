@@ -15,7 +15,7 @@ const {
   employeeIdSchema,
   updateEmployeeSchema,
 } = require('../joi_schema/adminSchema');
-const validator = require('express-joi-validation').createValidator({});
+const validator = require('express-joi-validation').createValidator({ passError: true});
 
 router.post(
   '/employee', 

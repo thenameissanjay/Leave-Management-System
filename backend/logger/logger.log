@@ -824,3 +824,31 @@
 [2025-06-17 15:28:44] ERROR: /authHandler/employeeLogin: TypeError: Cannot read properties of null (reading 'password')
 [2025-06-17 15:30:11] ERROR: /authHandler/employeeLogin: TypeError: Cannot read properties of null (reading 'password')
 [2025-06-17 15:30:33] ERROR: /authHandler/employeeLogin: TypeError: Cannot read properties of null (reading 'password')
+[2025-06-17 17:03:20] ERROR: /authHandler/employeeLogin: TypeError: Cannot read properties of null (reading 'password')
+[2025-06-17 17:09:36] ERROR: leaveHandler/requestLeave: No approval rule configured for this leaveCount
+[2025-06-17 18:38:11] ERROR: employeeHandler/getReportingManagerName: Employee Not Found
+[2025-06-17 18:40:47] ERROR: employeeHandler/getReportingManagerName: Employee Not Found
+[2025-06-17 18:44:26] ERROR: employeeHandler/getReportingManagerName: Employee Not Found
+[2025-06-18 09:33:21] ERROR: /authHandler/employeeLogin: TypeError: Cannot read properties of null (reading 'password')
+[2025-06-18 14:31:48] ERROR: leaveHandler/requestLeave: TypeError: Cannot read properties of null (reading 'balance_leave')
+[2025-06-18 14:33:43] ERROR: leaveHandler/requestLeave: QueryFailedError: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`leave_requests`, CONSTRAINT `FK_52b4b7c7d295e204add6dbe0a09` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`))
+[2025-06-18 14:35:33] ERROR: leaveHandler/requestLeave: TypeError: Cannot read properties of null (reading 'balance_leave')
+[2025-06-18 14:35:36] ERROR: leaveHandler/requestLeave: TypeError: Cannot read properties of null (reading 'balance_leave')
+[2025-06-18 14:36:27] ERROR: leaveHandler/requestLeave: QueryFailedError: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`leave_requests`, CONSTRAINT `FK_52b4b7c7d295e204add6dbe0a09` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`))
+[2025-06-18 15:25:27] ERROR: /adminHandler/createEmployee: QueryFailedError: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`employee`, CONSTRAINT `FK_2728e36aa77388e4a7493b424d6` FOREIGN KEY (`designation`) REFERENCES `designation` (`id`))
+[2025-06-18 15:29:54] ERROR: /adminHandler/createEmployee: QueryFailedError: Cannot add or update a child row: a foreign key constraint fails (`data_modeling_lms`.`employee`, CONSTRAINT `FK_2728e36aa77388e4a7493b424d6` FOREIGN KEY (`designation`) REFERENCES `designation` (`id`))
+[2025-06-18 17:16:35] ERROR: adminHandler/GetEmployee: EntityPropertyNotFoundError: Property "reporting_to" was not found in "employee". Make sure your query is correct.
+[2025-06-18 17:16:35] ERROR: adminHandler/GetEmployee: EntityPropertyNotFoundError: Property "reporting_to" was not found in "employee". Make sure your query is correct.
+[2025-06-18 17:19:45] ERROR: adminHandler/GetEmployee: EntityPropertyNotFoundError: Property "reporting_to" was not found in "employee". Make sure your query is correct.
+[2025-06-18 17:19:50] ERROR: adminHandler/GetEmployee: EntityPropertyNotFoundError: Property "reporting_to" was not found in "employee". Make sure your query is correct.
+[2025-06-18 17:20:20] ERROR: adminHandler/GetEmployee: EntityPropertyNotFoundError: Property "reporting_to" was not found in "employee". Make sure your query is correct.
+[2025-06-18 17:26:57] ERROR: adminHandler/GetEmployee: QueryFailedError: Operand should contain 1 column(s)
+[2025-06-18 17:27:44] ERROR: adminHandler/GetEmployee: QueryFailedError: Operand should contain 1 column(s)
+[2025-06-18 17:28:43] ERROR: adminHandler/GetEmployee: QueryFailedError: Operand should contain 1 column(s)
+[2025-06-18 17:28:43] ERROR: adminHandler/GetEmployee: QueryFailedError: Operand should contain 1 column(s)
+[2025-06-18 17:28:43] ERROR: adminHandler/GetEmployee: QueryFailedError: Operand should contain 1 column(s)
+[2025-06-18 17:29:50] ERROR: adminHandler/GetEmployee: ReferenceError: name is not defined
+[2025-06-18 17:30:52] ERROR: adminHandler/GetEmployee: QueryFailedError: Unknown column 'distinctAlias.employee_employee_id' in 'field list'
+[2025-06-18 17:30:52] ERROR: adminHandler/GetEmployee: QueryFailedError: Unknown column 'distinctAlias.employee_employee_id' in 'field list'
+[2025-06-18 17:30:52] ERROR: adminHandler/GetEmployee: QueryFailedError: Unknown column 'distinctAlias.employee_employee_id' in 'field list'
+[2025-06-18 17:30:53] ERROR: adminHandler/GetEmployee: QueryFailedError: Unknown column 'distinctAlias.employee_employee_id' in 'field list'

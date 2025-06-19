@@ -13,7 +13,7 @@ const LeaveCards = () => {
         const fetchLeave = async (id) => {
           try {
             const response = await axios.get(`http://localhost:8080/api/employee/total-leave/${user.EmployeeID}`);
-            console.log( response);
+            console.log( response.data);
             const data = response.data;
             setLeaveData(data);
           } catch (err) {

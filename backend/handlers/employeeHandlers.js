@@ -78,6 +78,7 @@ const getTotalLeave = async (req, res) => {
         total_leave: item.total_leave, // 10
         leave_taken: item.leave_taken, // 5
         balance_leave: item.balance_leave, // 5
+        leave_type_id: item.leave_type_dm.id,
         leave_type_name: item.leave_type_dm.name, // Sick
       });
     }
@@ -103,10 +104,12 @@ const getLeaveId = async (req, res) => {
     const response = {};
 
     leaveBalances.forEach((lb) => {
-      const { id, name } = lb.leave_type_dm; // in your entity it's many-to-many
-      if (id && lb.total_leave != 0) {
-        // ignore total_leave = null
-        response[`${id}`] = name; // {1:"sick", 2:"casual", 3:"LOP"}
+      const { id, name } = lb.leave_type_dm;
+      if (id && lb.total_leave != null) {
+        response[`${id}`] = {
+          name,
+          balance: lb.total_leave,
+        };
       }
     });
     res.json(response);
@@ -162,11 +165,9 @@ const TeamCalendar = async (req, res) => {
     res.json(results);
   } catch (error) {
     logger.error(`employeeHandler/TeamCalendar: ${error}`);
-    return res.status(500).json({message: error.message})
+    return res.status(500).json({ message: error.message });
   }
 };
-
-
 
 module.exports = {
   getReportingManagerName,
