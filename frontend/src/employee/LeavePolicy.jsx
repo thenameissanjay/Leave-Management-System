@@ -50,7 +50,7 @@ const ViewLeavePolicy = () => {
             d="M15 19l-7-7 7-7"
           />
         </svg>
-        Back
+        Leave Request
       </button>
 
       {/* Leave Policy Table */}

@@ -93,8 +93,8 @@ const UpdateEmployee = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('handel is calling')
     try {
-      
       await axios.put(
         `http://localhost:8080/api/admin/employee/${id}`,
         values
@@ -209,12 +209,19 @@ const UpdateEmployee = () => {
             />
           </div>
 
-          <div className="text-center">
+          <div className="text-center flex gap-4 justify-center">
             <button
               type="submit"
               className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-200"
             >
               Update
+            </button>
+            <button
+            type='button'
+              onClick={()=>{navigate('/ViewEmployee')}}
+              className="bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700 transition duration-200"
+            >
+              cancel
             </button>
           </div>
         </form>

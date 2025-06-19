@@ -11,6 +11,7 @@ const {
 } = require('../service/leavebalanceService');
 const logger = require('../logger/logger');
 const multer = require('multer');
+const { tryCatch } = require('bullmq');
 
 const employeeRepo = AppDataSource.getRepository(employee);
 const leaveRepo = AppDataSource.getRepository(leave_request);
@@ -232,6 +233,36 @@ const EmployeeIdNameDesg = async (req, res) => {
   }
 };
 
+
+/**
+ * if one employee is delete reassigning reporting manager to sub-employee
+ * PUT
+ * http://localhost:8080/api/admin/replace-reporting-manager?EmployeeID={21}&ReportingTo={22}
+ */
+
+const replaceReportingManager = async (req, res) => {
+  try{
+    const {EmployeeID, ReportingTo} = req.query;
+    console.log(req.query)
+    const emp = await employeeRepo.find({
+      where :{
+        reporting_to: EmployeeID
+      }
+    })
+    emp.forEach( async (employee)=>{
+        employee.reporting_to = parseInt(ReportingTo);
+        await employeeRepo.save(employee)
+
+    })
+
+
+    return res.json({message: 'Changed Reporting Manager'})
+  }catch(err)
+  { 
+     return res.status(404).json({message:'something happpen'})
+  }
+}
+
 /**
  * POST
  * "create new employees BULK UPLOAD"
@@ -285,4 +316,5 @@ module.exports = {
   deleteEmployee,
   EmployeeIdNameDesg,
   bulkUpload,
+  replaceReportingManager
 };

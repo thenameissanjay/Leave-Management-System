@@ -8,6 +8,7 @@ const {
   updateEmployee,
   deleteEmployee,
   EmployeeIdNameDesg,
+  replaceReportingManager,
   bulkUpload
 } = require('../handlers/adminHandlers');
 const {
@@ -44,6 +45,10 @@ router.delete(
 );
 
 router.get('/employee-id-name-desg', EmployeeIdNameDesg);
+
+
+router.put('/replace-reporting-manager', replaceReportingManager);
+
 
 // creating the storage
 const upload = multer({ storage: multer.memoryStorage() });
