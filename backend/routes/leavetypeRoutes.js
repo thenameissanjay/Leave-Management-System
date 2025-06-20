@@ -10,7 +10,7 @@ const {
   createLeaveTypeSchema,
   leaveTypeIdSchema,
 } = require('../joi_schema/leaveTypeSchema');
-const validator = require('express-joi-validation').createValidator({});
+const validator = require('express-joi-validation').createValidator({passError: true});
 
 router.post(
   '/leave-type',

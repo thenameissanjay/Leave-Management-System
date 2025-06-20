@@ -6,6 +6,8 @@ const {
   leave_request,
   LeaveStatus,
   LeaveStatusLabel,
+  dayTypeStatusLabel,
+  dayTypeStatus
 } = require('../entity/leave_requests');
 
 const { leave_level } = require('../entity/leave_level');
@@ -55,6 +57,7 @@ const requestLeave = async (req, res) => {
   try {
     const {
       leaveCount,
+      day_type,
       employee_id,
       designation,
       leaveType,
@@ -64,8 +67,6 @@ const requestLeave = async (req, res) => {
       requestAt,
     } = req.body;
     console.log(JSON.stringify(req.body, null, 2))
-
-    return res.status(200).json({message: "suuccesfully"})
     const result = await leaveBalanceRepo.findOne({
       where:{
         employee_id,
@@ -100,6 +101,7 @@ const requestLeave = async (req, res) => {
     const status = LeaveFlowStatus.status;
 
     // getting Approval Level based on Leave count = "3"
+
     const leaveLevel = await leaveLevelRepo.findOne({
       where: {
         start_count: LessThanOrEqual(leaveCount),
@@ -129,6 +131,8 @@ const requestLeave = async (req, res) => {
       leave_type: leaveType,
       from_date: fromDate,
       to_date: toDate,
+      leave_count: leaveCount,
+      day_type: dayTypeStatus[day_type],
       reason: reason,
       status: status, // 100
       requestedAt: requestAt,
@@ -161,6 +165,7 @@ const requestLeave = async (req, res) => {
 const incomingLeaveRequest = async (req, res) => {
   const { EmployeeID, role } = req.query;
   const { offset, limit } = req.query;
+  console.log(req.query)
 
   try {
     // find designationName by ID
@@ -206,6 +211,8 @@ const incomingLeaveRequest = async (req, res) => {
       const leaveRequest = item.leave_request;
       const employee_id = leaveRequest.employee_id;
       const leave_type_id = leaveRequest.leave_type.id;
+
+      leaveRequest.day_type = dayTypeStatusLabel[leaveRequest.day_type]  // "100" => fullday
 
       // Fetch leave balance of leave request
       if (employee_id && leave_type_id) {
@@ -302,6 +309,13 @@ const updateLeaveStatus = async (req, res) => {
         // Update leave_balance record
         const employeeId = requestRecord.employee_id;
         const leaveTypeId = requestRecord.leave_type;
+        const leave_count = requestRecord.leave_count;
+
+        console.log("leave request apporved");
+        console.log(requestRecord.employee_id);
+        console.log(requestRecord.leave_type);
+        console.log(requestRecord.leave_count);
+
 
         const leaveBalanceRecord = await leaveBalanceRepo.findOne({
           where: {
@@ -309,11 +323,12 @@ const updateLeaveStatus = async (req, res) => {
             leave_type_id: leaveTypeId,
           },
         });
+        console.log(leaveBalanceRecord)
 
         if (leaveBalanceRecord) {
-          leaveBalanceRecord.leave_taken += 1;
-          leaveBalanceRecord.balance_leave -= 1;
-
+          leaveBalanceRecord.leave_taken += leave_count;
+          leaveBalanceRecord.balance_leave -= leave_count;
+          console.log(leaveBalanceRecord)
           await leaveBalanceRepo.save(leaveBalanceRecord);
         }
       }
@@ -374,6 +389,7 @@ const incomingHistory = async (req, res) => {
         approval_status_label: LeaveStatusLabel[record.approval_status], // "400" -> "Approved"
         leave_request: {
           ...record.leave_request,
+          day_type: dayTypeStatusLabel[record.leave_request.day_type], // "100" => "full day"
           status_label: LeaveStatusLabel[record.leave_request.status],
         },
       };
@@ -429,6 +445,7 @@ const leaveStatus = async (req, res) => {
           record.status == roleStatus
             ? 'Pending'
             : LeaveStatusLabel[record.status], // "400" -> "Approved"
+        day_type: dayTypeStatusLabel[record.day_type], // "100" => "full day"
         approval_flow: record.approval_flow.map((approval) => ({
           ...approval,
           approval_status_label: LeaveStatusLabel[approval.approval_status],

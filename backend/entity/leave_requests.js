@@ -10,6 +10,16 @@ const LeaveStatus = {
   rejected: 500,
   cancelled: 600,
 };
+const dayTypeStatus = {
+  fullDay: 100,
+  firstHalf: 200,
+  secondHalf: 300,
+};
+const dayTypeStatusLabel = {
+  [dayTypeStatus.fullDay]: 'Full Day',
+  [dayTypeStatus.firstHalf]: 'First Half',
+  [dayTypeStatus.secondHalf]: 'Second Half',
+};
 
 const LeaveStatusLabel = {
   [LeaveStatus.pending]: 'Pending',
@@ -32,11 +42,19 @@ const leave_request = new EntitySchema({
       generated: true,
     },
     employee_id: {
-      // many
       type: 'int',
     },
-    leave_type: {
-      type: 'int',
+    leave_type:{
+      type: 'int'
+    },
+    day_type: {
+      type: 'enum',
+      enum: dayTypeStatus,
+      default: dayTypeStatus.fullDay,
+    },
+    leave_count: {
+      type: 'float',
+      default: 1,
     },
     from_date: {
       type: 'date',
@@ -53,6 +71,7 @@ const leave_request = new EntitySchema({
       enum: LeaveStatus, // Use the enum
       default: LeaveStatus.pending,
     },
+
     requestedAt: {
       type: 'datetime',
     },
@@ -87,4 +106,10 @@ const leave_request = new EntitySchema({
   },
 });
 
-module.exports = { leave_request, LeaveStatus, LeaveStatusLabel };
+module.exports = {
+  leave_request,
+  LeaveStatus,
+  LeaveStatusLabel,
+  dayTypeStatus,
+  dayTypeStatusLabel,
+};

@@ -5,7 +5,7 @@ const AdminSidebar = () => {
   const activeClass = 'bg-gray-900 font-semibold border-l-4 border-white pl-3';
 
   return (
-    <div className="fixed left-0 top-0 h-full w-64 bg-gray-800 text-white shadow-lg">
+    <div className="fixed left-0 top-0 h-full w-60 bg-gray-800 text-white shadow-lg">
       <div className="p-4 text-xl font-bold border-b border-gray-700">
         Admin Panel
       </div>

@@ -25,6 +25,7 @@ const RequestForm = () => {
     toDate: '',
     reason: '',
     leaveCount: 0,
+    day_type: 'fullDay',
     designation: user.Designation,
     requestAt: '',
   });
@@ -62,7 +63,7 @@ const RequestForm = () => {
         const res = await axios.get(
           `http://localhost:8080/api/employee/leave-id/${user.EmployeeID}`
         );
-        console.log(res.data)
+        console.log(res.data);
         setLeaveTypes(res.data);
       } catch (err) {
         const message = err.response?.data?.message;
@@ -82,6 +83,10 @@ const RequestForm = () => {
           updated.fromDate,
           updated.toDate
         );
+        if(updated.day_type != "fullDay")
+        {
+          updated.leaveCount = updated.leaveCount * 0.5;
+        }
       }
       return updated;
     });
@@ -90,11 +95,6 @@ const RequestForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    setFormData((prev) => {
-      const updated = { ...prev, leaveType: parseInt(leaveType) };
-      return updated;
-    });
 
     const { leaveType, fromDate, toDate, reason } = formData;
     if (!leaveType || !fromDate || !toDate || !reason) {
@@ -137,6 +137,7 @@ const RequestForm = () => {
       setLoading(true);
       const payload = {
         ...formData,
+        leaveType: parseInt(formData.leaveType),
         requestAt: new Date().toISOString(), // e.g. "2025-06-04T09:23:15.123Z"
       };
       console.log(payload);
@@ -153,6 +154,7 @@ const RequestForm = () => {
         toDate: '',
         reason: '',
         leaveCount: 0,
+        day_type: 'fullDay',
         designation: user.Designation,
       });
     } catch (err) {
@@ -244,7 +246,7 @@ const RequestForm = () => {
                   formData.fromDate ? new Date(formData.fromDate) : null
                 }
                 onChange={(e) => {
-                  const formatted = new Date(e).toISOString().split('T')[0];
+                  const formatted = e.toLocaleDateString('en-CA'); // safer
                   const target = { name: 'fromDate', value: formatted };
                   handleChange({ target });
                 }}
@@ -261,7 +263,7 @@ const RequestForm = () => {
               <DatePicker
                 selected={formData.toDate ? new Date(formData.toDate) : null}
                 onChange={(e) => {
-                  const formatted = new Date(e).toISOString().split('T')[0];
+                  const formatted = e.toLocaleDateString('en-CA'); // safer
                   const target = { name: 'toDate', value: formatted };
                   handleChange({ target });
                 }}
@@ -287,18 +289,37 @@ const RequestForm = () => {
             ></textarea>
           </div>
 
-          {/* Leave Count */}
-          <div>
-            <label className="block font-medium mb-1">
-              Leave Days (Excluding Weekends)
-            </label>
-            <input
-              type="number"
-              value={formData.leaveCount}
-              readOnly
-              className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100"
-            />
+          <div className='flex gap-4'>
+            <div>
+              <label className="block font-medium mb-1">
+                Day type
+              </label>
+              <select
+                name="day_type"
+                value={formData.day_type}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded px-3 py-2"
+              >
+                <option value="">Select Day Type</option>
+                <option value="fullDay">Full Day</option>
+                <option value="firstHalf">First Half</option>
+                <option value="secondHalf">Second Half</option>
+
+              </select>
+            </div>
+            <div>
+              <label className="block font-medium mb-1">
+                Leave Count
+              </label>
+              <input
+                type="number"
+                value={formData.leaveCount}
+                readOnly
+                className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100"
+              />
+            </div>
           </div>
+          {/* Leave Count */}
 
           {/* Submit */}
           <button

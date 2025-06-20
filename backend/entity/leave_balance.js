@@ -23,13 +23,13 @@ const leave_balance = new EntitySchema({
       type: "int",
     },
     total_leave:{
-        type: "int",
+        type: "float",
     },
     leave_taken:{
-        type: "int"
+        type: "float"
     },
     balance_leave:{
-        type: 'int'
+        type: 'float'
     },
     deletedAt: {
       type: 'timestamp',

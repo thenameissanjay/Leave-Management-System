@@ -10,7 +10,7 @@ const {
   createDesignationSchema,
   designationIdSchema,
 } = require('../joi_schema/desigantionSchema');
-const validator = require('express-joi-validation').createValidator({});
+const validator = require('express-joi-validation').createValidator({ passError: true});
 
 router.post(
   '/designation',

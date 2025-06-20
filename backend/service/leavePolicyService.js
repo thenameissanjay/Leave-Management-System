@@ -7,7 +7,6 @@ const leavePolicyRepo = AppDataSource.getRepository(leave_policy_dm)
 const leaveTypeRepo = AppDataSource.getRepository(leave_type_dm);
 const logger = require('../logger/logger');
 
-
 const updateLeavePolicyByLeaveType = async (leavetypeId) => {
          const employeeTypes = await employeeTypeRepo.find(); 
   

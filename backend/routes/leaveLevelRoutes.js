@@ -10,7 +10,7 @@ const {
   createLevelSchema,
   levelIdSchema,
 } = require('../joi_schema/leaveLevelSchema');
-const validator = require('express-joi-validation').createValidator({});
+const validator = require('express-joi-validation').createValidator({passError: true});
 
 router.get(
     '/look-up', 

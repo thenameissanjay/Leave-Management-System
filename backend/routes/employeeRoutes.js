@@ -13,7 +13,7 @@ const {
 } = require('../joi_schema/adminSchema');
 
 const { designationIdSchema } = require('../joi_schema/desigantionSchema');
-const validator = require('express-joi-validation').createValidator({});
+const validator = require('express-joi-validation').createValidator({passError: true});
 
 router.get(
   '/designation-name/:DesignationID',

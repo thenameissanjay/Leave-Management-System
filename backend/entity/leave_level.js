@@ -11,11 +11,11 @@ const leave_level = new EntitySchema({
       generated: true,
     },
     start_count: {
-      type: 'int',
+      type: 'float',
       nullable: false,
     },
     end_count: {
-      type: 'int',
+      type: 'float',
       nullable: false,
     },
     approval_order: {

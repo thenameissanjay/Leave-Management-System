@@ -32,19 +32,20 @@ const LeaveLevelManager = () => {
 
   const handleSave = async (index) => {
     const item = levels[index];
+    console.log(Number(item.start_count));
     try {
       await axios.put(
         `http://localhost:8080/api/leave-level/look-up/${item.leave_level_id}`,
         {
-          start_count: parseInt(item.start_count, 10),
-          end_count: parseInt(item.end_count, 10),
-          approval_order: parseInt(item.approval_order, 10),
+          start_count: Number(item.start_count),
+          end_count: Number(item.end_count),
+          approval_order: Number(item.approval_order),
         }
       );
       setEditIndex(null);
       showToast('Leave level updated!', 'success');
-    } catch {
-      showToast('Failed to update', 'error');
+    } catch (err){
+      showToast(err.response.data.message, 'error');
     }
   };
 
@@ -86,8 +87,7 @@ const LeaveLevelManager = () => {
       setNewLevel({ start_count: '', end_count: '', approval_order: '' });
       showToast('Created!', 'success');
     } catch(err) {
-      const message = err.response.data;
-      console.log(err)
+      const message = err.response.data.message;
       showToast(message, 'error');
     }
   };
@@ -132,7 +132,7 @@ const LeaveLevelManager = () => {
                               onChange={(e) =>
                                 handleEditChange(index, field, e.target.value)
                               }
-                              className="w-full px-2 py-1 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-keka-blue"
+                              className="w-15 px-2 py-1 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-keka-blue"
                             />
                           ) : (
                             <div className="text-sm text-gray-900">

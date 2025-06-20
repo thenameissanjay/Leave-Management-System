@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../Context/AuthContext';
 import { useToast } from './ui/ToastContainer';
+import { History } from 'lucide-react';
 
 const ApprovalList = () => {
   const { user } = useContext(AuthContext);
@@ -103,6 +104,9 @@ const ApprovalList = () => {
                   Leave Type
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Day Type
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Dates
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -139,13 +143,13 @@ const ApprovalList = () => {
                       {req.leave_type?.name || 'N/A'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {req.day_type || 'N/A'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {formatDate(req.from_date)} - {formatDate(req.to_date)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {Math.abs(
-                        (new Date(req.to_date) - new Date(req.from_date)) /
-                          (1000 * 60 * 60 * 24)
-                      ) + 1}{' '}
+                      {req.leave_count}{' '}
                       day(s)
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -219,140 +223,133 @@ const ApprovalList = () => {
         </button>
       </div>
 
-      {/* Modal for viewing request details */}
-      {isModalOpen && selectedRequest && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-xl font-bold">Leave Request Details</h2>
-                <button
-                  onClick={closeModal}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
+{isModalOpen && selectedRequest && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+    <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[100vh] overflow-y-auto">
+      {/* Header */}
+      <div className="flex justify-between items-center p-6 border-b">
+        <h2 className="text-xl font-semibold">Leave Request Details</h2>
+        <button
+          onClick={closeModal}
+          className="text-gray-400 hover:text-gray-600 p-1"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <p className="text-sm font-medium text-gray-500">
-                    Request ID
-                  </p>
-                  <p className="text-sm">
-                    #{selectedRequest.leave_request.request_id}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Employee</p>
-                  <p className="text-sm">
-                    {selectedRequest.leave_request.employee?.name}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">
-                    Leave Type
-                  </p>
-                  <p className="text-sm">
-                    {selectedRequest.leave_request.leave_type?.name}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">From Date</p>
-                  <p className="text-sm">
-                    {formatDate(selectedRequest.leave_request.from_date)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">To Date</p>
-                  <p className="text-sm">
-                    {formatDate(selectedRequest.leave_request.to_date)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Duration</p>
-                  <p className="text-sm">
-                    {Math.abs(
-                      (new Date(selectedRequest.leave_request.to_date) -
-                        new Date(selectedRequest.leave_request.from_date)) /
-                        (1000 * 60 * 60 * 24)
-                    ) + 1}{' '}
-                    day(s)
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Status</p>
-                  <p
-                    className={`text-sm ${getStatusClass(
-                      selectedRequest.approval_status
-                    )} px-2 py-1 rounded inline-block`}
-                  >
-                    {selectedRequest.approval_status_label}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">
-                    Applied On
-                  </p>
-                  <p className="text-sm">
-                    {formatDateTime(selectedRequest.leave_request.requestedAt)}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <p className="text-sm font-medium text-gray-500">Reason</p>
-                <p className="text-sm bg-gray-50 p-3 rounded">
-                  {selectedRequest.leave_request.reason || 'No reason provided'}
-                </p>
-              </div>
-
-              <div className="mb-4">
-                <p className="text-sm font-medium text-gray-500">Comments</p>
-                <p className="text-sm bg-gray-50 p-3 rounded">
-                  {selectedRequest.comments || 'No comments'}
-                </p>
-              </div>
-
-              {selectedRequest.approval_status === 100 && (
-                <div className="mt-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Your Comments (Optional)
-                  </label>
-                  <textarea
-                    rows="3"
-                    className="w-full border rounded px-3 py-2 mb-3 text-sm"
-                    placeholder="Add your comments here..."
-                    value={
-                      comments[selectedRequest.leave_request.request_id] || ''
-                    }
-                    onChange={(e) =>
-                      setComments({
-                        ...comments,
-                        [selectedRequest.leave_request.request_id]:
-                          e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              )}
-            </div>
+      <div className="p-6">
+        {/* Basic Info */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div>
+            <label className="text-sm text-gray-500">Request ID</label>
+            <p className="font-medium">#{selectedRequest.leave_request.request_id}</p>
+          </div>
+          <div>
+            <label className="text-sm text-gray-500">Employee</label>
+            <p className="font-medium">
+              {selectedRequest.leave_request.employee?.name} - {selectedRequest.leave_request.employee?.designation?.name}
+            </p>
+          </div>
+          <div>
+            <label className="text-sm text-gray-500">Leave Type</label>
+            <p className="font-medium">{selectedRequest.leave_request.leave_type?.name}</p>
+          </div>
+          <div>
+            <label className="text-sm text-gray-500">Status</label>
+            <p className={`${getStatusClass(selectedRequest.approval_status)} px-2 py-1 rounded text-sm w-50`}>
+              {selectedRequest.approval_status_label || getStatusLabel(selectedRequest.approval_status)}
+            </p>
+          </div>
+          <div>
+            <label className="text-sm text-gray-500">From Date</label>
+            <p className="font-medium">{formatDate(selectedRequest.leave_request.from_date)}</p>
+          </div>
+          <div>
+            <label className="text-sm text-gray-500">To Date</label>
+            <p className="font-medium">{formatDate(selectedRequest.leave_request.to_date)}</p>
+          </div>
+          <div>
+            <label className="text-sm text-gray-500">Duration</label>
+            <p className="font-medium">{selectedRequest.leave_request.leave_count} day(s)</p>
+          </div>
+          <div>
+            <label className="text-sm text-gray-500">Leave Balance</label>
+            <p className="font-medium">{selectedRequest.leave_request.leave_balance}</p>
+          </div>
+          <div>
+            <label className="text-sm text-gray-500">Applied On</label>
+            <p className="font-medium">{formatDateTime(selectedRequest.leave_request.requestedAt)}</p>
           </div>
         </div>
-      )}
+
+        {/* Reason */}
+        <div className="mb-6">
+          <label className="text-sm text-gray-500">Reason</label>
+          <p className="mt-1 p-3 bg-gray-50 rounded text-sm">
+            {selectedRequest.leave_request.reason || 'No reason provided'}
+          </p>
+        </div>
+
+        {/* Comments */}
+        <div className="mb-6">
+          <label className="text-sm text-gray-500">Comments</label>
+          <p className="mt-1 p-3 bg-gray-50 rounded text-sm">
+            {selectedRequest.comments || 'No comments'}
+          </p>
+        </div>
+
+        {/* Approval Actions */}
+        {selectedRequest.approval_status === 100 && (
+          <div className="border-t pt-6">
+            <label className="text-sm text-gray-500">Your Comments (Optional)</label>
+            <textarea
+              rows="3"
+              className="w-full border rounded p-3 mb-4 text-sm mt-1"
+              placeholder="Add your comments here..."
+              value={comments[selectedRequest.leave_request.request_id] || ''}
+              onChange={(e) =>
+                setComments({
+                  ...comments,
+                  [selectedRequest.leave_request.request_id]: e.target.value,
+                })
+              }
+            />
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  handleApproval(
+                    selectedRequest.leave_request.request_id,
+                    selectedRequest.approver_id,
+                    'rejected'
+                  );
+                  closeModal();
+                }}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              >
+                Reject
+              </button>
+              <button
+                onClick={() => {
+                  handleApproval(
+                    selectedRequest.leave_request.request_id,
+                    selectedRequest.approver_id,
+                    'approved'
+                  );
+                  closeModal();
+                }}
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+              >
+                Approve
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };

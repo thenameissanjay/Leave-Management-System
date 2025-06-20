@@ -16,7 +16,8 @@ const createRequestSchema = Joi.object({
     .required(),
 
   reason: Joi.string().max(100).empty('').required(),
-  leaveCount: Joi.number().integer().min(1).required(),
+  leaveCount: Joi.number().min(0.5).required(),
+  day_type: Joi.string().empty(null).empty('').required(),
   designation: Joi.number().integer().min(1).required(),
   requestAt: Joi.string().isoDate().empty('').required(),
 }).strict();

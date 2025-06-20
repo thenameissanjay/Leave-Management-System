@@ -13,7 +13,7 @@ const Layout = () => {
       
       {user.role === 'admin' ? <AdminSidebar /> : <EmployeeSidebar />}
       
-      <div className="flex-1 ml-64 p-8">
+      <div className="flex-1 ml-50 pl-4">
         <Outlet />
       </div>
     </div>

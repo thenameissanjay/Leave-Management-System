@@ -9,7 +9,7 @@ const EmployeeSidebar = () => {
   const activeClass = 'bg-blue-900 font-semibold border-l-4 border-white pl-3';
 
   return (
-    <div className="fixed left-0 top-0 h-full w-64 bg-blue-800 text-white shadow-lg">
+    <div className="fixed left-0 top-0 h-full w-54 bg-blue-800 text-white shadow-lg">
       <div className="p-4 text-xl font-bold border-b border-blue-700">
         Welcome {user?.Name}
       </div>

@@ -10,7 +10,7 @@ const {
   adminLoginSchema,
   employeeLoginSchema,
 } = require('../joi_schema/authSchema');
-const validator = require('express-joi-validation').createValidator({});
+const validator = require('express-joi-validation').createValidator({ passError: true});
 const {RateLimiter} = require('../utils/rateLimit')
 router.post(
   '/employee-login',

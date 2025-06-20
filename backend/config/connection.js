@@ -17,7 +17,7 @@ const AppDataSource = new DataSource({
   username: process.env.USER,
   password: process.env.PASSWORD,
   database: process.env.DBNAME,
-  synchronize: true,
+  synchronize: false,
   logging: false,
   entities: [employee, designation, leave_level, leave_request, leave_policy_dm, leave_type_dm, leave_balance, approval_flow]
 });

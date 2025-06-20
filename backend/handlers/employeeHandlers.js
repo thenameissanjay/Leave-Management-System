@@ -105,10 +105,10 @@ const getLeaveId = async (req, res) => {
 
     leaveBalances.forEach((lb) => {
       const { id, name } = lb.leave_type_dm;
-      if (id && lb.total_leave != null) {
+      if (id && lb.total_leave != 0) {
         response[`${id}`] = {
           name,
-          balance: lb.total_leave,
+          balance: lb.balance_leave,
         };
       }
     });
