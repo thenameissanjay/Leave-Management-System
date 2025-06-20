@@ -98,7 +98,7 @@ const LeavePolicyManager = () => {
   const isChanged = JSON.stringify(leavePolicies) !== JSON.stringify(originalPolicies);
 
   return (
-    <div className="max-w-4xl">
+    <div className="max-w-238">
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-xl font-semibold text-gray-800">Leave Policy Management</h1>

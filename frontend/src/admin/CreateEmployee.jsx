@@ -96,7 +96,7 @@ const CreateEmployee = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-grey-100">
+    <div className="min-h-screen flex items-center justify-center pl-12 bg-grey-100">
       <div className="flex gap-4 w-full">
         <div className="bg-white shadow-lg rounded-xl w-full max-w-md p-6">
           <h2 className="text-2xl font-bold text-center text-red-300 mb-6">
